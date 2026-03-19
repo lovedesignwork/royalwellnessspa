@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
 
 export default function Header() {
@@ -36,32 +37,17 @@ export default function Header() {
         <div className="max-w-7xl mx-auto px-6">
           <nav className="flex items-center justify-between">
             {/* Logo */}
-            <Link href="/" className="group flex items-center gap-3">
-              <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 ${
-                isScrolled ? 'bg-gold' : 'bg-white/10 backdrop-blur-sm border border-white/20'
-              }`}>
-                <span className={`font-display text-xl font-bold ${
-                  isScrolled ? 'text-white' : 'text-gold'
-                }`}>
-                  R
-                </span>
-              </div>
-              <div className="hidden sm:block">
-                <span
-                  className={`font-display text-lg font-semibold tracking-wide block leading-tight transition-colors ${
-                    isScrolled ? 'text-charcoal' : 'text-white'
-                  }`}
-                >
-                  ROYAL WELLNESS
-                </span>
-                <span
-                  className={`text-[10px] tracking-[0.25em] font-[var(--font-montserrat)] transition-colors ${
-                    isScrolled ? 'text-gold' : 'text-gold-light'
-                  }`}
-                >
-                  SPA & MASSAGE
-                </span>
-              </div>
+            <Link href="/" className="group flex items-center">
+              <Image
+                src="/Logo-Royal-Spa.png"
+                alt="Royal Wellness Spa"
+                width={180}
+                height={60}
+                className={`h-12 w-auto transition-all duration-300 ${
+                  isScrolled ? '' : 'brightness-0 invert'
+                }`}
+                priority
+              />
             </Link>
 
             {/* Desktop Navigation */}
@@ -138,19 +124,13 @@ export default function Header() {
           <div className="flex flex-col h-full">
             {/* Mobile Menu Header */}
             <div className="flex items-center justify-between p-6 border-b border-cream">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 bg-gold rounded-full flex items-center justify-center">
-                  <span className="font-display text-white text-lg font-bold">R</span>
-                </div>
-                <div>
-                  <span className="font-display text-charcoal text-sm font-semibold block">
-                    ROYAL WELLNESS
-                  </span>
-                  <span className="text-[9px] tracking-[0.2em] font-[var(--font-montserrat)] text-gold">
-                    SPA & MASSAGE
-                  </span>
-                </div>
-              </div>
+              <Image
+                src="/Logo-Royal-Spa.png"
+                alt="Royal Wellness Spa"
+                width={140}
+                height={47}
+                className="h-10 w-auto"
+              />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="p-2 rounded-full hover:bg-cream text-charcoal"

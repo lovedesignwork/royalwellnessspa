@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { MapPin, Phone, Mail, Clock, Instagram, Facebook } from 'lucide-react';
 
 export default function Footer() {
@@ -7,10 +8,13 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           <div>
-            <h3 className="font-display text-3xl font-semibold mb-2">
-              ROYAL WELLNESS
-            </h3>
-            <p className="text-gold text-sm tracking-[0.3em] mb-6">SPA</p>
+            <Image
+              src="/Logo-Royal-Spa.png"
+              alt="Royal Wellness Spa"
+              width={180}
+              height={60}
+              className="h-14 w-auto mb-6 brightness-0 invert"
+            />
             <p className="text-white/70 font-[var(--font-montserrat)] text-sm leading-relaxed">
               Indulge in a tranquil spa experience designed to restore balance
               to both body and mind.
