@@ -3,12 +3,5 @@
   "buildCommand": "npm run build",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
-  "regions": ["sin1"],
-  "env": {
-    "NEXT_PUBLIC_SUPABASE_URL": "@supabase_url",
-    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "PAYSOLUTION_MERCHANT_ID": "@paysolution_merchant_id",
-    "PAYSOLUTION_SECRET_KEY": "@paysolution_secret_key",
-    "PAYSOLUTION_API_URL": "@paysolution_api_url"
-  }
+  "regions": ["sin1"]
 }

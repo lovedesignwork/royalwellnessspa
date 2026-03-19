@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { treatments, getTreatmentById, getTreatmentsByCategory, type Treatment } from '@/lib/spa-data';
+import { treatments, getTreatmentById, getTreatmentsByCategory, type Treatment, type Category } from '@/lib/spa-data';
 import { Clock, Sparkles, ArrowRight, Check, Users, ChevronLeft, Star, ArrowLeft } from 'lucide-react';
 
 export async function generateStaticParams() {
@@ -60,7 +60,7 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
   const durationOptions = parseDurationOptions(treatment);
   const hasMultipleDurations = durationOptions.length > 1;
   
-  const relatedTreatments = getTreatmentsByCategory(treatment.category as typeof treatments[0]['category'])
+  const relatedTreatments = getTreatmentsByCategory(treatment.category as Category)
     .filter(t => t.id !== treatment.id)
     .slice(0, 3);
 
