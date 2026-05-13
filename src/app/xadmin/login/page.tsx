@@ -61,7 +61,7 @@ export default function AdminLoginPage() {
 
           <form onSubmit={handleLogin} className="space-y-6">
             <div>
-              <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+              <label className="block font-body text-sm text-charcoal/70 mb-2">
                 <Mail className="w-4 h-4 inline mr-2" />
                 Email
               </label>
@@ -70,13 +70,13 @@ export default function AdminLoginPage() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full p-3 border border-cream font-[var(--font-montserrat)] text-sm"
+                className="w-full p-3 border border-cream font-body text-sm"
                 placeholder="admin@example.com"
               />
             </div>
 
             <div>
-              <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+              <label className="block font-body text-sm text-charcoal/70 mb-2">
                 <Lock className="w-4 h-4 inline mr-2" />
                 Password
               </label>
@@ -85,7 +85,7 @@ export default function AdminLoginPage() {
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full p-3 border border-cream font-[var(--font-montserrat)] text-sm"
+                className="w-full p-3 border border-cream font-body text-sm"
                 placeholder="••••••••"
               />
             </div>
@@ -93,14 +93,14 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 text-white font-[var(--font-montserrat)] text-sm py-3 transition-colors"
+              className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 text-white font-body text-sm py-3 transition-colors"
             >
               {isLoading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
         </div>
 
-        <p className="text-center text-white/50 text-xs mt-6 font-[var(--font-montserrat)]">
+        <p className="text-center text-white/50 text-xs mt-6 font-body">
           © 2026 Royal Wellness Spa. All rights reserved.
         </p>
       </div>

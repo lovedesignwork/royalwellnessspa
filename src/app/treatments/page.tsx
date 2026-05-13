@@ -190,7 +190,7 @@ function TreatmentsContent() {
                 All ({treatments.length})
               </button>
               
-              {categories.map((category) => (
+              {categories.filter(c => c !== "Top-Up / Add-On").map((category) => (
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}

@@ -13,7 +13,7 @@ export default function Hero() {
       <div className="hero-overlay absolute inset-0" />
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <p className="font-[var(--font-montserrat)] text-gold-light text-sm tracking-[0.4em] mb-4 animate-fade-in-up opacity-0 animate-delay-100">
+        <p className="font-body text-gold-light text-sm tracking-[0.4em] mb-4 animate-fade-in-up opacity-0 animate-delay-100">
           3RD FLOOR • PHUKET
         </p>
 
@@ -22,25 +22,25 @@ export default function Hero() {
           <span className="block text-gold">Spa</span>
         </h1>
 
-        <p className="font-[var(--font-montserrat)] text-white/80 text-lg md:text-xl font-light max-w-2xl mx-auto mb-4 animate-fade-in-up opacity-0 animate-delay-300">
+        <p className="font-body text-white/80 text-lg md:text-xl font-light max-w-2xl mx-auto mb-4 animate-fade-in-up opacity-0 animate-delay-300">
           Indulge in a tranquil spa experience designed to restore balance to
           both body and mind
         </p>
 
-        <p className="font-[var(--font-montserrat)] text-gold-light text-sm tracking-wider mb-10 animate-fade-in-up opacity-0 animate-delay-300">
+        <p className="font-body text-gold-light text-sm tracking-wider mb-10 animate-fade-in-up opacity-0 animate-delay-300">
           OPEN 10AM - 11PM
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up opacity-0 animate-delay-400">
           <Link
             href="/book"
-            className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-10 py-4 tracking-widest"
+            className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-10 py-4 tracking-widest"
           >
             BOOK YOUR ESCAPE
           </Link>
           <Link
             href="/treatments"
-            className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-[var(--font-montserrat)] text-sm px-10 py-4 tracking-widest transition-all"
+            className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-body text-sm px-10 py-4 tracking-widest transition-all"
           >
             VIEW TREATMENTS
           </Link>

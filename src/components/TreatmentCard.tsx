@@ -13,7 +13,7 @@ export default function TreatmentCard({ treatment }: TreatmentCardProps) {
     <div className="card-hover bg-white rounded-sm overflow-hidden shadow-md group">
       <div className="relative h-48 bg-gradient-to-br from-cream to-sage/30 flex items-center justify-center">
         {isSignature && (
-          <div className="absolute top-4 right-4 bg-gold text-white text-xs font-[var(--font-montserrat)] px-3 py-1 flex items-center gap-1">
+          <div className="absolute top-4 right-4 bg-gold text-white text-xs font-body px-3 py-1 flex items-center gap-1">
             <Sparkles className="w-3 h-3" />
             SIGNATURE
           </div>
@@ -22,18 +22,18 @@ export default function TreatmentCard({ treatment }: TreatmentCardProps) {
           <h3 className="font-display text-2xl text-charcoal group-hover:text-gold transition-colors">
             {treatment.name}
           </h3>
-          <p className="text-sm text-gold font-[var(--font-montserrat)] mt-2">
+          <p className="text-sm text-gold font-body mt-2">
             {treatment.category}
           </p>
         </div>
       </div>
 
       <div className="p-6">
-        <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-4 line-clamp-2">
+        <p className="font-body text-sm text-charcoal/70 mb-4 line-clamp-2">
           {treatment.description}
         </p>
 
-        <div className="flex items-center gap-2 text-sm text-charcoal/60 font-[var(--font-montserrat)] mb-4">
+        <div className="flex items-center gap-2 text-sm text-charcoal/60 font-body mb-4">
           <Clock className="w-4 h-4" />
           <span>{treatment.duration}</span>
         </div>
@@ -42,7 +42,7 @@ export default function TreatmentCard({ treatment }: TreatmentCardProps) {
           {treatment.highlights.slice(0, 3).map((highlight, idx) => (
             <span
               key={idx}
-              className="text-xs font-[var(--font-montserrat)] bg-cream text-charcoal/70 px-2 py-1 rounded-sm"
+              className="text-xs font-body bg-cream text-charcoal/70 px-2 py-1 rounded-sm"
             >
               {highlight}
             </span>
@@ -57,7 +57,7 @@ export default function TreatmentCard({ treatment }: TreatmentCardProps) {
           </div>
           <Link
             href={`/book?treatment=${treatment.id}`}
-            className="btn-luxury bg-charcoal hover:bg-gold text-white font-[var(--font-montserrat)] text-xs px-4 py-2 tracking-wide"
+            className="btn-luxury bg-charcoal hover:bg-gold text-white font-body text-xs px-4 py-2 tracking-wide"
           >
             Book Now
           </Link>

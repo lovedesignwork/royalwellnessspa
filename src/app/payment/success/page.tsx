@@ -22,17 +22,17 @@ function SuccessContent() {
           <h1 className="font-display text-3xl text-charcoal mb-4">
             Payment Successful!
           </h1>
-          <p className="font-[var(--font-montserrat)] text-charcoal/70 mb-6">
+          <p className="font-body text-charcoal/70 mb-6">
             Your booking has been confirmed. We look forward to welcoming you at Royal Wellness Spa.
           </p>
           {ref && (
-            <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60 mb-8">
+            <p className="font-body text-sm text-charcoal/60 mb-8">
               Booking Reference: <strong>{ref}</strong>
             </p>
           )}
           <Link
             href="/"
-            className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block"
+            className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-8 py-3 inline-block"
           >
             Return Home
           </Link>

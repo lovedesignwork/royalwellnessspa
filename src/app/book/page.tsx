@@ -281,7 +281,7 @@ function BookingContent() {
       <main className="min-h-screen bg-background">
         <section className="pt-32 pb-8 bg-charcoal">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+            <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
               RESERVE YOUR
             </p>
             <h1 className="font-display text-4xl md:text-5xl text-white mb-6">
@@ -298,7 +298,7 @@ function BookingContent() {
                 <div key={step.id} className="flex items-center">
                   <div className="flex items-center">
                     <div
-                      className={`w-10 h-10 rounded-full flex items-center justify-center font-[var(--font-montserrat)] text-sm transition-all ${
+                      className={`w-10 h-10 rounded-full flex items-center justify-center font-body text-sm transition-all ${
                         getStepIndex(currentStep) >= idx
                           ? 'bg-gold text-white'
                           : 'bg-cream text-charcoal/50'
@@ -311,7 +311,7 @@ function BookingContent() {
                       )}
                     </div>
                     <span
-                      className={`ml-3 font-[var(--font-montserrat)] text-sm hidden md:block ${
+                      className={`ml-3 font-body text-sm hidden md:block ${
                         getStepIndex(currentStep) >= idx
                           ? 'text-charcoal'
                           : 'text-charcoal/50'
@@ -341,7 +341,7 @@ function BookingContent() {
                     <h2 className="font-display text-3xl text-charcoal mb-2">
                       Select Treatments
                     </h2>
-                    <p className="font-[var(--font-montserrat)] text-charcoal/60 text-sm">
+                    <p className="font-body text-charcoal/60 text-sm">
                       Add treatments for each guest in your party
                     </p>
                   </div>
@@ -349,13 +349,13 @@ function BookingContent() {
                   {/* Guest Selection Cards */}
                   <div className="bg-white rounded-xl shadow-md p-5 mb-8">
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal flex items-center gap-2">
+                      <h3 className="font-body text-sm font-medium text-charcoal flex items-center gap-2">
                         <Users className="w-4 h-4 text-gold" />
                         Who's getting pampered?
                       </h3>
                       <button
                         onClick={addGuest}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-gold text-white font-[var(--font-montserrat)] text-sm font-medium hover:bg-gold-dark shadow-md hover:shadow-lg transition-all hover:scale-105"
+                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-gold text-white font-body text-sm font-medium hover:bg-gold-dark shadow-md hover:shadow-lg transition-all hover:scale-105"
                       >
                         <Plus className="w-4 h-4" />
                         Add Guest
@@ -412,7 +412,7 @@ function BookingContent() {
                               />
                               
                               {/* Treatment status */}
-                              <div className={`mt-2 text-xs font-[var(--font-montserrat)] ${
+                              <div className={`mt-2 text-xs font-body ${
                                 isActive ? 'text-white/80' : hasSelection ? 'text-green-600' : 'text-charcoal/50'
                               }`}>
                                 {hasSelection ? (
@@ -468,7 +468,7 @@ function BookingContent() {
                     {activeGuest && (
                       <div className="mt-4 pt-4 border-t border-cream flex items-center gap-2">
                         <div className="w-2 h-2 bg-gold rounded-full animate-pulse" />
-                        <span className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                        <span className="font-body text-sm text-charcoal/70">
                           Now selecting treatment for <strong className="text-gold">{activeGuest.guestName}</strong>
                         </span>
                       </div>
@@ -484,7 +484,7 @@ function BookingContent() {
                         placeholder="Search treatments..."
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
-                        className="w-full pl-12 pr-4 py-3 border border-cream rounded-full font-[var(--font-montserrat)] text-sm focus:border-gold transition-colors"
+                        className="w-full pl-12 pr-4 py-3 border border-cream rounded-full font-body text-sm focus:border-gold transition-colors"
                       />
                     </div>
                   </div>
@@ -493,7 +493,7 @@ function BookingContent() {
                   <div className="flex gap-2 overflow-x-auto pb-4 mb-6">
                     <button
                       onClick={() => setSelectedCategory('all')}
-                      className={`px-4 py-2 rounded-full font-[var(--font-montserrat)] text-xs whitespace-nowrap transition-all ${
+                      className={`px-4 py-2 rounded-full font-body text-xs whitespace-nowrap transition-all ${
                         selectedCategory === 'all'
                           ? 'bg-charcoal text-white'
                           : 'bg-cream text-charcoal hover:bg-charcoal/10'
@@ -505,7 +505,7 @@ function BookingContent() {
                       <button
                         key={cat}
                         onClick={() => setSelectedCategory(cat)}
-                        className={`px-4 py-2 rounded-full font-[var(--font-montserrat)] text-xs whitespace-nowrap transition-all ${
+                        className={`px-4 py-2 rounded-full font-body text-xs whitespace-nowrap transition-all ${
                           selectedCategory === cat
                             ? 'bg-charcoal text-white'
                             : 'bg-cream text-charcoal hover:bg-charcoal/10'
@@ -554,14 +554,14 @@ function BookingContent() {
                               )}
                               
                               <div className="absolute top-3 left-3">
-                                <span className="bg-white/90 backdrop-blur-sm text-charcoal font-[var(--font-montserrat)] text-[10px] px-2 py-1 rounded-full">
+                                <span className="bg-white/90 backdrop-blur-sm text-charcoal font-body text-[10px] px-2 py-1 rounded-full">
                                   {treatment.category}
                                 </span>
                               </div>
                               
                               {isSignature && (
                                 <div className="absolute top-3 right-3">
-                                  <span className="bg-gold text-white font-[var(--font-montserrat)] text-[10px] px-2 py-1 rounded-full flex items-center gap-1">
+                                  <span className="bg-gold text-white font-body text-[10px] px-2 py-1 rounded-full flex items-center gap-1">
                                     <Sparkles className="w-3 h-3" />
                                   </span>
                                 </div>
@@ -569,7 +569,7 @@ function BookingContent() {
 
                               <div className="absolute bottom-3 right-3">
                                 <span className="bg-gold text-white font-display text-lg px-3 py-1 rounded-sm">
-                                  ฿{treatment.price.split(' /')[0]}
+                                  {treatment.price.split(' /')[0]}
                                 </span>
                               </div>
                             </div>
@@ -581,17 +581,17 @@ function BookingContent() {
                               
                               <div className="flex items-center gap-2 text-charcoal/50 mb-2">
                                 <Clock className="w-3 h-3" />
-                                <span className="font-[var(--font-montserrat)] text-xs">
+                                <span className="font-body text-xs">
                                   {treatment.duration}
                                 </span>
                                 {hasDurationOptions(treatment) && (
-                                  <span className="ml-auto bg-gold/10 text-gold text-[10px] font-[var(--font-montserrat)] px-2 py-0.5 rounded-full">
+                                  <span className="ml-auto bg-gold/10 text-gold text-[10px] font-body px-2 py-0.5 rounded-full">
                                     Multiple options
                                   </span>
                                 )}
                               </div>
 
-                              <p className="font-[var(--font-montserrat)] text-xs text-charcoal/60 line-clamp-2">
+                              <p className="font-body text-xs text-charcoal/60 line-clamp-2">
                                 {treatment.description}
                               </p>
                             </div>
@@ -614,7 +614,7 @@ function BookingContent() {
                     {guestsWithTreatments.length === 0 ? (
                       <div className="text-center py-8">
                         <Users className="w-12 h-12 text-charcoal/20 mx-auto mb-3" />
-                        <p className="font-[var(--font-montserrat)] text-sm text-charcoal/50">
+                        <p className="font-body text-sm text-charcoal/50">
                           Select treatments for your guests
                         </p>
                       </div>
@@ -626,7 +626,7 @@ function BookingContent() {
                             <div key={guest.id} className="bg-cream/50 rounded-lg p-3">
                               <div className="flex items-start justify-between mb-1">
                                 <div>
-                                  <p className="font-[var(--font-montserrat)] text-xs text-gold">
+                                  <p className="font-body text-xs text-gold">
                                     {guest.guestName}
                                   </p>
                                   <p className="font-display text-sm text-charcoal">
@@ -641,7 +641,7 @@ function BookingContent() {
                                 </button>
                               </div>
                               <div className="flex items-center justify-between">
-                                <span className="font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                                <span className="font-body text-xs text-charcoal/50">
                                   {guest.selectedDuration}
                                 </span>
                                 <span className="font-display text-base text-gold">
@@ -655,7 +655,7 @@ function BookingContent() {
                         {/* Subtotal */}
                         <div className="border-t border-cream pt-4 mb-6">
                           <div className="flex justify-between">
-                            <span className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                            <span className="font-body text-sm text-charcoal/70">
                               Subtotal
                             </span>
                             <span className="font-display text-lg text-charcoal">
@@ -666,7 +666,7 @@ function BookingContent() {
 
                         {/* Date Selection */}
                         <div className="mb-5">
-                          <h4 className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal mb-3 flex items-center gap-2">
+                          <h4 className="font-body text-sm font-medium text-charcoal mb-3 flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gold" />
                             Select Date
                           </h4>
@@ -676,7 +676,7 @@ function BookingContent() {
                                 key={date}
                                 type="button"
                                 onClick={() => setBookingData((prev) => ({ ...prev, date }))}
-                                className={`p-2 text-center font-[var(--font-montserrat)] text-xs rounded-lg transition-colors ${
+                                className={`p-2 text-center font-body text-xs rounded-lg transition-colors ${
                                   bookingData.date === date
                                     ? 'bg-gold text-white'
                                     : 'bg-cream hover:bg-gold/20'
@@ -691,7 +691,7 @@ function BookingContent() {
                           </div>
                           {/* Show more dates option */}
                           <details className="mt-2">
-                            <summary className="text-xs text-gold cursor-pointer font-[var(--font-montserrat)]">
+                            <summary className="text-xs text-gold cursor-pointer font-body">
                               Show more dates
                             </summary>
                             <div className="grid grid-cols-4 gap-2 mt-2">
@@ -700,7 +700,7 @@ function BookingContent() {
                                   key={date}
                                   type="button"
                                   onClick={() => setBookingData((prev) => ({ ...prev, date }))}
-                                  className={`p-2 text-center font-[var(--font-montserrat)] text-xs rounded-lg transition-colors ${
+                                  className={`p-2 text-center font-body text-xs rounded-lg transition-colors ${
                                     bookingData.date === date
                                       ? 'bg-gold text-white'
                                       : 'bg-cream hover:bg-gold/20'
@@ -718,7 +718,7 @@ function BookingContent() {
 
                         {/* Time Selection */}
                         <div className="mb-6">
-                          <h4 className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal mb-3 flex items-center gap-2">
+                          <h4 className="font-body text-sm font-medium text-charcoal mb-3 flex items-center gap-2">
                             <Clock className="w-4 h-4 text-gold" />
                             Select Time
                           </h4>
@@ -728,7 +728,7 @@ function BookingContent() {
                                 key={time}
                                 type="button"
                                 onClick={() => setBookingData((prev) => ({ ...prev, time }))}
-                                className={`p-2 font-[var(--font-montserrat)] text-xs rounded-lg transition-colors ${
+                                className={`p-2 font-body text-xs rounded-lg transition-colors ${
                                   bookingData.time === time
                                     ? 'bg-gold text-white'
                                     : 'bg-cream hover:bg-gold/20'
@@ -745,7 +745,7 @@ function BookingContent() {
                           <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-6">
                             <div className="flex items-center gap-2 text-green-700">
                               <Check className="w-4 h-4" />
-                              <span className="font-[var(--font-montserrat)] text-sm">
+                              <span className="font-body text-sm">
                                 {format(new Date(bookingData.date), 'EEE, MMM d')} at {bookingData.time}
                               </span>
                             </div>
@@ -756,7 +756,7 @@ function BookingContent() {
                         <button
                           onClick={handleProceedToDetails}
                           disabled={!canProceedToDetails}
-                          className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/20 disabled:cursor-not-allowed text-white font-[var(--font-montserrat)] text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
+                          className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/20 disabled:cursor-not-allowed text-white font-body text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
                         >
                           {!bookingData.date || !bookingData.time ? (
                             'Select date & time'
@@ -776,7 +776,7 @@ function BookingContent() {
                 {guestsWithTreatments.length > 0 && (
                   <div className="fixed bottom-0 left-0 right-0 bg-white border-t shadow-lg p-4 lg:hidden z-40">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                      <span className="font-body text-sm text-charcoal/70">
                         {guestsWithTreatments.length} treatment{guestsWithTreatments.length > 1 ? 's' : ''}
                       </span>
                       <span className="font-display text-lg text-gold">
@@ -786,13 +786,13 @@ function BookingContent() {
                     {bookingData.date && bookingData.time ? (
                       <button
                         onClick={handleProceedToDetails}
-                        className="w-full bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
+                        className="w-full bg-gold hover:bg-gold-dark text-white font-body text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
                       >
                         Continue • {format(new Date(bookingData.date), 'MMM d')} at {bookingData.time}
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     ) : (
-                      <p className="text-center font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                      <p className="text-center font-body text-xs text-charcoal/50">
                         Select date & time in the booking panel above
                       </p>
                     )}
@@ -818,7 +818,7 @@ function BookingContent() {
                             <p className="font-display text-xl text-charcoal">
                               {format(new Date(bookingData.date), 'EEEE, MMMM d, yyyy')}
                             </p>
-                            <p className="font-[var(--font-montserrat)] text-sm text-gold">
+                            <p className="font-body text-sm text-gold">
                               {bookingData.time} • {guestsWithTreatments.length} treatment{guestsWithTreatments.length > 1 ? 's' : ''}
                             </p>
                           </div>
@@ -826,7 +826,7 @@ function BookingContent() {
                         <button
                           type="button"
                           onClick={() => setCurrentStep('treatment')}
-                          className="text-sm text-gold hover:text-gold-dark font-[var(--font-montserrat)]"
+                          className="text-sm text-gold hover:text-gold-dark font-body"
                         >
                           Change
                         </button>
@@ -842,7 +842,7 @@ function BookingContent() {
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+                          <label className="block font-body text-sm text-charcoal/70 mb-2">
                             First Name *
                           </label>
                           <input
@@ -850,12 +850,12 @@ function BookingContent() {
                             required
                             value={bookingData.firstName}
                             onChange={(e) => setBookingData((prev) => ({ ...prev, firstName: e.target.value }))}
-                            className="w-full p-3 border border-cream rounded-lg font-[var(--font-montserrat)] text-sm focus:border-gold transition-colors"
+                            className="w-full p-3 border border-cream rounded-lg font-body text-sm focus:border-gold transition-colors"
                             placeholder="John"
                           />
                         </div>
                         <div>
-                          <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+                          <label className="block font-body text-sm text-charcoal/70 mb-2">
                             Last Name *
                           </label>
                           <input
@@ -863,12 +863,12 @@ function BookingContent() {
                             required
                             value={bookingData.lastName}
                             onChange={(e) => setBookingData((prev) => ({ ...prev, lastName: e.target.value }))}
-                            className="w-full p-3 border border-cream rounded-lg font-[var(--font-montserrat)] text-sm focus:border-gold transition-colors"
+                            className="w-full p-3 border border-cream rounded-lg font-body text-sm focus:border-gold transition-colors"
                             placeholder="Doe"
                           />
                         </div>
                         <div>
-                          <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+                          <label className="block font-body text-sm text-charcoal/70 mb-2">
                             <Mail className="w-4 h-4 inline mr-1" />
                             Email *
                           </label>
@@ -877,12 +877,12 @@ function BookingContent() {
                             required
                             value={bookingData.email}
                             onChange={(e) => setBookingData((prev) => ({ ...prev, email: e.target.value }))}
-                            className="w-full p-3 border border-cream rounded-lg font-[var(--font-montserrat)] text-sm focus:border-gold transition-colors"
+                            className="w-full p-3 border border-cream rounded-lg font-body text-sm focus:border-gold transition-colors"
                             placeholder="john@example.com"
                           />
                         </div>
                         <div>
-                          <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+                          <label className="block font-body text-sm text-charcoal/70 mb-2">
                             <Phone className="w-4 h-4 inline mr-1" />
                             Phone *
                           </label>
@@ -891,18 +891,18 @@ function BookingContent() {
                             required
                             value={bookingData.phone}
                             onChange={(e) => setBookingData((prev) => ({ ...prev, phone: e.target.value }))}
-                            className="w-full p-3 border border-cream rounded-lg font-[var(--font-montserrat)] text-sm focus:border-gold transition-colors"
+                            className="w-full p-3 border border-cream rounded-lg font-body text-sm focus:border-gold transition-colors"
                             placeholder="+66 XX XXX XXXX"
                           />
                         </div>
                         <div className="md:col-span-2">
-                          <label className="block font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-2">
+                          <label className="block font-body text-sm text-charcoal/70 mb-2">
                             Special Requests (Optional)
                           </label>
                           <textarea
                             value={bookingData.notes}
                             onChange={(e) => setBookingData((prev) => ({ ...prev, notes: e.target.value }))}
-                            className="w-full p-3 border border-cream rounded-lg font-[var(--font-montserrat)] text-sm h-24 resize-none focus:border-gold transition-colors"
+                            className="w-full p-3 border border-cream rounded-lg font-body text-sm h-24 resize-none focus:border-gold transition-colors"
                             placeholder="Any allergies, preferences, or special requests..."
                           />
                         </div>
@@ -922,7 +922,7 @@ function BookingContent() {
                           <p className="font-display text-lg text-charcoal">
                             Royal Phuket City Hotel Guest
                           </p>
-                          <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                          <p className="font-body text-sm text-charcoal/60">
                             Check this box to receive 10% off your booking. Please present your room key or booking confirmation at the spa.
                           </p>
                         </div>
@@ -942,17 +942,17 @@ function BookingContent() {
                         {guestsWithTreatments.map((guest) => (
                           <div key={guest.id} className="flex justify-between">
                             <div>
-                              <p className="font-[var(--font-montserrat)] text-xs text-gold">
+                              <p className="font-body text-xs text-gold">
                                 {guest.guestName}
                               </p>
-                              <p className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                              <p className="font-body text-sm text-charcoal">
                                 {guest.treatment?.name}
                               </p>
-                              <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                              <p className="font-body text-xs text-charcoal/50">
                                 {guest.selectedDuration}
                               </p>
                             </div>
-                            <span className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                            <span className="font-body text-sm text-charcoal">
                               ฿{guest.selectedPrice.toLocaleString()}
                             </span>
                           </div>
@@ -963,13 +963,13 @@ function BookingContent() {
                       <div className="mb-6 pb-6 border-b border-cream">
                         <div className="flex items-center gap-2 text-charcoal/70 mb-2">
                           <Calendar className="w-4 h-4" />
-                          <span className="font-[var(--font-montserrat)] text-sm">
+                          <span className="font-body text-sm">
                             {format(new Date(bookingData.date), 'EEEE, MMMM d, yyyy')}
                           </span>
                         </div>
                         <div className="flex items-center gap-2 text-charcoal/70">
                           <Clock className="w-4 h-4" />
-                          <span className="font-[var(--font-montserrat)] text-sm">
+                          <span className="font-body text-sm">
                             {bookingData.time}
                           </span>
                         </div>
@@ -978,19 +978,19 @@ function BookingContent() {
                       {/* Pricing */}
                       <div className="space-y-2 mb-6">
                         <div className="flex justify-between">
-                          <span className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                          <span className="font-body text-sm text-charcoal/70">
                             Subtotal
                           </span>
-                          <span className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                          <span className="font-body text-sm text-charcoal">
                             ฿{calculateSubtotal().toLocaleString()}
                           </span>
                         </div>
                         {bookingData.isHotelGuest && (
                           <div className="flex justify-between text-green-600">
-                            <span className="font-[var(--font-montserrat)] text-sm">
+                            <span className="font-body text-sm">
                               Hotel Guest Discount (10%)
                             </span>
-                            <span className="font-[var(--font-montserrat)] text-sm">
+                            <span className="font-body text-sm">
                               -฿{calculateDiscount().toLocaleString()}
                             </span>
                           </div>
@@ -1009,11 +1009,11 @@ function BookingContent() {
                       <div className="bg-cream/50 rounded-lg p-4 mb-6">
                         <div className="flex items-center gap-2 mb-2">
                           <CreditCard className="w-5 h-5 text-gold" />
-                          <span className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal">
+                          <span className="font-body text-sm font-medium text-charcoal">
                             Secure Payment
                           </span>
                         </div>
-                        <p className="font-[var(--font-montserrat)] text-xs text-charcoal/60">
+                        <p className="font-body text-xs text-charcoal/60">
                           Credit cards, debit cards, and QR payment accepted via PaySolution.
                         </p>
                       </div>
@@ -1023,7 +1023,7 @@ function BookingContent() {
                         <button
                           type="submit"
                           disabled={isProcessing}
-                          className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 disabled:cursor-not-allowed text-white font-[var(--font-montserrat)] text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
+                          className="w-full bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 disabled:cursor-not-allowed text-white font-body text-sm py-4 rounded-full transition-colors flex items-center justify-center gap-2"
                         >
                           {isProcessing ? (
                             <>
@@ -1040,7 +1040,7 @@ function BookingContent() {
                         <button
                           type="button"
                           onClick={() => setCurrentStep('treatment')}
-                          className="w-full text-charcoal/60 hover:text-charcoal font-[var(--font-montserrat)] text-sm py-2 transition-colors"
+                          className="w-full text-charcoal/60 hover:text-charcoal font-body text-sm py-2 transition-colors"
                         >
                           ← Back to Treatments
                         </button>
@@ -1060,7 +1060,7 @@ function BookingContent() {
                 <h2 className="font-display text-3xl text-charcoal mb-4">
                   Booking Confirmed!
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-charcoal/70 mb-8">
+                <p className="font-body text-charcoal/70 mb-8">
                   Thank you for your booking. A confirmation email has been sent to{' '}
                   <strong>{bookingData.email}</strong>.
                 </p>
@@ -1074,17 +1074,17 @@ function BookingContent() {
                     {guestsWithTreatments.map((guest) => (
                       <div key={guest.id} className="flex justify-between pb-2 border-b border-cream">
                         <div>
-                          <p className="font-[var(--font-montserrat)] text-xs text-gold">
+                          <p className="font-body text-xs text-gold">
                             {guest.guestName}
                           </p>
-                          <p className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                          <p className="font-body text-sm text-charcoal">
                             {guest.treatment?.name}
                           </p>
-                          <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                          <p className="font-body text-xs text-charcoal/50">
                             {guest.selectedDuration}
                           </p>
                         </div>
-                        <span className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                        <span className="font-body text-sm text-charcoal">
                           ฿{guest.selectedPrice.toLocaleString()}
                         </span>
                       </div>
@@ -1092,15 +1092,15 @@ function BookingContent() {
                     
                     <div className="flex items-center gap-2 text-charcoal/70">
                       <Calendar className="w-4 h-4" />
-                      <span className="font-[var(--font-montserrat)] text-sm">
+                      <span className="font-body text-sm">
                         {bookingData.date && format(new Date(bookingData.date), 'EEEE, MMMM d, yyyy')} at {bookingData.time}
                       </span>
                     </div>
 
                     {bookingData.isHotelGuest && (
                       <div className="flex justify-between text-green-600">
-                        <span className="font-[var(--font-montserrat)] text-sm">Hotel Discount Applied</span>
-                        <span className="font-[var(--font-montserrat)] text-sm">-10%</span>
+                        <span className="font-body text-sm">Hotel Discount Applied</span>
+                        <span className="font-body text-sm">-10%</span>
                       </div>
                     )}
 
@@ -1115,7 +1115,7 @@ function BookingContent() {
 
                 <button
                   onClick={() => router.push('/')}
-                  className="bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-8 py-3 rounded-full transition-colors"
+                  className="bg-gold hover:bg-gold-dark text-white font-body text-sm px-8 py-3 rounded-full transition-colors"
                 >
                   Return Home
                 </button>
@@ -1157,7 +1157,7 @@ function BookingContent() {
                 <X className="w-4 h-4 text-white" />
               </button>
               <div className="absolute bottom-3 left-4 right-4">
-                <p className="text-gold text-xs font-[var(--font-montserrat)] uppercase tracking-wider">
+                <p className="text-gold text-xs font-body uppercase tracking-wider">
                   {durationModal.treatment.category}
                 </p>
                 <h3 className="text-white font-display text-xl">
@@ -1168,7 +1168,7 @@ function BookingContent() {
 
             {/* Duration Options */}
             <div className="p-6">
-              <h4 className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal mb-4 flex items-center gap-2">
+              <h4 className="font-body text-sm font-medium text-charcoal mb-4 flex items-center gap-2">
                 <Clock className="w-4 h-4 text-gold" />
                 Select Duration
               </h4>
@@ -1184,7 +1184,7 @@ function BookingContent() {
                       <div className="w-10 h-10 rounded-full bg-gold/10 flex items-center justify-center group-hover:bg-gold group-hover:text-white transition-colors">
                         <Clock className="w-5 h-5 text-gold group-hover:text-white" />
                       </div>
-                      <span className="font-[var(--font-montserrat)] text-sm text-charcoal">
+                      <span className="font-body text-sm text-charcoal">
                         {option.duration}
                       </span>
                     </div>
@@ -1195,7 +1195,7 @@ function BookingContent() {
                 ))}
               </div>
 
-              <p className="mt-4 text-center font-[var(--font-montserrat)] text-xs text-charcoal/50">
+              <p className="mt-4 text-center font-body text-xs text-charcoal/50">
                 Selecting for: <span className="text-gold font-medium">{bookingData.guests.find(g => g.id === durationModal.guestId)?.guestName}</span>
               </p>
             </div>

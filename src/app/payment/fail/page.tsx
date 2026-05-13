@@ -22,24 +22,24 @@ function FailContent() {
           <h1 className="font-display text-3xl text-charcoal mb-4">
             Payment Failed
           </h1>
-          <p className="font-[var(--font-montserrat)] text-charcoal/70 mb-6">
+          <p className="font-body text-charcoal/70 mb-6">
             Unfortunately, your payment could not be processed. Please try again or contact us for assistance.
           </p>
           {ref && (
-            <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60 mb-8">
+            <p className="font-body text-sm text-charcoal/60 mb-8">
               Reference: <strong>{ref}</strong>
             </p>
           )}
           <div className="flex gap-4 justify-center">
             <Link
               href="/book"
-              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block"
+              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-8 py-3 inline-block"
             >
               Try Again
             </Link>
             <Link
               href="/contact"
-              className="border border-charcoal hover:bg-charcoal hover:text-white text-charcoal font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block transition-colors"
+              className="border border-charcoal hover:bg-charcoal hover:text-white text-charcoal font-body text-sm px-8 py-3 inline-block transition-colors"
             >
               Contact Us
             </Link>

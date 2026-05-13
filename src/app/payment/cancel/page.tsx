@@ -18,19 +18,19 @@ function CancelContent() {
           <h1 className="font-display text-3xl text-charcoal mb-4">
             Payment Cancelled
           </h1>
-          <p className="font-[var(--font-montserrat)] text-charcoal/70 mb-8">
+          <p className="font-body text-charcoal/70 mb-8">
             Your payment has been cancelled. Your booking has not been confirmed.
           </p>
           <div className="flex gap-4 justify-center">
             <Link
               href="/book"
-              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block"
+              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-8 py-3 inline-block"
             >
               Book Again
             </Link>
             <Link
               href="/"
-              className="border border-charcoal hover:bg-charcoal hover:text-white text-charcoal font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block transition-colors"
+              className="border border-charcoal hover:bg-charcoal hover:text-white text-charcoal font-body text-sm px-8 py-3 inline-block transition-colors"
             >
               Return Home
             </Link>

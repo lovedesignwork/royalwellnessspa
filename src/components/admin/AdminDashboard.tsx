@@ -117,7 +117,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
         <nav className="p-4">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-[var(--font-montserrat)] transition-colors ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-body transition-colors ${
               activeTab === 'overview' ? 'bg-gold text-white' : 'text-white/70 hover:bg-white/5'
             }`}
           >
@@ -126,7 +126,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
           </button>
           <button
             onClick={() => setActiveTab('bookings')}
-            className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-[var(--font-montserrat)] transition-colors ${
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-body transition-colors ${
               activeTab === 'bookings' ? 'bg-gold text-white' : 'text-white/70 hover:bg-white/5'
             }`}
           >
@@ -160,7 +160,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
           <>
             <div className="mb-8">
               <h2 className="font-display text-3xl text-charcoal">Dashboard</h2>
-              <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+              <p className="font-body text-sm text-charcoal/60">
                 Welcome back! Here is your spa overview.
               </p>
             </div>
@@ -169,14 +169,14 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
               <div className="bg-white p-6 rounded-sm shadow-sm">
                 <div className="flex items-center justify-between mb-4">
                   <Calendar className="w-8 h-8 text-gold" />
-                  <span className="text-xs text-green-600 font-[var(--font-montserrat)]">
+                  <span className="text-xs text-green-600 font-body">
                     <TrendingUp className="w-3 h-3 inline" /> Today
                   </span>
                 </div>
                 <p className="font-display text-3xl text-charcoal">
                   {stats?.today_bookings || 0}
                 </p>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   Today Bookings
                 </p>
               </div>
@@ -188,7 +188,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <p className="font-display text-3xl text-charcoal">
                   {stats?.total_bookings || 0}
                 </p>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   Total Bookings
                 </p>
               </div>
@@ -200,7 +200,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <p className="font-display text-3xl text-charcoal">
                   {stats?.pending_bookings || 0}
                 </p>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   Pending
                 </p>
               </div>
@@ -212,7 +212,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <p className="font-display text-3xl text-charcoal">
                   ฿{(stats?.total_revenue || 0).toLocaleString()}
                 </p>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   Total Revenue
                 </p>
               </div>
@@ -226,19 +226,19 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <table className="w-full">
                   <thead>
                     <tr className="border-b border-gray-100">
-                      <th className="text-left py-3 px-4 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                      <th className="text-left py-3 px-4 font-body text-xs text-charcoal/60 uppercase">
                         Reference
                       </th>
-                      <th className="text-left py-3 px-4 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                      <th className="text-left py-3 px-4 font-body text-xs text-charcoal/60 uppercase">
                         Customer
                       </th>
-                      <th className="text-left py-3 px-4 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                      <th className="text-left py-3 px-4 font-body text-xs text-charcoal/60 uppercase">
                         Treatment
                       </th>
-                      <th className="text-left py-3 px-4 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                      <th className="text-left py-3 px-4 font-body text-xs text-charcoal/60 uppercase">
                         Date
                       </th>
-                      <th className="text-left py-3 px-4 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                      <th className="text-left py-3 px-4 font-body text-xs text-charcoal/60 uppercase">
                         Status
                       </th>
                     </tr>
@@ -246,21 +246,21 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                   <tbody>
                     {bookings.slice(0, 5).map((booking) => (
                       <tr key={booking.id} className="border-b border-gray-50 hover:bg-gray-50">
-                        <td className="py-3 px-4 font-[var(--font-montserrat)] text-sm">
+                        <td className="py-3 px-4 font-body text-sm">
                           {booking.reference}
                         </td>
-                        <td className="py-3 px-4 font-[var(--font-montserrat)] text-sm">
+                        <td className="py-3 px-4 font-body text-sm">
                           {booking.customer_first_name} {booking.customer_last_name}
                         </td>
-                        <td className="py-3 px-4 font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                        <td className="py-3 px-4 font-body text-sm text-charcoal/70">
                           {booking.treatment_name}
                         </td>
-                        <td className="py-3 px-4 font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                        <td className="py-3 px-4 font-body text-sm text-charcoal/70">
                           {format(new Date(booking.booking_date), 'MMM d, yyyy')} at {booking.booking_time}
                         </td>
                         <td className="py-3 px-4">
                           <span
-                            className={`px-2 py-1 text-xs font-[var(--font-montserrat)] rounded-sm ${getStatusBadge(
+                            className={`px-2 py-1 text-xs font-body rounded-sm ${getStatusBadge(
                               booking.status
                             )}`}
                           >
@@ -281,7 +281,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
             <div className="mb-8 flex items-center justify-between">
               <div>
                 <h2 className="font-display text-3xl text-charcoal">Bookings</h2>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   Manage all spa bookings
                 </p>
               </div>
@@ -296,14 +296,14 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                     placeholder="Search by reference, name, or email..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-200 font-[var(--font-montserrat)] text-sm"
+                    className="w-full pl-10 pr-4 py-2 border border-gray-200 font-body text-sm"
                   />
                 </div>
                 <div className="relative">
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value)}
-                    className="appearance-none px-4 py-2 pr-10 border border-gray-200 font-[var(--font-montserrat)] text-sm bg-white"
+                    className="appearance-none px-4 py-2 pr-10 border border-gray-200 font-body text-sm bg-white"
                   >
                     <option value="all">All Status</option>
                     <option value="pending">Pending</option>
@@ -320,28 +320,28 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
               <table className="w-full">
                 <thead>
                   <tr className="bg-gray-50 border-b border-gray-100">
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Reference
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Customer
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Treatment
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Date & Time
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Amount
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Status
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Payment
                     </th>
-                    <th className="text-left py-4 px-6 font-[var(--font-montserrat)] text-xs text-charcoal/60 uppercase">
+                    <th className="text-left py-4 px-6 font-body text-xs text-charcoal/60 uppercase">
                       Actions
                     </th>
                   </tr>
@@ -349,31 +349,31 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <tbody>
                   {filteredBookings.map((booking) => (
                     <tr key={booking.id} className="border-b border-gray-50 hover:bg-gray-50">
-                      <td className="py-4 px-6 font-[var(--font-montserrat)] text-sm font-medium">
+                      <td className="py-4 px-6 font-body text-sm font-medium">
                         {booking.reference}
                       </td>
                       <td className="py-4 px-6">
-                        <p className="font-[var(--font-montserrat)] text-sm">
+                        <p className="font-body text-sm">
                           {booking.customer_first_name} {booking.customer_last_name}
                         </p>
-                        <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                        <p className="font-body text-xs text-charcoal/50">
                           {booking.customer_email}
                         </p>
                       </td>
-                      <td className="py-4 px-6 font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                      <td className="py-4 px-6 font-body text-sm text-charcoal/70">
                         {booking.treatment_name}
                       </td>
-                      <td className="py-4 px-6 font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                      <td className="py-4 px-6 font-body text-sm text-charcoal/70">
                         {format(new Date(booking.booking_date), 'MMM d, yyyy')}
                         <br />
                         <span className="text-xs">{booking.booking_time}</span>
                       </td>
-                      <td className="py-4 px-6 font-[var(--font-montserrat)] text-sm">
+                      <td className="py-4 px-6 font-body text-sm">
                         ฿{booking.amount.toLocaleString()}
                       </td>
                       <td className="py-4 px-6">
                         <span
-                          className={`px-2 py-1 text-xs font-[var(--font-montserrat)] rounded-sm ${getStatusBadge(
+                          className={`px-2 py-1 text-xs font-body rounded-sm ${getStatusBadge(
                             booking.status
                           )}`}
                         >
@@ -382,7 +382,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                       </td>
                       <td className="py-4 px-6">
                         <span
-                          className={`px-2 py-1 text-xs font-[var(--font-montserrat)] rounded-sm ${getPaymentBadge(
+                          className={`px-2 py-1 text-xs font-body rounded-sm ${getPaymentBadge(
                             booking.payment_status
                           )}`}
                         >
@@ -434,7 +434,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
 
               {filteredBookings.length === 0 && (
                 <div className="py-12 text-center">
-                  <p className="font-[var(--font-montserrat)] text-charcoal/50">
+                  <p className="font-body text-charcoal/50">
                     No bookings found
                   </p>
                 </div>
@@ -457,19 +457,19 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
               <div className="p-6 space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Reference
                     </p>
-                    <p className="font-[var(--font-montserrat)] text-sm font-medium">
+                    <p className="font-body text-sm font-medium">
                       {selectedBooking.reference}
                     </p>
                   </div>
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Status
                     </p>
                     <span
-                      className={`px-2 py-1 text-xs font-[var(--font-montserrat)] rounded-sm ${getStatusBadge(
+                      className={`px-2 py-1 text-xs font-body rounded-sm ${getStatusBadge(
                         selectedBooking.status
                       )}`}
                     >
@@ -479,28 +479,28 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 </div>
 
                 <div>
-                  <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                  <p className="font-body text-xs text-charcoal/50 uppercase">
                     Treatment
                   </p>
-                  <p className="font-[var(--font-montserrat)] text-sm">
+                  <p className="font-body text-sm">
                     {selectedBooking.treatment_name}
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Date
                     </p>
-                    <p className="font-[var(--font-montserrat)] text-sm">
+                    <p className="font-body text-sm">
                       {format(new Date(selectedBooking.booking_date), 'EEEE, MMMM d, yyyy')}
                     </p>
                   </div>
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Time
                     </p>
-                    <p className="font-[var(--font-montserrat)] text-sm">
+                    <p className="font-body text-sm">
                       {selectedBooking.booking_time}
                     </p>
                   </div>
@@ -509,26 +509,26 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 <hr className="border-gray-100" />
 
                 <div>
-                  <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase mb-2">
+                  <p className="font-body text-xs text-charcoal/50 uppercase mb-2">
                     Customer Information
                   </p>
-                  <p className="font-[var(--font-montserrat)] text-sm">
+                  <p className="font-body text-sm">
                     {selectedBooking.customer_first_name} {selectedBooking.customer_last_name}
                   </p>
-                  <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                  <p className="font-body text-sm text-charcoal/70">
                     {selectedBooking.customer_email}
                   </p>
-                  <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                  <p className="font-body text-sm text-charcoal/70">
                     {selectedBooking.customer_phone}
                   </p>
                 </div>
 
                 {selectedBooking.notes && (
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Notes
                     </p>
-                    <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                    <p className="font-body text-sm text-charcoal/70">
                       {selectedBooking.notes}
                     </p>
                   </div>
@@ -538,7 +538,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Amount
                     </p>
                     <p className="font-display text-2xl text-gold">
@@ -546,11 +546,11 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                     </p>
                   </div>
                   <div>
-                    <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                    <p className="font-body text-xs text-charcoal/50 uppercase">
                       Payment Status
                     </p>
                     <span
-                      className={`px-2 py-1 text-xs font-[var(--font-montserrat)] rounded-sm ${getPaymentBadge(
+                      className={`px-2 py-1 text-xs font-body rounded-sm ${getPaymentBadge(
                         selectedBooking.payment_status
                       )}`}
                     >
@@ -560,10 +560,10 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
                 </div>
 
                 <div>
-                  <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50 uppercase">
+                  <p className="font-body text-xs text-charcoal/50 uppercase">
                     Created At
                   </p>
-                  <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                  <p className="font-body text-sm text-charcoal/70">
                     {format(new Date(selectedBooking.created_at), 'PPpp')}
                   </p>
                 </div>

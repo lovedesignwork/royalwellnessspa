@@ -2,11 +2,10 @@ import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
 import Link from 'next/link';
-import { getSignatureTreatments, categories, getTreatmentsByCategory } from '@/lib/spa-data';
+import { categories, getTreatmentsByCategory } from '@/lib/spa-data';
 import { Clock, Award, Heart, Leaf, Star, Quote, Hotel, Sparkles, Shield, Users, Gem, CheckCircle } from 'lucide-react';
 
 export default function Home() {
-  const signatureTreatments = getSignatureTreatments();
   const travelRecovery = getTreatmentsByCategory('Travel Recovery').slice(0, 3);
 
   const testimonials = [
@@ -98,18 +97,18 @@ export default function Home() {
                 </div>
                 <div className="absolute -bottom-6 -right-6 bg-gold p-6 rounded-sm shadow-xl hidden lg:block">
                   <p className="font-display text-white text-4xl font-semibold">13+</p>
-                  <p className="font-[var(--font-montserrat)] text-white/80 text-sm">Years of Excellence</p>
+                  <p className="font-body text-white/80 text-sm">Years of Excellence</p>
                 </div>
               </div>
 
               <div>
-                <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+                <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                   WELCOME TO ROYAL WELLNESS SPA
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6 leading-tight">
                   A Sanctuary of <span className="text-gold">Serenity</span> in the Heart of Phuket
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-charcoal/70 leading-relaxed mb-8">
+                <p className="font-body text-charcoal/70 leading-relaxed mb-8">
                   Nestled on the 3rd floor with panoramic views, Royal Wellness Spa offers an escape from the ordinary. 
                   With expert massage techniques passed down through generations and premium aromatic oils sourced from 
                   Thailand's finest botanical gardens, every treatment is a journey to complete renewal.
@@ -127,10 +126,10 @@ export default function Home() {
                         <item.icon className="w-5 h-5 text-gold" />
                       </div>
                       <div>
-                        <h3 className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal">
+                        <h3 className="font-body text-sm font-medium text-charcoal">
                           {item.title}
                         </h3>
-                        <p className="font-[var(--font-montserrat)] text-xs text-charcoal/60">
+                        <p className="font-body text-xs text-charcoal/60">
                           {item.desc}
                         </p>
                       </div>
@@ -140,81 +139,12 @@ export default function Home() {
 
                 <Link
                   href="/about"
-                  className="inline-flex items-center gap-2 font-[var(--font-montserrat)] text-sm text-gold hover:text-gold-dark transition-colors"
+                  className="inline-flex items-center gap-2 font-body text-sm text-gold hover:text-gold-dark transition-colors"
                 >
                   Discover Our Story
                   <span className="text-lg">→</span>
                 </Link>
               </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Signature Treatments */}
-        <section className="py-24 bg-cream">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
-                OUR SPECIALTIES
-              </p>
-              <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
-                Signature Treatments
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {signatureTreatments.map((treatment) => (
-                <div
-                  key={treatment.id}
-                  className="bg-white p-8 card-hover flex flex-col"
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <h3 className="font-display text-2xl text-charcoal mb-2">
-                        {treatment.name}
-                      </h3>
-                      <p className="font-[var(--font-montserrat)] text-gold text-sm">
-                        {treatment.category}
-                      </p>
-                    </div>
-                    <span className="bg-gold/10 text-gold font-[var(--font-montserrat)] text-xs px-3 py-1">
-                      SIGNATURE
-                    </span>
-                  </div>
-
-                  <p className="font-[var(--font-montserrat)] text-charcoal/70 text-sm mb-6 flex-grow">
-                    {treatment.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-2 mb-6">
-                    {treatment.highlights.slice(0, 4).map((h, i) => (
-                      <span
-                        key={i}
-                        className="font-[var(--font-montserrat)] text-xs bg-cream px-3 py-1 text-charcoal/70"
-                      >
-                        {h}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="flex items-center justify-between pt-4 border-t border-cream">
-                    <div>
-                      <span className="font-[var(--font-montserrat)] text-xs text-charcoal/50 block">
-                        {treatment.duration}
-                      </span>
-                      <span className="font-display text-2xl text-gold">
-                        ฿{treatment.price}
-                      </span>
-                    </div>
-                    <Link
-                      href={`/book?treatment=${treatment.id}`}
-                      className="btn-luxury bg-charcoal hover:bg-gold text-white font-[var(--font-montserrat)] text-sm px-6 py-3"
-                    >
-                      Book Now
-                    </Link>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
         </section>
@@ -232,13 +162,13 @@ export default function Home() {
           <div className="relative z-10 max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+                <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                   PERFECT FOR TRAVELERS
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl mb-6">
                   Travel Recovery <span className="text-gold">Collection</span>
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-white/70 mb-8 leading-relaxed">
+                <p className="font-body text-white/70 mb-8 leading-relaxed">
                   Designed specifically for weary travelers, our recovery treatments restore your body 
                   and mind after long journeys. From jet lag to digital fatigue, we have the perfect 
                   remedy for modern travel stress.
@@ -248,14 +178,14 @@ export default function Home() {
                   {['Jet Lag & Flight Recovery', 'Digital Detox & Screen Fatigue', 'Walking & Sightseeing Recovery', 'Active Sports Recovery'].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-gold" />
-                      <span className="font-[var(--font-montserrat)] text-sm text-white/80">{item}</span>
+                      <span className="font-body text-sm text-white/80">{item}</span>
                     </div>
                   ))}
                 </div>
 
                 <Link
                   href="/treatments?category=Travel%20Recovery"
-                  className="btn-luxury border border-gold bg-transparent hover:bg-gold text-white font-[var(--font-montserrat)] text-sm px-8 py-3 inline-block"
+                  className="btn-luxury border border-gold bg-transparent hover:bg-gold text-white font-body text-sm px-8 py-3 inline-block"
                 >
                   View All Recovery Treatments
                 </Link>
@@ -274,7 +204,7 @@ export default function Home() {
                       <h3 className="font-display text-xl text-white mb-1">
                         {treatment.name}
                       </h3>
-                      <p className="font-[var(--font-montserrat)] text-white/60 text-xs mb-2 line-clamp-1">
+                      <p className="font-body text-white/60 text-xs mb-2 line-clamp-1">
                         {treatment.description}
                       </p>
                       <div className="flex items-center justify-between">
@@ -283,7 +213,7 @@ export default function Home() {
                         </span>
                         <Link
                           href={`/book?treatment=${treatment.id}`}
-                          className="font-[var(--font-montserrat)] text-xs text-gold hover:text-gold-light transition-colors"
+                          className="font-body text-xs text-gold hover:text-gold-light transition-colors"
                         >
                           Book →
                         </Link>
@@ -300,13 +230,13 @@ export default function Home() {
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+              <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                 WHY CHOOSE US
               </p>
               <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
                 What Makes Us <span className="text-gold">Different</span>
               </h2>
-              <p className="font-[var(--font-montserrat)] text-charcoal/70">
+              <p className="font-body text-charcoal/70">
                 At Royal Wellness Spa, we don't just offer massages – we craft transformative experiences 
                 that address the unique challenges of modern travelers and city dwellers.
               </p>
@@ -325,7 +255,7 @@ export default function Home() {
                     <h3 className="font-display text-2xl text-charcoal mb-3">
                       {feature.title}
                     </h3>
-                    <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70 leading-relaxed">
+                    <p className="font-body text-sm text-charcoal/70 leading-relaxed">
                       {feature.description}
                     </p>
                   </div>
@@ -350,20 +280,20 @@ export default function Home() {
               </div>
               <div className="text-center lg:text-left">
                 <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full mb-4">
-                  <span className="font-[var(--font-montserrat)] text-white text-sm font-medium">
+                  <span className="font-body text-white text-sm font-medium">
                     EXCLUSIVE OFFER
                   </span>
                 </div>
                 <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
                   Royal Phuket City Hotel Guests Get <span className="font-semibold">10% OFF</span>
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-white/90 mb-6 max-w-xl">
+                <p className="font-body text-white/90 mb-6 max-w-xl">
                   Staying at Royal Phuket City Hotel? Enjoy an exclusive 10% discount on all spa treatments. 
                   Simply present your room key or booking confirmation at reception.
                 </p>
                 <Link
                   href="/book"
-                  className="inline-block bg-white text-gold hover:bg-cream font-[var(--font-montserrat)] text-sm px-8 py-3 transition-colors shadow-lg"
+                  className="inline-block bg-white text-gold hover:bg-cream font-body text-sm px-8 py-3 transition-colors shadow-lg"
                 >
                   Book With Hotel Discount
                 </Link>
@@ -376,7 +306,7 @@ export default function Home() {
         <section className="py-24 bg-cream">
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
-              <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+              <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                 EXPLORE
               </p>
               <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
@@ -385,14 +315,13 @@ export default function Home() {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {categories.map((category, idx) => {
+              {categories.filter(c => c !== "Top-Up / Add-On").map((category, idx) => {
                 const images = [
                   '/images/Royal Spa 5.jpg',
                   '/images/Royal Spa 6.jpg',
                   '/images/Royal Spa 7.jpg',
                   '/images/Royal Spa 8.jpg',
                   '/images/Royal Spa 9.jpg',
-                  '/images/Royal Spa 10.jpg',
                 ];
                 const treatmentCount = getTreatmentsByCategory(category as typeof categories[number]).length;
                 
@@ -410,7 +339,7 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent" />
                     <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/20 transition-colors duration-300" />
                     <div className="relative h-full flex flex-col justify-end p-6">
-                      <span className="font-[var(--font-montserrat)] text-gold text-xs tracking-wider mb-2">
+                      <span className="font-body text-gold text-xs tracking-wider mb-2">
                         {treatmentCount} TREATMENTS
                       </span>
                       <h3 className="font-display text-xl md:text-2xl text-white">
@@ -429,7 +358,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="flex flex-col lg:flex-row gap-16">
               <div className="lg:w-1/3">
-                <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+                <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                   TESTIMONIALS
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
@@ -438,8 +367,8 @@ export default function Home() {
                 
                 <div className="bg-cream p-8 rounded-sm mb-6">
                   <div className="flex items-center gap-2 mb-4">
-                    <span className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal">Google</span>
-                    <span className="font-[var(--font-montserrat)] text-xs text-charcoal/60">Reviews</span>
+                    <span className="font-body text-sm font-medium text-charcoal">Google</span>
+                    <span className="font-body text-xs text-charcoal/60">Reviews</span>
                   </div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-display text-4xl text-charcoal">4.9</span>
@@ -449,7 +378,7 @@ export default function Home() {
                       ))}
                     </div>
                   </div>
-                  <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                  <p className="font-body text-sm text-charcoal/60">
                     Based on 200+ reviews
                   </p>
                 </div>
@@ -457,7 +386,7 @@ export default function Home() {
                 <Link
                   href="https://google.com/maps"
                   target="_blank"
-                  className="inline-flex items-center gap-2 font-[var(--font-montserrat)] text-sm text-gold hover:text-gold-dark transition-colors"
+                  className="inline-flex items-center gap-2 font-body text-sm text-gold hover:text-gold-dark transition-colors"
                 >
                   See All Reviews on Google
                   <span className="text-lg">→</span>
@@ -477,19 +406,19 @@ export default function Home() {
                           <Star key={i} className="w-4 h-4 text-gold fill-gold" />
                         ))}
                       </div>
-                      <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-4 leading-relaxed">
+                      <p className="font-body text-sm text-charcoal/70 mb-4 leading-relaxed">
                         "{testimonial.text}"
                       </p>
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-[var(--font-montserrat)] text-sm font-medium text-charcoal">
+                          <p className="font-body text-sm font-medium text-charcoal">
                             {testimonial.name}
                           </p>
-                          <p className="font-[var(--font-montserrat)] text-xs text-charcoal/50">
+                          <p className="font-body text-xs text-charcoal/50">
                             {testimonial.country}
                           </p>
                         </div>
-                        <span className="font-[var(--font-montserrat)] text-xs text-charcoal/40">
+                        <span className="font-body text-xs text-charcoal/40">
                           {testimonial.date}
                         </span>
                       </div>
@@ -512,26 +441,26 @@ export default function Home() {
           <div className="absolute inset-0 bg-charcoal/70" />
 
           <div className="relative z-10 max-w-3xl mx-auto text-center px-6">
-            <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+            <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
               BEGIN YOUR JOURNEY
             </p>
             <h2 className="font-display text-4xl md:text-5xl text-white mb-6">
               Ready to Experience True Relaxation?
             </h2>
-            <p className="font-[var(--font-montserrat)] text-white/80 mb-10">
+            <p className="font-body text-white/80 mb-10">
               Book your appointment today and discover the art of wellness at Royal Wellness Spa. 
               Your sanctuary of serenity awaits.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
-                className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-12 py-4 tracking-widest inline-block"
+                className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-12 py-4 tracking-widest inline-block"
               >
                 BOOK YOUR ESCAPE
               </Link>
               <Link
                 href="/treatments"
-                className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-[var(--font-montserrat)] text-sm px-12 py-4 tracking-widest inline-block transition-all"
+                className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-body text-sm px-12 py-4 tracking-widest inline-block transition-all"
               >
                 VIEW TREATMENTS
               </Link>

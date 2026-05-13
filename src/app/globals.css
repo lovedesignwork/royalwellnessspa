@@ -3,9 +3,9 @@
 :root {
   --background: #fdfbf7;
   --foreground: #000000;
-  --gold: #D4B371;
-  --gold-light: #e5c98a;
-  --gold-dark: #b89a5a;
+  --gold: #B8974F;
+  --gold-light: #D4B371;
+  --gold-dark: #9A7B3A;
   --cream: #f5f0e6;
   --charcoal: #000000;
   --sage: #9cae9c;
@@ -33,6 +33,24 @@
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-body), sans-serif;
+  font-size: 14px;
+}
+
+p, span, a, li, td, th, label, input, select, textarea, button {
+  font-family: var(--font-body), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display), serif;
+}
+
+.text-xs {
+  font-size: 13px !important;
+}
+
+.text-sm {
+  font-size: 14px !important;
 }
 
 .luxury-gradient {

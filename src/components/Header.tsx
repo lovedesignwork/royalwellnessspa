@@ -59,7 +59,7 @@ export default function Header() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`relative font-[var(--font-montserrat)] text-sm px-5 py-2 rounded-full transition-all duration-300 ${
+                    className={`relative font-body text-sm px-5 py-2 rounded-full transition-all duration-300 ${
                       isScrolled
                         ? 'text-charcoal hover:text-gold hover:bg-gold/10'
                         : 'text-white/90 hover:text-white hover:bg-white/10'
@@ -75,7 +75,7 @@ export default function Header() {
             <div className="hidden lg:flex items-center gap-4">
               <Link
                 href="/book"
-                className={`group relative overflow-hidden font-[var(--font-montserrat)] text-sm px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 ${
+                className={`group relative overflow-hidden font-body text-sm px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 ${
                   isScrolled
                     ? 'bg-gold text-white hover:bg-gold-dark'
                     : 'bg-white text-charcoal hover:bg-gold hover:text-white'
@@ -145,7 +145,7 @@ export default function Header() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="flex items-center justify-between px-6 py-4 font-[var(--font-montserrat)] text-charcoal hover:bg-cream hover:text-gold transition-colors group"
+                  className="flex items-center justify-between px-6 py-4 font-body text-charcoal hover:bg-cream hover:text-gold transition-colors group"
                   onClick={() => setIsMobileMenuOpen(false)}
                   style={{ animationDelay: `${idx * 50}ms` }}
                 >
@@ -159,7 +159,7 @@ export default function Header() {
             <div className="p-6 border-t border-cream bg-cream/30">
               <Link
                 href="/book"
-                className="block w-full bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-center py-4 rounded-full transition-colors mb-4"
+                className="block w-full bg-gold hover:bg-gold-dark text-white font-body text-center py-4 rounded-full transition-colors mb-4"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 Book Your Escape
@@ -168,13 +168,13 @@ export default function Header() {
               <div className="flex items-center justify-center gap-4 text-sm">
                 <a 
                   href="tel:+66XXXXXXXX" 
-                  className="flex items-center gap-2 text-charcoal/60 hover:text-gold transition-colors font-[var(--font-montserrat)]"
+                  className="flex items-center gap-2 text-charcoal/60 hover:text-gold transition-colors font-body"
                 >
                   <Phone className="w-4 h-4" />
                   <span>Call Us</span>
                 </a>
                 <span className="text-charcoal/30">|</span>
-                <span className="flex items-center gap-2 text-charcoal/60 font-[var(--font-montserrat)]">
+                <span className="flex items-center gap-2 text-charcoal/60 font-body">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>

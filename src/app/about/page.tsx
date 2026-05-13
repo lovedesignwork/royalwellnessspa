@@ -10,13 +10,13 @@ export default function AboutPage() {
       <main>
         <section className="pt-32 pb-16 bg-charcoal">
           <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+            <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
               ABOUT US
             </p>
             <h1 className="font-display text-4xl md:text-6xl text-white mb-6">
               Our Story
             </h1>
-            <p className="font-[var(--font-montserrat)] text-white/70 max-w-2xl mx-auto">
+            <p className="font-body text-white/70 max-w-2xl mx-auto">
               Discover the passion and expertise behind Royal Wellness Spa
             </p>
           </div>
@@ -26,19 +26,19 @@ export default function AboutPage() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
-                <p className="font-[var(--font-montserrat)] text-gold text-sm tracking-[0.3em] mb-4">
+                <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
                   3RD FLOOR • PHUKET
                 </p>
                 <h2 className="font-display text-4xl text-charcoal mb-6">
                   A Sanctuary of Serenity
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-charcoal/70 leading-relaxed mb-6">
+                <p className="font-body text-charcoal/70 leading-relaxed mb-6">
                   Indulge in a tranquil spa experience designed to restore balance to both body and mind. With expert massage techniques and premium aromatic oils, our spa offers a serene escape that leaves you feeling refreshed, relaxed, and completely renewed.
                 </p>
-                <p className="font-[var(--font-montserrat)] text-charcoal/70 leading-relaxed mb-6">
+                <p className="font-body text-charcoal/70 leading-relaxed mb-6">
                   Located in the heart of Phuket, Royal Wellness Spa combines traditional Thai healing arts with modern wellness practices. Our team of certified therapists brings years of expertise and a genuine passion for helping guests achieve total relaxation.
                 </p>
-                <p className="font-[var(--font-montserrat)] text-charcoal/70 leading-relaxed">
+                <p className="font-body text-charcoal/70 leading-relaxed">
                   Whether you are a weary traveler seeking recovery from jet lag, a digital nomad needing relief from screen fatigue, or simply looking for a luxurious escape, we have crafted treatments specifically for your needs.
                 </p>
               </div>
@@ -53,7 +53,7 @@ export default function AboutPage() {
                   <span className="font-display text-white text-4xl block mb-2">
                     10AM
                   </span>
-                  <span className="font-[var(--font-montserrat)] text-white/80 text-sm">
+                  <span className="font-body text-white/80 text-sm">
                     to 11PM Daily
                   </span>
                 </div>
@@ -98,7 +98,7 @@ export default function AboutPage() {
                   <h3 className="font-display text-xl text-charcoal mb-4">
                     {item.title}
                   </h3>
-                  <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70">
+                  <p className="font-body text-sm text-charcoal/70">
                     {item.desc}
                   </p>
                 </div>
@@ -120,12 +120,12 @@ export default function AboutPage() {
             <h2 className="font-display text-4xl md:text-5xl text-white mb-6">
               Experience True Relaxation
             </h2>
-            <p className="font-[var(--font-montserrat)] text-white/80 mb-10">
+            <p className="font-body text-white/80 mb-10">
               Book your appointment today and let us guide you on a journey to wellness.
             </p>
             <Link
               href="/book"
-              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm px-12 py-4 tracking-widest inline-block"
+              className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-12 py-4 tracking-widest inline-block"
             >
               BOOK NOW
             </Link>
