@@ -19,7 +19,6 @@ const categoryDescriptions: Record<string, string> = {
 };
 
 function TreatmentCard({ treatment }: { treatment: Treatment }) {
-  const isSignature = treatment.notes.toLowerCase().includes('signature');
   const hasMultipleDurations = treatment.duration.includes('/');
 
   return (
@@ -34,15 +33,22 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
           
-          {isSignature && (
-            <div className="absolute top-4 right-4 bg-gold text-white text-xs font-[var(--font-montserrat)] px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+          {treatment.isSignature && (
+            <div className="absolute top-4 right-4 bg-gold text-white text-xs font-body px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Sparkles className="w-3 h-3" />
               SIGNATURE
             </div>
           )}
 
+          {treatment.isCouple && (
+            <div className="absolute top-4 right-4 bg-rose-500 text-white text-xs font-body px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              <Star className="w-3 h-3" />
+              COUPLE
+            </div>
+          )}
+
           <div className="absolute top-4 left-4">
-            <span className="bg-white/90 backdrop-blur-sm text-charcoal text-xs font-[var(--font-montserrat)] px-3 py-1 rounded-full">
+            <span className="bg-white/90 backdrop-blur-sm text-charcoal text-xs font-body px-3 py-1 rounded-full">
               {treatment.category}
             </span>
           </div>
@@ -53,7 +59,7 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
                 {treatment.name}
               </h3>
               <span className="bg-gold text-white font-display text-lg px-3 py-1 rounded-lg shadow-lg">
-                ฿{treatment.price.split(' /')[0]}
+                {treatment.price.split(' /')[0]}
               </span>
             </div>
           </div>
@@ -62,19 +68,24 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
 
       <div className="p-5">
         <div className="flex items-center gap-3 mb-3">
-          <div className="flex items-center gap-1.5 text-sm text-charcoal/60 font-[var(--font-montserrat)]">
+          <div className="flex items-center gap-1.5 text-sm text-charcoal/60 font-body">
             <Clock className="w-4 h-4 text-gold" />
             <span>{treatment.duration}</span>
           </div>
           {hasMultipleDurations && (
-            <span className="bg-gold/10 text-gold text-[10px] font-[var(--font-montserrat)] px-2 py-0.5 rounded-full">
+            <span className="bg-gold/10 text-gold text-[10px] font-body px-2 py-0.5 rounded-full">
               Multiple options
+            </span>
+          )}
+          {treatment.priceNote && (
+            <span className="bg-rose-500/10 text-rose-500 text-[10px] font-body px-2 py-0.5 rounded-full">
+              {treatment.priceNote}
             </span>
           )}
         </div>
 
         <Link href={`/treatments/${treatment.id}`}>
-          <p className="font-[var(--font-montserrat)] text-sm text-charcoal/70 mb-4 line-clamp-2 hover:text-charcoal transition-colors">
+          <p className="font-body text-sm text-charcoal/70 mb-4 line-clamp-2 hover:text-charcoal transition-colors">
             {treatment.description}
           </p>
         </Link>
@@ -83,7 +94,7 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
           {treatment.highlights.slice(0, 3).map((highlight, idx) => (
             <span
               key={idx}
-              className="text-[10px] font-[var(--font-montserrat)] bg-cream text-charcoal/60 px-2 py-0.5 rounded-full"
+              className="text-[10px] font-body bg-cream text-charcoal/60 px-2 py-0.5 rounded-full"
             >
               {highlight}
             </span>
@@ -93,13 +104,13 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
         <div className="flex gap-2">
           <Link
             href={`/treatments/${treatment.id}`}
-            className="flex-1 text-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-[var(--font-montserrat)] text-sm py-2.5 rounded-xl transition-all"
+            className="flex-1 text-center border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-white font-body text-sm py-2.5 rounded-xl transition-all"
           >
             Learn More
           </Link>
           <Link
             href={`/book?treatment=${treatment.id}`}
-            className="flex-1 text-center bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-sm py-2.5 rounded-xl transition-all"
+            className="flex-1 text-center bg-gold hover:bg-gold-dark text-white font-body text-sm py-2.5 rounded-xl transition-all"
           >
             Book Now
           </Link>
@@ -147,7 +158,7 @@ function TreatmentsContent() {
             <div className="text-center">
               <div className="inline-flex items-center gap-2 bg-gold/20 text-gold px-4 py-2 rounded-full mb-6">
                 <Sparkles className="w-4 h-4" />
-                <span className="font-[var(--font-montserrat)] text-sm tracking-wide">
+                <span className="font-body text-sm tracking-wide">
                   {treatments.length} Premium Treatments
                 </span>
               </div>
@@ -156,7 +167,7 @@ function TreatmentsContent() {
                 Our <span className="text-gold italic">Spa Menu</span>
               </h1>
               
-              <p className="font-[var(--font-montserrat)] text-white/70 max-w-2xl mx-auto text-lg">
+              <p className="font-body text-white/70 max-w-2xl mx-auto text-lg">
                 Discover our curated collection of treatments, each designed to restore 
                 balance and bring harmony to your body and mind.
               </p>
@@ -170,7 +181,7 @@ function TreatmentsContent() {
             <div className="flex flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => setSelectedCategory('all')}
-                className={`px-3 py-1.5 rounded-full font-[var(--font-montserrat)] text-xs transition-all ${
+                className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${
                   selectedCategory === 'all'
                     ? 'bg-gold text-white'
                     : 'bg-cream text-charcoal hover:bg-gold/20'
@@ -183,7 +194,7 @@ function TreatmentsContent() {
                 <button
                   key={category}
                   onClick={() => setSelectedCategory(category)}
-                  className={`px-3 py-1.5 rounded-full font-[var(--font-montserrat)] text-xs transition-all ${
+                  className={`px-3 py-1.5 rounded-full font-body text-xs transition-all ${
                     selectedCategory === category
                       ? 'bg-gold text-white'
                       : 'bg-cream text-charcoal hover:bg-gold/20'
@@ -204,7 +215,7 @@ function TreatmentsContent() {
                 <h2 className="font-display text-3xl text-charcoal">
                   {selectedCategory}
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-sm text-charcoal/60">
+                <p className="font-body text-sm text-charcoal/60">
                   {categoryDescriptions[selectedCategory]}
                 </p>
               </div>
@@ -231,13 +242,13 @@ function TreatmentsContent() {
                 <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
                   Browse by Category
                 </h2>
-                <p className="font-[var(--font-montserrat)] text-white/60">
+                <p className="font-body text-white/60">
                   Find the perfect treatment for your needs
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {categories.map((category) => (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                {categories.filter(c => c !== "Top-Up / Add-On").map((category) => (
                   <button
                     key={category}
                     onClick={() => setSelectedCategory(category)}
@@ -246,7 +257,7 @@ function TreatmentsContent() {
                     <h3 className="font-display text-lg text-white group-hover:text-gold transition-colors mb-1">
                       {category}
                     </h3>
-                    <p className="font-[var(--font-montserrat)] text-xs text-white/50">
+                    <p className="font-body text-xs text-white/50">
                       {treatmentsByCategory[category]?.length || 0} treatments
                     </p>
                   </button>
@@ -261,21 +272,21 @@ function TreatmentsContent() {
           <div className="max-w-4xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-2 bg-gold/10 text-gold px-4 py-2 rounded-full mb-6">
               <Star className="w-4 h-4" />
-              <span className="font-[var(--font-montserrat)] text-sm">Special Offer</span>
+              <span className="font-body text-sm">Special Offer</span>
             </div>
             
             <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
               Royal Phuket City Hotel Guests
             </h2>
             
-            <p className="font-[var(--font-montserrat)] text-charcoal/70 text-lg mb-8 max-w-2xl mx-auto">
+            <p className="font-body text-charcoal/70 text-lg mb-8 max-w-2xl mx-auto">
               Enjoy an exclusive <span className="text-gold font-semibold">10% discount</span> on all 
               treatments when you stay at Royal Phuket City Hotel.
             </p>
             
             <Link
               href="/book"
-              className="inline-flex items-center gap-3 bg-gold hover:bg-gold-dark text-white font-[var(--font-montserrat)] text-lg px-8 py-4 rounded-full transition-all hover:shadow-xl hover:shadow-gold/30 hover:gap-4"
+              className="inline-flex items-center gap-3 bg-gold hover:bg-gold-dark text-white font-body text-lg px-8 py-4 rounded-full transition-all hover:shadow-xl hover:shadow-gold/30 hover:gap-4"
             >
               Book Your Treatment
               <ArrowRight className="w-5 h-5" />
@@ -294,7 +305,7 @@ export default function TreatmentsPage() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-4" />
-          <p className="font-[var(--font-montserrat)] text-charcoal/60">Loading treatments...</p>
+          <p className="font-body text-charcoal/60">Loading treatments...</p>
         </div>
       </div>
     }>

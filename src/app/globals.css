@@ -2,12 +2,12 @@
 
 :root {
   --background: #fdfbf7;
-  --foreground: #1a1a1a;
-  --gold: #c9a962;
-  --gold-light: #dfc88a;
-  --gold-dark: #a68a3e;
+  --foreground: #000000;
+  --gold: #D4B371;
+  --gold-light: #e5c98a;
+  --gold-dark: #b89a5a;
   --cream: #f5f0e6;
-  --charcoal: #2d2d2d;
+  --charcoal: #000000;
   --sage: #9cae9c;
 }
 
@@ -20,16 +20,14 @@
   --color-cream: var(--cream);
   --color-charcoal: var(--charcoal);
   --color-sage: var(--sage);
-  --font-display: var(--font-libre);
-  --font-body: var(--font-montserrat);
 }
 
 .font-display {
-  font-family: var(--font-libre), serif;
+  font-family: var(--font-display), serif;
 }
 
 .font-body {
-  font-family: var(--font-montserrat), sans-serif;
+  font-family: var(--font-body), sans-serif;
 }
 
 body {

@@ -1,16 +1,28 @@
 export interface Treatment {
   id: number;
   name: string;
-  alternateNames: string[];
   category: string;
-  idealFor: string[];
   duration: string;
   price: string;
   priceValue: number;
   description: string;
   highlights: string[];
+  targetGuest: string;
+  bestBookingTime: string;
   notes: string;
-  flow: string[];
+  image: string;
+  isSignature?: boolean;
+  isCouple?: boolean;
+  priceNote?: string;
+}
+
+export interface AddOn {
+  id: number;
+  name: string;
+  duration: string;
+  price: number;
+  techniques: string[];
+  pairsWith: string;
   image: string;
 }
 
@@ -25,6 +37,19 @@ export const categories = [
 
 export type Category = (typeof categories)[number];
 
+export const spaInfo = {
+  name: "Royal Wellness Spa",
+  location: "3rd Floor, Royal Phuket City Hotel",
+  phone: "090-596-9666",
+  lineUrl: "https://lin.ee/En1ToHH",
+  hours: "Daily 10:00 – 22:00",
+  brandColors: {
+    gold: "#D4B371",
+    black: "#000000",
+    white: "#FFFFFF",
+  },
+};
+
 const treatmentImages: Record<string, string> = {
   "Travel Recovery": "/images/Royal Spa 1.jpg",
   "Skin & Radiance": "/images/Royal Spa 2.jpg",
@@ -36,484 +61,410 @@ const treatmentImages: Record<string, string> = {
 
 const specificImages: Record<number, string> = {
   1: "/images/shutterstock_2452280715_resize.jpg",
-  2: "/images/shutterstock_2452280721_resize.jpg",
-  3: "/images/shutterstock_2497508867_resize.jpg",
-  4: "/images/shutterstock_2520861525_resize.jpg",
-  5: "/images/Royal Spa 7.jpg",
-  6: "/images/Royal Spa 8.jpg",
-  7: "/images/Royal Spa 9.jpg",
-  8: "/images/Royal Spa 10.jpg",
-  9: "/images/Royal Spa 11.jpg",
-  10: "/images/Royal Spa 12.jpg",
-  11: "/images/Royal Spa 13.jpg",
+  2: "/images/shutterstock_2364665635_resize.jpg",
+  3: "/images/shutterstock_2167201991_resize.jpg",
+  4: "/images/shutterstock_2452786083_resize.jpg",
+  5: "/images/Royal Wellness Spa 1.jpg",
+  6: "/images/shutterstock_2589885543_resize.jpg",
+  7: "/images/Royal Spa 2.jpg",
+  8: "/images/Royal Spa 3.jpg",
+  9: "/images/shutterstock_1874692903_resize.jpg",
+  10: "/images/shutterstock_2530376767_resize.jpg",
+  11: "/images/Royal Spa 4.jpg",
   12: "/images/shutterstock_232040092_resize.jpg",
-  13: "/images/shutterstock_2364665635_resize.jpg",
-  14: "/images/shutterstock_2167201991_resize.jpg",
-  15: "/images/shutterstock_2452280715_resize.jpg",
-  16: "/images/shutterstock_2452786083_resize.jpg",
-  17: "/images/Royal Wellness Spa 1.jpg",
-  18: "/images/shutterstock_2589885543_resize.jpg",
-  19: "/images/Royal Wellness Spa 8.jpg",
-  20: "/images/Royal Wellness Spa 9.jpg",
-  21: "/images/Royal Wellness Spa 10.jpg",
-  22: "/images/Royal Wellness Spa 2.jpg",
-  23: "/images/Royal Wellness Spa 3.jpg",
-  24: "/images/Royal Wellness Spa 4.jpg",
+  13: "/images/Royal Spa 5.jpg",
+  14: "/images/shutterstock_1062047603_resize.jpg",
+  15: "/images/Royal Spa 6.jpg",
+  16: "/images/Royal Spa 7.jpg",
+  17: "/images/Royal Spa 8.jpg",
+  18: "/images/Royal Spa 9.jpg",
+  19: "/images/Royal Spa 10.jpg",
 };
 
 export const treatments: Treatment[] = [
+  // Travel Recovery (5 treatments)
   {
     id: 1,
-    name: "Digital Detox Recovery",
-    alternateNames: ["Digital Detox Head Recovery", "Urban Screen Recovery"],
+    name: "Office Syndrome Relief",
     category: "Travel Recovery",
-    idealFor: ["Digital nomads", "Remote workers", "Screen fatigue sufferers"],
-    duration: "45 / 90 / 120 min",
-    price: "890 / 2,090 / 2,490",
-    priceValue: 890,
-    description: "Targets neck, shoulders, upper back, and scalp tension from prolonged screen time. Restores mental clarity and relieves eye strain.",
-    highlights: ["Neck & shoulder therapy", "Head & scalp relaxation", "Warm eye compress", "Gentle back release"],
-    notes: "45 min = head-focused entry; 90/120 min = full recovery",
-    flow: [
-      "Head & Scalp Relaxation",
+    duration: "60 / 90 / 120 min",
+    price: "฿990 / ฿1,890 / ฿1,980",
+    priceValue: 990,
+    description: "Full recovery for desk workers and long-stay guests — targeting neck, shoulder, scalp, and eyes with warm compress techniques not found at competitors.",
+    highlights: [
       "Neck & Shoulder Release",
-      "Warm Eye Compress",
-      "Relaxing Aroma Breathing Ritual",
       "Deep Scalp Circulation Therapy",
-      "Mind Calm Integration"
+      "Warm Eye Compress",
+      "Relaxing Aroma Ritual",
+      "Mind Calm Integration",
+      "Deep Back Release (120 min)",
     ],
-    image: specificImages[1]
+    targetGuest: "Long-stay guests",
+    bestBookingTime: "Night before check-out",
+    notes: "Core offering for hotel guests",
+    image: specificImages[1] || treatmentImages["Travel Recovery"],
   },
   {
     id: 2,
-    name: "Urban Posture Reset",
-    alternateNames: ["Remote Worker Reset", "Sitting Lifestyle Recovery"],
+    name: "Posture Revival",
     category: "Travel Recovery",
-    idealFor: ["Remote workers", "Office lifestyle", "Long sitting hours"],
     duration: "90 / 120 min",
-    price: "2,090 / 2,490",
-    priceValue: 2090,
-    description: "Releases back, hip, and shoulder tension from prolonged sitting. Restores posture, mobility, and re-energizes tired muscles.",
-    highlights: ["Deep back & shoulder release", "Hip & lower back relaxation", "Gentle stretching", "Circulation stimulation"],
-    notes: "Closely related to Digital Detox Recovery—can upsell",
-    flow: [],
-    image: specificImages[2]
+    price: "฿1,800 / ฿1,980",
+    priceValue: 1800,
+    description: "Full posture reset for remote workers and WFH guests — includes hip and lower back release with assisted stretching unavailable at competing spas.",
+    highlights: [
+      "Deep Back & Shoulder Release",
+      "Hip & Lower Back Relaxation",
+      "Assisted Stretching",
+    ],
+    targetGuest: "Remote workers / WFH guests",
+    bestBookingTime: "Weekends",
+    notes: "Core offering for hotel guests",
+    image: specificImages[2] || treatmentImages["Travel Recovery"],
   },
   {
     id: 3,
-    name: "Jet Lag Recovery Ritual",
-    alternateNames: ["Royal Jet Lag Recovery Ritual", "After Flight Recovery"],
+    name: "Voyage Revival",
     category: "Travel Recovery",
-    idealFor: ["Long-haul travelers", "Jet lag recovery", "Post-flight fatigue"],
     duration: "90 / 120 min",
-    price: "2,190 / 2,590",
-    priceValue: 2190,
-    description: "Restores the body after long flights via circulation support, lymphatic flow, and full-body relaxation.",
-    highlights: ["Foot awakening ritual", "Circulation boost leg flow", "Lymph flow activation", "Back & shoulder release", "Aroma relaxation", "Warm eye compress"],
-    notes: "Can add Breathing Reset add-on",
-    flow: [
-      "Foot Awakening Ritual (10 min)",
-      "Circulation Boost Leg Flow (20 min)",
-      "Lymph Flow Activation (15 min)",
-      "Back & Shoulder Release (25 min)",
-      "Aroma Relaxation (10 min)",
-      "Warm Eye Compress (10 min)"
+    price: "฿1,980 / ฿2,070",
+    priceValue: 1980,
+    description: "Designed for long-haul travellers — combines foot revival, leg circulation, lymphatic drainage, and warm eye compress in one session.",
+    highlights: [
+      "Foot Awakening Ritual",
+      "Circulation Boost Leg Flow",
+      "Lymph Flow Activation",
+      "Warm Eye Compress",
     ],
-    image: specificImages[3]
+    targetGuest: "Long-haul travellers",
+    bestBookingTime: "After check-in, before first night's sleep",
+    notes: "Core offering for hotel guests",
+    image: specificImages[3] || treatmentImages["Travel Recovery"],
   },
   {
     id: 4,
-    name: "Urban Walking Recovery",
-    alternateNames: ["Balance & Realign Recovery", "Phuket Old Town Recovery", "Lower Body Recovery"],
+    name: "Wander Relief",
     category: "Travel Recovery",
-    idealFor: ["City tourists", "Sightseeing travelers", "Walking Street visitors"],
     duration: "90 / 120 min",
-    price: "2,090 / 2,490",
-    priceValue: 2090,
-    description: "Relieves tension in hips, legs, and feet from long sightseeing days. Restores lower body alignment, balance, and energy.",
-    highlights: ["Lower body alignment & recovery", "Myofascial reset", "Mobility restore stretch"],
-    notes: "Related to Foot Recovery Boost add-on (15 min)",
-    flow: [
+    price: "฿1,440 / ฿1,530",
+    priceValue: 1440,
+    description: "Full lower body recovery for guests who have walked extensively — specialised myofascial release and mobility stretching unavailable at local competitors.",
+    highlights: [
       "Lower Body Alignment & Recovery",
       "Myofascial Reset",
-      "Mobility Restore Stretch"
+      "Mobility Restore Stretch",
     ],
-    image: specificImages[4]
+    targetGuest: "High-activity tourists",
+    bestBookingTime: "Final night of trip",
+    notes: "Core offering for hotel guests",
+    image: specificImages[4] || treatmentImages["Travel Recovery"],
   },
   {
     id: 5,
-    name: "Active Body Recovery",
-    alternateNames: ["Active Muscle Recovery", "Athlete Recovery Therapy", "Sport Recovery Ritual", "Performance Muscle Recovery"],
+    name: "Active Body Revival",
     category: "Travel Recovery",
-    idealFor: ["Gym & fitness", "Muay Thai practitioners", "Sports activities", "Active travelers"],
     duration: "90 / 120 min",
-    price: "2,290 / 2,790",
-    priceValue: 2290,
-    description: "Warming recovery for active guests. Releases muscle fatigue, restores mobility, and supports natural recovery after physical activity.",
-    highlights: ["Foot activation", "Warm oil muscle preparation", "Deep muscle release", "Mobility restore stretch", "Head reset"],
-    notes: "Highest-priced recovery menu",
-    flow: [
-      "Foot Activation (5 min)",
-      "Warm Oil Muscle Preparation (10 min)",
-      "Deep Muscle Release (30 min)",
-      "Mobility Restore Stretch (10 min)",
-      "Head Reset (5 min)"
+    price: "฿2,160 / ฿2,250",
+    priceValue: 2160,
+    description: "The most comprehensive sport recovery on the menu — warm oil muscle prep, deep tissue for athletes, and assisted stretching close with a Head Reset.",
+    highlights: [
+      "Foot Activation",
+      "Warm Oil Muscle Preparation",
+      "Deep Tissue — Glutes / Hamstrings / Calves",
+      "Mobility Restore Stretch",
+      "Head Reset (closing)",
     ],
-    image: specificImages[5]
+    targetGuest: "Athletes / Active travellers",
+    bestBookingTime: "After exercise",
+    notes: "Core offering for hotel guests",
+    image: specificImages[5] || treatmentImages["Travel Recovery"],
   },
+
+  // Skin & Radiance (2 treatments)
   {
     id: 6,
-    name: "Royal Grounding Recovery Ritual",
-    alternateNames: ["Signature Foot & Full Recovery Ritual"],
-    category: "Travel Recovery",
-    idealFor: ["Long walkers", "Travelers", "Lower-body fatigue"],
-    duration: "45 / 90 min",
-    price: "790 / 1,790",
-    priceValue: 790,
-    description: "Spa's signature foot therapy. Restores circulation, releases deep leg tension, and rebalances the body from the ground up.",
-    highlights: ["Circulation activation & hip mobility", "Lower body deep tissue therapy", "Therapeutic foot reflexology", "Shoulder flow opening", "Arm & hand relaxation", "Head relaxation therapy"],
-    notes: "Best entry point for foot-focused guests",
-    flow: [
-      "Circulation Activation & Hip Mobility (10 min)",
-      "Lower Body Deep Tissue Therapy (25 min)",
-      "Therapeutic Foot Reflexology (20 min)",
-      "Shoulder Flow Opening (15 min)",
-      "Arm & Hand Relaxation (10 min)",
-      "Head Relaxation Therapy (10 min)"
+    name: "Sunkiss Recovery",
+    category: "Skin & Radiance",
+    duration: "120 min",
+    price: "฿2,790",
+    priceValue: 2790,
+    description: "Deep skin restoration for guests after sun exposure — organic exfoliation, botanical oil infusion, and muscle rebalancing in one session.",
+    highlights: [
+      "Organic Body Polish",
+      "Core Muscle Rebalancing",
+      "Nourishing Skin Infusion with Botanical Oils",
+      "Aroma Relaxation",
+      "Professional Head Reset",
+      "Warm Eye Compress",
     ],
-    image: specificImages[6]
+    targetGuest: "Sun-exposed leisure guests",
+    bestBookingTime: "After outdoor sightseeing",
+    notes: "",
+    image: specificImages[6] || treatmentImages["Skin & Radiance"],
   },
   {
     id: 7,
-    name: "After-Sun Skin Recovery",
-    alternateNames: ["Sun Recovery Skin Ritual", "After-Sun Revitalizing Ritual", "Tropical Skin Revival"],
+    name: "Royal Glow Ritual",
     category: "Skin & Radiance",
-    idealFor: ["Tourists", "Sun-exposed travelers", "Leisure vacation guests"],
-    duration: "120 min",
-    price: "2,990",
-    priceValue: 2990,
-    description: "Restores skin from sun exposure and travel stress using organic oils and botanical ingredients. Deeply hydrates and revitalizes.",
-    highlights: ["Organic body polish", "Core muscle rebalancing", "Nourishing skin infusion", "Aroma relaxation", "Professional head reset", "Warm eye compress"],
-    notes: "Alternative names: Sun-Kissed Skin Recovery; Radiant Skin Renewal Ritual",
-    flow: [
-      "Organic Body Polish",
-      "Core Muscle Rebalancing",
-      "Nourishing Skin Infusion",
-      "Aroma Relaxation",
-      "Professional Head Reset",
-      "Warm Eye Compress"
-    ],
-    image: specificImages[7]
-  },
-  {
-    id: 8,
-    name: "Royal Glow Renewal Ritual",
-    alternateNames: ["Royal Radiance Renewal", "Golden Glow Rejuvenation", "Ultimate Glow Renewal"],
-    category: "Skin & Radiance",
-    idealFor: ["All guests seeking full-body + facial renewal"],
     duration: "150 min",
-    price: "3,890",
-    priceValue: 3890,
-    description: "Ultimate signature ritual combining body and facial renewal. Restores youthful energy, radiant skin, and deep relaxation.",
-    highlights: ["Organic body polish", "Core muscle rebalancing", "Nourishing aromatherapy massage", "Royal Glow Recovery Facial", "Warm eye compress"],
-    notes: "SIGNATURE treatment — flagship upsell",
-    flow: [
+    price: "฿3,960",
+    priceValue: 3960,
+    description: "Signature full-body and facial ritual — body scrub, aroma massage, and a complete Sculpting Lift Facial in one session. Purchasing separately costs ฿5,480; Royal Glow Ritual delivers both for ฿3,960.",
+    highlights: [
       "Organic Body Polish",
       "Core Muscle Rebalancing",
       "Nourishing Aromatherapy Massage",
-      "Royal Glow Recovery Facial (Deep Cleansing, Exfoliation, Hydration Mask, Sculpting Lift Massage)",
-      "Warm Eye Compress"
+      "Royal Glow Recovery Facial",
+      "Deep Cleansing & Enzyme Exfoliation",
+      "Hydration Mask & Sculpting Lift Massage",
+      "Warm Eye Compress",
     ],
-    image: specificImages[8]
+    targetGuest: "All guests seeking full body + facial",
+    bestBookingTime: "Special occasion / day before departure",
+    notes: "Signature",
+    isSignature: true,
+    image: specificImages[7] || treatmentImages["Skin & Radiance"],
+  },
+
+  // Couple & Special (3 treatments)
+  {
+    id: 8,
+    name: "Silk Radiance Ritual",
+    category: "Couple & Special",
+    duration: "120 min",
+    price: "฿4,990",
+    priceValue: 4990,
+    description: "A shared skin renewal experience for couples in a private suite — organic polish and botanical oil infusion side by side.",
+    highlights: [
+      "Organic Body Polish",
+      "Nourishing Skin Infusion — Botanical Oils",
+      "Aroma Relaxation",
+      "Head Reset",
+      "Warm Eye Compress",
+      "Performed simultaneously in Couple Suite",
+    ],
+    targetGuest: "Couples / Honeymoon / Anniversary",
+    bestBookingTime: "Special evening",
+    notes: "Couple Suite required",
+    isCouple: true,
+    priceNote: "per couple",
+    image: specificImages[8] || treatmentImages["Couple & Special"],
   },
   {
     id: 9,
-    name: "Royal Radiance Body Ritual",
-    alternateNames: ["Golden Glow Body Ritual", "Silk Skin Revitalizing Ritual"],
+    name: "Harmony Retreat",
     category: "Couple & Special",
-    idealFor: ["Urban tourists", "Guests seeking skin rejuvenation"],
-    duration: "120 min",
-    price: "5,400",
-    priceValue: 5400,
-    description: "Luxurious couple-priced skin renewal combining exfoliation, nourishing massage, and aromatherapy for smoother, brighter skin.",
-    highlights: ["Organic body polish", "Core muscle rebalancing", "Nourishing skin infusion", "Aroma relaxation", "Professional head reset", "Warm eye compress"],
-    notes: "Per couple pricing",
-    flow: [
-      "Organic Body Polish",
-      "Core Muscle Rebalancing",
-      "Nourishing Skin Infusion",
-      "Aroma Relaxation",
-      "Professional Head Reset",
-      "Warm Eye Compress"
+    duration: "90 / 120 min",
+    price: "฿3,960 / ฿4,140",
+    priceValue: 3960,
+    description: "A restorative lower body treatment for couples — myofascial release and mobility stretching together in the Couple Suite.",
+    highlights: [
+      "Lower Body Alignment & Recovery",
+      "Myofascial Reset",
+      "Mobility Restore Stretch",
+      "Performed simultaneously in Couple Suite",
     ],
-    image: specificImages[9]
+    targetGuest: "Couples",
+    bestBookingTime: "Relaxation evening",
+    notes: "Couple Suite required",
+    isCouple: true,
+    priceNote: "per couple",
+    image: specificImages[9] || treatmentImages["Couple & Special"],
   },
   {
     id: 10,
-    name: "Traveler's Couple Reset",
-    alternateNames: ["Royal Couple Renewal", "Couple Rebalance Ritual", "Couple Urban Recovery", "Traveler Couple Retreat"],
+    name: "Blossom Bridal",
     category: "Couple & Special",
-    idealFor: ["Couples after travel", "Sightseeing couples", "Leisure travelers"],
-    duration: "90 / 120 min",
-    price: "4,090 / 4,890",
-    priceValue: 4090,
-    description: "Restorative shared experience releasing accumulated travel tension, restoring lower body energy, and promoting couple relaxation.",
-    highlights: ["Lower body alignment & recovery", "Myofascial reset", "Mobility restore stretch"],
-    notes: "Per couple pricing",
-    flow: [
-      "Lower Body Alignment & Recovery",
-      "Myofascial Reset",
-      "Mobility Restore Stretch"
-    ],
-    image: specificImages[10]
-  },
-  {
-    id: 11,
-    name: "Bridal Radiance Preparation Ritual",
-    alternateNames: ["Wedding Day Radiance Ritual", "Bridal Glow Preparation", "Royal Bridal Renewal", "Bridal Calm & Glow Ritual"],
-    category: "Couple & Special",
-    idealFor: ["Pre-wedding", "Special occasions", "Photo/event preparation"],
     duration: "120 min",
-    price: "3,200 / 6,200",
+    price: "฿3,200 / ฿6,200",
     priceValue: 3200,
-    description: "Calming pre-wedding ritual releasing neck & shoulder tension, restoring posture, and revitalizing skin for a natural glow.",
-    highlights: ["Upper body reset", "Deep core rebalancing", "Aroma relaxation", "Performance head reset", "Warm eye compress", "Radiance glow mask"],
-    notes: "3,200/person or 6,200/couple",
-    flow: [
+    description: "Pre-wedding preparation treatment — relaxation, deep core rebalancing, and a Radiance Glow Mask for a luminous, camera-ready complexion.",
+    highlights: [
       "Upper Body Reset",
       "Deep Core Rebalancing",
-      "Aroma Relaxation",
       "Performance Head Reset",
-      "Warm Eye Compress",
-      "Radiance Glow Mask"
+      "Radiance Glow Mask",
     ],
-    image: specificImages[11]
+    targetGuest: "Bride / Pre-wedding / Special occasions",
+    bestBookingTime: "Night before the event",
+    notes: "Couple Suite required",
+    isCouple: true,
+    priceNote: "per person (฿6,200 per couple)",
+    image: specificImages[10] || treatmentImages["Couple & Special"],
+  },
+
+  // Facial Treatments (2 treatments)
+  {
+    id: 11,
+    name: "Sunkiss Facial",
+    category: "Facial Treatments",
+    duration: "30 / 60 min",
+    price: "฿690 / ฿1,490",
+    priceValue: 690,
+    description: "Targeted cooling and soothing facial for guests with sun-damaged skin — pairs naturally with Sunkiss Recovery.",
+    highlights: [
+      "Cooling Compress",
+      "Aloe & Botanical Soothing Mask",
+      "Hydration Essence + Repair Moisturiser",
+    ],
+    targetGuest: "Guests with heavy sun exposure",
+    bestBookingTime: "After outdoor activities",
+    notes: "",
+    image: specificImages[11] || treatmentImages["Facial Treatments"],
   },
   {
     id: 12,
-    name: "Urban Detox Facial",
-    alternateNames: ["Pollution Defense Therapy"],
+    name: "Royal Signature Facial",
     category: "Facial Treatments",
-    idealFor: ["City travelers", "Pollution-exposed guests"],
     duration: "30 / 60 min",
-    price: "590 / 1,690",
-    priceValue: 590,
-    description: "Removes pollution, PM2.5, and excess oil. Detoxifies pores and restores a fresh, balanced complexion.",
-    highlights: ["Gentle cleansing", "Mild exfoliation", "Charcoal mask", "Lymphatic facial massage", "Balancing serum", "Moisturizing protection"],
+    price: "฿690 / ฿1,490",
+    priceValue: 690,
+    description: "The only facial on the menu where guests choose their own focus — Detox, Brightening, or Hydration — creating a personalised experience unavailable at competitors.",
+    highlights: [
+      "Customisable focus — Detox & Deep Cleanse",
+      "Or Brightening & Radiance",
+      "Or Hydration & Nourishment",
+      "Lymphatic Drainage Facial Massage",
+      "High-quality products matched to skin type",
+    ],
+    targetGuest: "Guests wanting a personalised facial",
+    bestBookingTime: "Any time",
     notes: "",
-    flow: [],
-    image: specificImages[12]
+    image: specificImages[12] || treatmentImages["Facial Treatments"],
   },
+
+  // Classic Thai Heritage (3 treatments)
   {
     id: 13,
-    name: "After-Sun Recovery Facial",
-    alternateNames: ["Tropical Skin Soothing Therapy"],
-    category: "Facial Treatments",
-    idealFor: ["Sun-exposed travelers", "Tropical climate guests"],
-    duration: "30 / 60 min",
-    price: "590 / 1,690",
-    priceValue: 590,
-    description: "Calms skin stressed by tropical sun. Reduces redness, cools the skin, and restores the skin barrier.",
-    highlights: ["Gentle cleansing", "Cooling compress", "Aloe/botanical soothing mask", "Relaxing facial massage", "Hydration essence", "Repair moisturizer"],
-    notes: "Pairs well with Urban Skin Recovery body treatment",
-    flow: [],
-    image: specificImages[13]
+    name: "Royal Thai Balance",
+    category: "Classic Thai Heritage",
+    duration: "60 / 90 min",
+    price: "฿900 / ฿1,350",
+    priceValue: 900,
+    description: "Traditional Thai therapy elevated with joint mobility work — no oil, full-body stretch and acupressure.",
+    highlights: [
+      "Full-body Thai Stretch",
+      "Acupressure",
+      "Joint Mobility Work",
+    ],
+    targetGuest: "All guests",
+    bestBookingTime: "Any time",
+    notes: "Traditional methods",
+    image: specificImages[13] || treatmentImages["Classic Thai Heritage"],
   },
   {
     id: 14,
-    name: "Hydration Boost Facial",
-    alternateNames: ["Deep Moisture Therapy"],
-    category: "Facial Treatments",
-    idealFor: ["Dehydrated skin", "All travelers"],
-    duration: "30 / 60 min",
-    price: "590 / 1,690",
-    priceValue: 590,
-    description: "Deeply replenishes lost moisture and revives tired skin. Improves elasticity and softness.",
-    highlights: ["Gentle cleansing", "Soft exfoliation", "Hydrating essence infusion", "Relaxing facial massage", "Hydration mask", "Moisture lock serum"],
-    notes: "",
-    flow: [],
-    image: specificImages[14]
+    name: "Aroma Relaxation Massage",
+    category: "Classic Thai Heritage",
+    duration: "60 / 90 min",
+    price: "฿1,100 / ฿1,980",
+    priceValue: 1100,
+    description: "Deep full-body relaxation with premium aromatherapy oils — hotel-quality oil selection above the standard of local competitors.",
+    highlights: [
+      "Aromatherapy Oil Massage",
+      "Full-body Relaxation",
+      "Circulation Boost",
+      "Premium Essential Oils",
+    ],
+    targetGuest: "All guests",
+    bestBookingTime: "Any time",
+    notes: "Traditional methods",
+    image: specificImages[14] || treatmentImages["Classic Thai Heritage"],
   },
   {
     id: 15,
-    name: "Radiant Vitamin C Facial",
-    alternateNames: ["Glow & Brightening Therapy"],
-    category: "Facial Treatments",
-    idealFor: ["Dull skin", "Guests seeking brightening"],
-    duration: "30 / 60 min",
-    price: "590 / 1,690",
-    priceValue: 590,
-    description: "Brightens dull skin and restores luminous glow using Vitamin C. Improves skin tone clarity and natural radiance.",
-    highlights: ["Gentle cleansing", "Enzyme exfoliation", "Vitamin C serum infusion", "Facial massage", "Brightening mask", "Glow finishing cream"],
-    notes: "",
-    flow: [],
-    image: specificImages[15]
+    name: "Thai Herbal Compress Therapy",
+    category: "Classic Thai Heritage",
+    duration: "60 / 90 min",
+    price: "฿1,440 / ฿1,890",
+    priceValue: 1440,
+    description: "Traditional herbal compress with freshly prepared balls — deep heat penetration beyond standard oil massage.",
+    highlights: [
+      "Warm Herbal Compress (prepared fresh)",
+      "Deep Muscle Release",
+      "Circulation Stimulation",
+    ],
+    targetGuest: "All guests / Deep muscle relief",
+    bestBookingTime: "Any time",
+    notes: "Traditional methods",
+    image: specificImages[15] || treatmentImages["Classic Thai Heritage"],
   },
+];
+
+export const addOns: AddOn[] = [
   {
     id: 16,
-    name: "Jet Lag Recovery Facial",
-    alternateNames: ["Traveler Skin Reset Therapy"],
-    category: "Facial Treatments",
-    idealFor: ["Long-haul travelers", "Post-flight fatigue"],
-    duration: "30 / 60 min",
-    price: "590 / 1,690",
-    priceValue: 590,
-    description: "Restores hydration and vitality lost during flights. Reduces puffiness, tired eyes, and dull skin.",
-    highlights: ["Gentle cleansing", "Hydration essence", "Relaxing facial massage", "Cooling eye mask", "Hydrating recovery mask", "Moisture lock serum"],
-    notes: "Pairs with Jet Lag Recovery Ritual body treatment",
-    flow: [],
-    image: specificImages[16]
+    name: "Foot Boost",
+    duration: "15 min",
+    price: 350,
+    techniques: [
+      "Warm Welcome Touch",
+      "Reflex Point Stimulation (Solar Plexus, Kidney Zone, Digestive Zone)",
+      "Finishing Relaxation",
+    ],
+    pairsWith: "All foot / leg treatments",
+    image: specificImages[16] || treatmentImages["Top-Up / Add-On"],
   },
   {
     id: 17,
-    name: "Royal Wellness Signature Facial",
-    alternateNames: ["Ultimate Rejuvenation Ritual"],
-    category: "Facial Treatments",
-    idealFor: ["All guests seeking premium facial"],
-    duration: "90 min",
-    price: "2,790",
-    priceValue: 2790,
-    description: "Signature facial ritual combining advanced massage, botanical nourishment, and deep hydration. Improves firmness, circulation, and natural radiance.",
-    highlights: ["Welcome aromatherapy breathing", "Gentle cleansing", "Enzyme exfoliation", "Royal lifting facial massage", "Nourishing collagen mask", "Neck & shoulder relaxation", "Intensive serum infusion", "Moisture lock finishing cream"],
-    notes: "SIGNATURE facial — flagship upsell",
-    flow: [
-      "Welcome Aromatherapy Breathing",
-      "Gentle Cleansing",
-      "Enzyme Exfoliation",
-      "Royal Lifting Facial Massage",
-      "Nourishing Collagen Mask",
-      "Neck & Shoulder Relaxation",
-      "Intensive Serum Infusion",
-      "Moisture Lock Finishing Cream"
+    name: "Head Reset",
+    duration: "15 min",
+    price: 320,
+    techniques: [
+      "Gentle Scalp Warm-up",
+      "Base-of-Skull Pressure Release",
+      "Deep Scalp Massage",
+      "Neck Tension Release",
     ],
-    image: specificImages[17]
+    pairsWith: "Office Syndrome Relief / Voyage Revival / Facial treatments",
+    image: specificImages[17] || treatmentImages["Top-Up / Add-On"],
   },
   {
     id: 18,
-    name: "Royal Thai Balance",
-    alternateNames: [],
-    category: "Classic Thai Heritage",
-    idealFor: ["All guests"],
-    duration: "60 / 90 min",
-    price: "1,290 / 1,690",
-    priceValue: 1290,
-    description: "Traditional Thai stretching and pressure techniques to improve flexibility, release muscle tension, and restore natural body balance.",
-    highlights: ["Full-body Thai stretch", "Acupressure", "Joint mobility work"],
-    notes: "",
-    flow: [],
-    image: specificImages[18]
+    name: "Thai Herbal Compress",
+    duration: "15 min",
+    price: 390,
+    techniques: [
+      "Warm Herbal Compress Preparation",
+      "Gentle Pressing Along Tension Areas",
+      "Rhythmic Application",
+      "Light Finishing Massage",
+    ],
+    pairsWith: "All massage treatments",
+    image: specificImages[18] || treatmentImages["Top-Up / Add-On"],
   },
   {
     id: 19,
-    name: "Aroma Relaxation Massage",
-    alternateNames: [],
-    category: "Classic Thai Heritage",
-    idealFor: ["All guests"],
-    duration: "60 / 90 min",
-    price: "1,390 / 1,790",
-    priceValue: 1390,
-    description: "Soothing full-body massage using aromatic essential oils to promote deep relaxation, improve circulation, and relieve everyday tension.",
-    highlights: ["Aromatherapy oil massage", "Full-body relaxation", "Circulation boost"],
-    notes: "",
-    flow: [],
-    image: specificImages[19]
-  },
-  {
-    id: 20,
-    name: "Thai Herbal Compress Therapy",
-    alternateNames: ["Thai Herbal Heat Therapy"],
-    category: "Classic Thai Heritage",
-    idealFor: ["All guests"],
-    duration: "60 / 90 min",
-    price: "1,590 / 1,990",
-    priceValue: 1590,
-    description: "Traditional Thai massage combined with warm herbal compress to relieve muscle stiffness, stimulate circulation, and promote deep relaxation.",
-    highlights: ["Warm herbal compress", "Deep muscle release", "Circulation stimulation"],
-    notes: "Top-up 15-min version: 390 THB",
-    flow: [],
-    image: specificImages[20]
-  },
-  {
-    id: 21,
-    name: "Foot Recovery Boost",
-    alternateNames: ["Reflex Foot Refresh"],
-    category: "Top-Up / Add-On",
-    idealFor: ["Walkers", "Travelers", "Fatigue relief"],
-    duration: "15 min",
-    price: "350",
-    priceValue: 350,
-    description: "Focused reflexology boost to relieve foot fatigue, stimulate circulation, and restore lightness to tired legs.",
-    highlights: ["Warm welcome touch", "Foot warm-up", "Reflex point stimulation", "Finishing relaxation"],
-    notes: "Add-on to any lower-body treatment",
-    flow: [],
-    image: specificImages[21]
-  },
-  {
-    id: 22,
-    name: "Head Reset Therapy",
-    alternateNames: ["Deep Scalp & Neck Relaxation"],
-    category: "Top-Up / Add-On",
-    idealFor: ["Mental stress", "Long screen hours"],
-    duration: "15 min",
-    price: "320",
-    priceValue: 320,
-    description: "Focused head and neck therapy releasing tension from mental stress and screen use. Stimulates scalp circulation and calms the nervous system.",
-    highlights: ["Gentle scalp warm-up", "Base-of-skull pressure release", "Deep scalp massage", "Neck tension release"],
-    notes: "Add-on to any treatment",
-    flow: [],
-    image: specificImages[22]
-  },
-  {
-    id: 23,
-    name: "Thai Herbal Heat Therapy",
-    alternateNames: ["Thai Herbal Compress Enhancement"],
-    category: "Top-Up / Add-On",
-    idealFor: ["Muscle stiffness", "General relaxation enhancement"],
-    duration: "15 min",
-    price: "390",
-    priceValue: 390,
-    description: "Traditional Thai herbal compress to deepen muscle relaxation and stimulate circulation during any treatment.",
-    highlights: ["Warm herbal compress preparation", "Gentle pressing along tension areas", "Rhythmic herbal compress application", "Light finishing massage"],
-    notes: "Enhancement for any massage",
-    flow: [],
-    image: specificImages[23]
-  },
-  {
-    id: 24,
     name: "Screen Relief Treatment",
-    alternateNames: ["Digital Eye Relief", "Warm Eye Compress Add-On"],
-    category: "Top-Up / Add-On",
-    idealFor: ["Digital nomads", "Remote workers", "Screen fatigue"],
     duration: "15 min",
-    price: "350",
-    priceValue: 350,
-    description: "Relieves eye strain and mental fatigue from screen use using warm eye compress therapy and gentle scalp reset.",
-    highlights: ["Warm eye compress application", "Scalp reset techniques", "Gentle temple relaxation massage", "Finishing relaxation strokes"],
-    notes: "Can pair with any head/neck treatment",
-    flow: [],
-    image: specificImages[24]
-  }
+    price: 350,
+    techniques: [
+      "Warm Eye Compress Application",
+      "Scalp Reset Techniques",
+      "Gentle Temple Relaxation Massage",
+      "Finishing Relaxation Strokes",
+    ],
+    pairsWith: "Office Syndrome Relief / Facial treatments",
+    image: specificImages[19] || treatmentImages["Top-Up / Add-On"],
+  },
 ];
 
-export const getTreatmentsByCategory = (category: Category): Treatment[] => {
-  return treatments.filter(t => t.category === category);
+export const getTreatmentById = (id: number): Treatment | undefined => {
+  return treatments.find((t) => t.id === id);
 };
 
-export const getTreatmentById = (id: number): Treatment | undefined => {
-  return treatments.find(t => t.id === id);
+export const getTreatmentsByCategory = (category: Category): Treatment[] => {
+  return treatments.filter((t) => t.category === category);
 };
 
 export const getSignatureTreatments = (): Treatment[] => {
-  return treatments.filter(t => t.notes.toLowerCase().includes('signature'));
+  return treatments.filter((t) => t.isSignature);
 };
 
-export const spaInfo = {
-  name: "Royal Wellness Spa",
-  tagline: "Massage & Spa",
-  location: "3rd Floor",
-  hours: "10AM - 11PM",
-  description: "Indulge in a tranquil spa experience designed to restore balance to both body and mind. With expert massage techniques and premium aromatic oils, our spa offers a serene escape that leaves you feeling refreshed, relaxed, and completely renewed.",
-  address: "Phuket, Thailand",
-  phone: "+66 XX XXX XXXX",
-  email: "info@royalwellnessspa.com"
+export const getAddOns = (): AddOn[] => {
+  return addOns;
+};
+
+export const getAllTreatmentsWithAddOns = (): (Treatment | AddOn)[] => {
+  return [...treatments, ...addOns];
 };
