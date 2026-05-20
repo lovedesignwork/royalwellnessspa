@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, Suspense } from 'react';
+import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -64,6 +64,9 @@ function BookingContent() {
   const [activeGuestId, setActiveGuestId] = useState<string>('guest-1');
   const [showCart, setShowCart] = useState(false);
   const [durationModal, setDurationModal] = useState<{ treatment: Treatment; guestId: string } | null>(null);
+  const [paymentError, setPaymentError] = useState<string>('');
+  const [paymentForm, setPaymentForm] = useState<{ url: string; data: Record<string, string> } | null>(null);
+  const paymentFormRef = useRef<HTMLFormElement>(null);
   
   const [bookingData, setBookingData] = useState<BookingData>({
     guests: [{ id: 'guest-1', guestName: 'Guest 1', treatment: null, selectedDuration: '', selectedPrice: 0 }],
@@ -221,12 +224,13 @@ function BookingContent() {
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!bookingData.date || !bookingData.time || !bookingData.firstName || !bookingData.email || !bookingData.phone) {
       return;
     }
 
     setIsProcessing(true);
+    setPaymentError('');
 
     try {
       const response = await fetch('/api/payment/create', {
@@ -260,14 +264,23 @@ function BookingContent() {
 
       const data = await response.json();
 
-      if (data.success && data.paymentUrl) {
-        window.location.href = data.paymentUrl;
-      } else {
+      if (data.success && data.paymentUrl && data.formData) {
+        // Pay Solutions requires a POST form submission. Set the form data and submit it.
+        setPaymentForm({ url: data.paymentUrl, data: data.formData });
+        setTimeout(() => {
+          paymentFormRef.current?.submit();
+        }, 100);
+      } else if (data.success) {
+        // No payment gateway configured — fall back to confirmation
         setCurrentStep('confirmation');
+        setIsProcessing(false);
+      } else {
+        setPaymentError(data.error || 'Failed to initiate payment. Please try again.');
+        setIsProcessing(false);
       }
-    } catch {
-      setCurrentStep('confirmation');
-    } finally {
+    } catch (error) {
+      console.error('Payment error:', error);
+      setPaymentError('Failed to initiate payment. Please try again.');
       setIsProcessing(false);
     }
   };
@@ -1018,6 +1031,13 @@ function BookingContent() {
                         </p>
                       </div>
 
+                      {/* Payment Error */}
+                      {paymentError && (
+                        <div className="mb-4 bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg text-sm font-body">
+                          {paymentError}
+                        </div>
+                      )}
+
                       {/* Actions */}
                       <div className="space-y-3">
                         <button
@@ -1199,6 +1219,33 @@ function BookingContent() {
                 Selecting for: <span className="text-gold font-medium">{bookingData.guests.find(g => g.id === durationModal.guestId)?.guestName}</span>
               </p>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Hidden form for Pay Solutions POST submission */}
+      {paymentForm && (
+        <form
+          ref={paymentFormRef}
+          action={paymentForm.url}
+          method="POST"
+          style={{ display: 'none' }}
+        >
+          {Object.entries(paymentForm.data).map(([key, value]) => (
+            <input key={key} type="hidden" name={key} value={value} />
+          ))}
+        </form>
+      )}
+
+      {/* Payment redirect overlay */}
+      {paymentForm && (
+        <div className="fixed inset-0 z-[100] bg-black/60 backdrop-blur-sm flex items-center justify-center p-6">
+          <div className="bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full text-center">
+            <div className="w-16 h-16 border-4 border-gold/30 border-t-gold rounded-full animate-spin mx-auto mb-6" />
+            <h3 className="font-display text-2xl text-charcoal mb-2">Redirecting to Payment</h3>
+            <p className="font-body text-sm text-charcoal/60">
+              Please wait while we redirect you to Pay Solutions to complete your payment securely.
+            </p>
           </div>
         </div>
       )}

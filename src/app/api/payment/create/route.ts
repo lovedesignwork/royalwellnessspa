@@ -1,17 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
-import crypto from 'crypto';
+import { createAdminSupabaseClient } from '@/lib/supabase/admin';
+import { generatePaymentFormData } from '@/lib/paysolutions';
+
+const MAX_REF_LENGTH = 12;
 
 interface TreatmentItem {
   guestName: string;
   treatmentName: string;
+  duration?: string;
   price: number;
 }
 
 interface PaymentRequest {
   amount: number;
   treatments: TreatmentItem[];
-  treatment?: string; // Legacy single treatment
+  treatment?: string;
   date: string;
   time: string;
   customer: {
@@ -25,19 +28,36 @@ interface PaymentRequest {
   discount?: number;
 }
 
+function buildNumericRef(source: string): string {
+  const digits = (source || '').replace(/\D/g, '');
+  const timestamp = Date.now().toString();
+  const random = Math.floor(Math.random() * 1_000_000)
+    .toString()
+    .padStart(6, '0');
+
+  const combined = `${digits}${timestamp}${random}`;
+  return combined.slice(-MAX_REF_LENGTH);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body: PaymentRequest = await request.json();
-    const { amount, treatments, treatment, date, time, customer, notes, isHotelGuest, discount } = body;
+    const { amount, treatments, treatment, date, time, customer, notes, isHotelGuest } = body;
 
-    const supabase = await createClient();
+    const supabase = createAdminSupabaseClient();
 
-    const bookingRef = `RWS-${Date.now()}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    // Generate booking reference (alphanumeric, max 20 chars)
+    const bookingRef = `RWS${Date.now()}${Math.floor(Math.random() * 10000)}`.slice(0, 20);
 
     // Format treatment names for storage
-    const treatmentNames = treatments 
-      ? treatments.map(t => `${t.guestName}: ${t.treatmentName}`).join(' | ')
+    const treatmentNames = treatments && treatments.length > 0
+      ? treatments
+          .map((t) => `${t.guestName}: ${t.treatmentName}${t.duration ? ` (${t.duration})` : ''}`)
+          .join(' | ')
       : treatment || '';
+
+    // Generate the numeric Pay Solutions ref
+    const paySolutionsRef = buildNumericRef(bookingRef);
 
     const { data: booking, error: bookingError } = await supabase
       .from('bookings')
@@ -50,15 +70,16 @@ export async function POST(request: NextRequest) {
         customer_last_name: customer.lastName,
         customer_email: customer.email,
         customer_phone: customer.phone,
-        notes: `${notes}${isHotelGuest ? ' [HOTEL GUEST - 10% DISCOUNT]' : ''}`,
-        amount: amount,
+        notes: `${notes || ''}${isHotelGuest ? ' [HOTEL GUEST - 10% DISCOUNT]' : ''}`,
+        amount,
         status: 'pending',
         payment_status: 'pending',
+        payment_ref: paySolutionsRef,
       })
       .select()
       .single();
 
-    if (bookingError) {
+    if (bookingError || !booking) {
       console.error('Booking error:', bookingError);
       return NextResponse.json(
         { success: false, error: 'Failed to create booking' },
@@ -66,11 +87,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const merchantId = process.env.PAYSOLUTION_MERCHANT_ID;
-    const secretKey = process.env.PAYSOLUTION_SECRET_KEY;
-    const apiUrl = process.env.PAYSOLUTION_API_URL || 'https://www.thaiepay.com/epaylink/payment.aspx';
+    const merchantId = process.env.PAYSOLUTIONS_MERCHANT_ID;
 
-    if (!merchantId || !secretKey) {
+    if (!merchantId) {
+      // Fallback: confirm booking without payment (for testing)
       return NextResponse.json({
         success: true,
         bookingRef,
@@ -79,42 +99,35 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    const orderRef = bookingRef;
-    const productDetail = treatments 
+    const productDetail = treatments && treatments.length > 0
       ? `Royal Wellness Spa - ${treatments.length} treatment(s)`
-      : `Royal Wellness Spa - ${treatment}`;
-    const customerEmail = customer.email;
-    const customerName = `${customer.firstName} ${customer.lastName}`;
-    
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-    const successUrl = `${baseUrl}/payment/success?ref=${orderRef}`;
-    const failUrl = `${baseUrl}/payment/fail?ref=${orderRef}`;
-    const cancelUrl = `${baseUrl}/payment/cancel?ref=${orderRef}`;
-    const backendUrl = `${baseUrl}/api/payment/webhook`;
+      : `Royal Wellness Spa - ${treatment || 'Booking'}`;
+    const customerName = `${customer.firstName} ${customer.lastName}`.trim();
 
-    const checksumString = `${merchantId}${orderRef}${amount}${secretKey}`;
-    const checksum = crypto.createHash('md5').update(checksumString).digest('hex');
-
-    const paymentParams = new URLSearchParams({
-      merchantid: merchantId,
-      refno: orderRef,
-      customeremail: customerEmail,
-      productdetail: productDetail,
-      total: amount.toString(),
-      cc: 'THB',
-      returnurl: successUrl,
-      postbackurl: backendUrl,
-      cancelurl: cancelUrl,
-      failurl: failUrl,
-      customername: customerName,
-      checksum: checksum,
+    // Generate Pay Solutions form data
+    const result = generatePaymentFormData({
+      refNo: paySolutionsRef,
+      originalRef: bookingRef,
+      amount: Number(amount),
+      description: productDetail,
+      customerEmail: customer.email,
+      customerName,
+      customerPhone: customer.phone,
     });
 
-    const paymentUrl = `${apiUrl}?${paymentParams.toString()}`;
+    if (!result.success) {
+      console.error('Pay Solutions form data generation failure:', result.error);
+      return NextResponse.json(
+        { success: false, error: `Payment initialization failed: ${result.error}` },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
-      paymentUrl,
+      paymentUrl: result.paymentUrl,
+      formData: result.formData,
+      refNo: result.refNo,
       bookingRef,
       bookingId: booking.id,
     });
