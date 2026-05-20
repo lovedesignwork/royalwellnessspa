@@ -41,8 +41,10 @@ export const spaInfo = {
   name: "Royal Wellness Spa",
   location: "3rd Floor, Royal Phuket City Hotel",
   phone: "090-596-9666",
+  whatsapp: "090-596-9666",
   lineUrl: "https://lin.ee/En1ToHH",
-  hours: "Daily 10:00 – 22:00",
+  email: "wallop.c@royalwellnessspaphuket.com",
+  hours: "Open Daily: 10:00 AM – 10:00 PM",
   brandColors: {
     gold: "#D4B371",
     black: "#000000",

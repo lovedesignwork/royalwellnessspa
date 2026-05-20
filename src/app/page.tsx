@@ -116,7 +116,7 @@ export default function Home() {
 
                 <div className="grid grid-cols-2 gap-6 mb-8">
                   {[
-                    { icon: Clock, title: 'Open Daily', desc: '10AM - 11PM' },
+                    { icon: Clock, title: 'Open Daily', desc: '10:00 AM – 10:00 PM' },
                     { icon: Award, title: 'Certified Experts', desc: '500+ hours training' },
                     { icon: Heart, title: 'Organic Oils', desc: 'Premium aromatics' },
                     { icon: Leaf, title: 'Eco-Conscious', desc: 'Sustainable practices' },
