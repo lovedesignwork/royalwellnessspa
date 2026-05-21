@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createAdminSupabaseClient } from '@/lib/supabase/admin';
 import { generatePaymentFormData } from '@/lib/paysolutions';
+import { insertSpaReservation } from '@/lib/supabase-rpch';
 
 const MAX_REF_LENGTH = 12;
 
@@ -85,6 +86,24 @@ export async function POST(request: NextRequest) {
         { success: false, error: 'Failed to create booking' },
         { status: 500 }
       );
+    }
+
+    // Also insert into RPCH admin dashboard (spa_reservations table)
+    const rpchResult = await insertSpaReservation({
+      guest_name: `${customer.firstName} ${customer.lastName}`.trim(),
+      email: customer.email,
+      phone: customer.phone,
+      date: date,
+      time: time,
+      guests: treatments?.length || 1,
+      service: treatmentNames,
+      occasion: isHotelGuest ? 'Hotel Guest (10% Discount)' : undefined,
+      special_requests: notes || undefined,
+    });
+
+    if (!rpchResult.ok) {
+      console.error('RPCH reservation insert failed:', rpchResult.error);
+      // Continue anyway - local booking succeeded, admin will see it in local DB
     }
 
     const merchantId = process.env.PAYSOLUTIONS_MERCHANT_ID;
