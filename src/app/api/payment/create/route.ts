@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminSupabaseClient } from '@/lib/supabase/admin';
 import { generatePaymentFormData } from '@/lib/paysolutions';
-import { insertSpaReservation } from '@/lib/supabase-rpch';
+import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
 
 const MAX_REF_LENGTH = 12;
 
@@ -45,9 +44,9 @@ export async function POST(request: NextRequest) {
     const body: PaymentRequest = await request.json();
     const { amount, treatments, treatment, date, time, customer, notes, isHotelGuest } = body;
 
-    const supabase = createAdminSupabaseClient();
+    const supabase = getRPCHSupabaseClient();
 
-    // Generate booking reference (alphanumeric, max 20 chars)
+    // Generate booking reference
     const bookingRef = `RWS${Date.now()}${Math.floor(Math.random() * 10000)}`.slice(0, 20);
 
     // Format treatment names for storage
@@ -60,22 +59,24 @@ export async function POST(request: NextRequest) {
     // Generate the numeric Pay Solutions ref
     const paySolutionsRef = buildNumericRef(bookingRef);
 
+    // Insert into spa_reservations (RPCH admin picks it up)
     const { data: booking, error: bookingError } = await supabase
-      .from('bookings')
+      .from('spa_reservations')
       .insert({
         reference: bookingRef,
-        treatment_name: treatmentNames,
-        booking_date: date,
-        booking_time: time,
-        customer_first_name: customer.firstName,
-        customer_last_name: customer.lastName,
-        customer_email: customer.email,
-        customer_phone: customer.phone,
-        notes: `${notes || ''}${isHotelGuest ? ' [HOTEL GUEST - 10% DISCOUNT]' : ''}`,
-        amount,
+        payment_ref: paySolutionsRef,
+        guest_name: `${customer.firstName} ${customer.lastName}`.trim(),
+        email: customer.email,
+        phone: customer.phone,
+        date: date,
+        time: time,
+        guests: treatments?.length || 1,
+        service: treatmentNames,
+        occasion: isHotelGuest ? 'Hotel Guest (10% Discount)' : null,
+        special_requests: notes || null,
+        amount: amount,
         status: 'pending',
         payment_status: 'pending',
-        payment_ref: paySolutionsRef,
       })
       .select()
       .single();
@@ -83,27 +84,9 @@ export async function POST(request: NextRequest) {
     if (bookingError || !booking) {
       console.error('Booking error:', bookingError);
       return NextResponse.json(
-        { success: false, error: 'Failed to create booking' },
+        { success: false, error: `Failed to create booking: ${bookingError?.message || 'unknown error'}` },
         { status: 500 }
       );
-    }
-
-    // Also insert into RPCH admin dashboard (spa_reservations table)
-    const rpchResult = await insertSpaReservation({
-      guest_name: `${customer.firstName} ${customer.lastName}`.trim(),
-      email: customer.email,
-      phone: customer.phone,
-      date: date,
-      time: time,
-      guests: treatments?.length || 1,
-      service: treatmentNames,
-      occasion: isHotelGuest ? 'Hotel Guest (10% Discount)' : undefined,
-      special_requests: notes || undefined,
-    });
-
-    if (!rpchResult.ok) {
-      console.error('RPCH reservation insert failed:', rpchResult.error);
-      // Continue anyway - local booking succeeded, admin will see it in local DB
     }
 
     const merchantId = process.env.PAYSOLUTIONS_MERCHANT_ID;
@@ -153,7 +136,7 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('Payment creation error:', error);
     return NextResponse.json(
-      { success: false, error: 'Internal server error' },
+      { success: false, error: error instanceof Error ? error.message : 'Internal server error' },
       { status: 500 }
     );
   }

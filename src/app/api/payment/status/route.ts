@@ -1,31 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminSupabaseClient } from '@/lib/supabase/admin';
+import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
 import { isPaymentSuccessful } from '@/lib/paysolutions';
 
 type BookingRecord = {
   id: string;
-  reference: string;
+  reference: string | null;
   payment_ref: string | null;
   payment_status: string | null;
   status: string;
-  amount: number;
+  amount: number | null;
   transaction_id: string | null;
   updated_at: string;
   created_at: string;
-  customer_first_name: string;
-  customer_last_name: string;
-  customer_email: string;
-  customer_phone: string;
-  treatment_name: string;
-  booking_date: string;
-  booking_time: string;
-  notes: string | null;
+  guest_name: string;
+  email: string;
+  phone: string;
+  service: string | null;
+  date: string;
+  time: string;
+  special_requests: string | null;
 };
 
 export async function GET(request: NextRequest) {
   try {
     const bookingRef = request.nextUrl.searchParams.get('bookingRef');
-    // PaySolutions return URL parameters for verification
     const result = request.nextUrl.searchParams.get('result');
     const apCode =
       request.nextUrl.searchParams.get('apcode') || request.nextUrl.searchParams.get('Apcode');
@@ -35,8 +33,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Missing bookingRef' }, { status: 400 });
     }
 
-    const supabase = createAdminSupabaseClient();
-    const selectFields = '*';
+    const supabase = getRPCHSupabaseClient();
 
     const normalizedRef = bookingRef.trim();
     const upperRef = normalizedRef.toUpperCase();
@@ -62,8 +59,8 @@ export async function GET(request: NextRequest) {
       tried.add(key);
 
       const { data, error } = await supabase
-        .from('bookings')
-        .select(selectFields)
+        .from('spa_reservations')
+        .select('*')
         .eq(variant.column, variant.value)
         .order('created_at', { ascending: false })
         .limit(1);
@@ -96,7 +93,7 @@ export async function GET(request: NextRequest) {
 
       if (isSuccess) {
         const { error: updateError } = await supabase
-          .from('bookings')
+          .from('spa_reservations')
           .update({
             status: 'confirmed',
             payment_status: 'paid',
@@ -123,11 +120,11 @@ export async function GET(request: NextRequest) {
         status: booking.status,
         amount: booking.amount,
         transaction_id: booking.transaction_id,
-        treatment_name: booking.treatment_name,
-        booking_date: booking.booking_date,
-        booking_time: booking.booking_time,
-        customer_name: `${booking.customer_first_name} ${booking.customer_last_name}`.trim(),
-        customer_email: booking.customer_email,
+        treatment_name: booking.service,
+        booking_date: booking.date,
+        booking_time: booking.time,
+        customer_name: booking.guest_name,
+        customer_email: booking.email,
         has_callback: Boolean(booking.payment_status),
         updated_at: booking.updated_at,
         created_at: booking.created_at,

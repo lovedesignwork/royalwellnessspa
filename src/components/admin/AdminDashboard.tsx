@@ -82,7 +82,7 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
 
   const updateBookingStatus = async (bookingId: string, newStatus: string) => {
     const supabase = createClient();
-    await supabase.from('bookings').update({ status: newStatus }).eq('id', bookingId);
+    await supabase.from('spa_reservations').update({ status: newStatus }).eq('id', bookingId);
     router.refresh();
   };
 

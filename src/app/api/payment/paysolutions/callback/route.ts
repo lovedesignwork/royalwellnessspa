@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createAdminSupabaseClient } from '@/lib/supabase/admin';
+import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
 import { parseCallbackData, isPaymentSuccessful } from '@/lib/paysolutions';
 
 async function parseRequestBody(request: NextRequest): Promise<Record<string, unknown>> {
@@ -23,7 +23,6 @@ async function parseRequestBody(request: NextRequest): Promise<Record<string, un
     return result;
   }
 
-  // Fallback: try JSON, then parse as query string
   const rawBody = await request.text();
   if (!rawBody) {
     return {};
@@ -54,10 +53,10 @@ async function handleCallback(body: Record<string, unknown>, request: NextReques
 
     const { refNo, amount, status, transactionId } = callbackData;
 
-    const supabase = createAdminSupabaseClient();
+    const supabase = getRPCHSupabaseClient();
 
-    // Find the booking by reference (or payment_ref)
-    let bookingQuery = supabase.from('bookings').select('*').limit(1);
+    // Find the booking by reference or payment_ref
+    let bookingQuery = supabase.from('spa_reservations').select('*').limit(1);
 
     if (bookingRefOverride) {
       bookingQuery = bookingQuery.eq('reference', bookingRefOverride);
@@ -83,9 +82,9 @@ async function handleCallback(body: Record<string, unknown>, request: NextReques
     });
 
     const { error: updateError } = await supabase
-      .from('bookings')
+      .from('spa_reservations')
       .update({
-        status: isSuccess ? 'confirmed' : 'payment_failed',
+        status: isSuccess ? 'confirmed' : 'cancelled',
         payment_status: isSuccess ? 'paid' : 'failed',
         transaction_id: transactionId || refNo,
         payment_completed_at: isSuccess ? new Date().toISOString() : null,
