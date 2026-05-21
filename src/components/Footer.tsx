@@ -1,8 +1,13 @@
-import Link from 'next/link';
+'use client';
+
+import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { MapPin, Phone, Clock, Instagram, Facebook, MessageCircle, Mail } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Footer() {
+  const t = useTranslations('footer');
+  const tNav = useTranslations('nav');
   return (
     <footer className="bg-charcoal text-white">
       <div className="max-w-7xl mx-auto px-6 py-16">
@@ -16,14 +21,13 @@ export default function Footer() {
               className="h-14 w-auto mb-6 brightness-0 invert"
             />
             <p className="text-white/70 font-body text-sm leading-relaxed">
-              Indulge in a tranquil spa experience designed to restore balance
-              to both body and mind.
+              {t('description')}
             </p>
           </div>
 
           <div>
             <h4 className="font-display text-xl font-semibold mb-6 text-gold">
-              Quick Links
+              {t('quickLinks')}
             </h4>
             <ul className="space-y-3 font-body text-sm">
               <li>
@@ -31,7 +35,7 @@ export default function Footer() {
                   href="/treatments"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
-                  Our Treatments
+                  {tNav('treatments')}
                 </Link>
               </li>
               <li>
@@ -39,7 +43,7 @@ export default function Footer() {
                   href="/book"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
-                  Book Appointment
+                  {tNav('home') === 'Home' ? 'Book Appointment' : 'จองนัดหมาย'}
                 </Link>
               </li>
               <li>
@@ -47,7 +51,7 @@ export default function Footer() {
                   href="/about"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
-                  About Us
+                  {tNav('about')}
                 </Link>
               </li>
               <li>
@@ -55,7 +59,7 @@ export default function Footer() {
                   href="/contact"
                   className="text-white/70 hover:text-gold transition-colors"
                 >
-                  Contact
+                  {tNav('contact')}
                 </Link>
               </li>
             </ul>
@@ -63,7 +67,7 @@ export default function Footer() {
 
           <div>
             <h4 className="font-display text-xl font-semibold mb-6 text-gold">
-              Contact Info
+              {t('contactInfo')}
             </h4>
             <ul className="space-y-4 font-body text-sm text-white/70">
               <li className="flex items-start gap-3">
@@ -103,14 +107,14 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Clock className="w-4 h-4 text-gold flex-shrink-0" />
-                <span>Open Daily: 10:00 AM – 10:00 PM</span>
+                <span>{t('openDaily')}</span>
               </li>
             </ul>
           </div>
 
           <div>
             <h4 className="font-display text-xl font-semibold mb-6 text-gold">
-              Follow Us
+              {tNav('home') === 'Home' ? 'Follow Us' : 'ติดตามเรา'}
             </h4>
             <div className="flex gap-4 mb-8">
               <a
@@ -135,21 +139,23 @@ export default function Footer() {
               </a>
             </div>
             <p className="font-body text-sm text-white/70">
-              Subscribe to our newsletter for exclusive offers and wellness tips.
+              {tNav('home') === 'Home' 
+                ? 'Subscribe to our newsletter for exclusive offers and wellness tips.'
+                : 'สมัครรับจดหมายข่าวเพื่อรับข้อเสนอพิเศษและเคล็ดลับสุขภาพ'}
             </p>
           </div>
         </div>
 
         <div className="border-t border-white/10 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="font-body text-xs text-white/50">
-            © 2026 Royal Wellness Spa. All rights reserved.
+            © 2026 Royal Wellness Spa. {t('copyright')}
           </p>
           <div className="flex gap-6 font-body text-xs text-white/50">
             <Link href="/privacy" className="hover:text-gold transition-colors">
-              Privacy Policy
+              {tNav('home') === 'Home' ? 'Privacy Policy' : 'นโยบายความเป็นส่วนตัว'}
             </Link>
             <Link href="/terms" className="hover:text-gold transition-colors">
-              Terms of Service
+              {tNav('home') === 'Home' ? 'Terms of Service' : 'ข้อกำหนดการใช้บริการ'}
             </Link>
           </div>
         </div>

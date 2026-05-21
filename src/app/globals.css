@@ -30,11 +30,42 @@
   font-family: var(--font-body), sans-serif;
 }
 
+.font-thai {
+  font-family: var(--font-thai), sans-serif;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-body), sans-serif;
   font-size: 14px;
+}
+
+body.font-thai {
+  font-family: var(--font-thai), sans-serif;
+}
+
+body.font-thai p,
+body.font-thai span,
+body.font-thai a,
+body.font-thai li,
+body.font-thai td,
+body.font-thai th,
+body.font-thai label,
+body.font-thai input,
+body.font-thai select,
+body.font-thai textarea,
+body.font-thai button {
+  font-family: var(--font-thai), sans-serif;
+}
+
+body.font-thai h1,
+body.font-thai h2,
+body.font-thai h3,
+body.font-thai h4,
+body.font-thai h5,
+body.font-thai h6 {
+  font-family: var(--font-thai), sans-serif;
 }
 
 p, span, a, li, td, th, label, input, select, textarea, button {

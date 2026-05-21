@@ -1,7 +1,13 @@
-import Link from 'next/link';
+'use client';
+
+import { Link } from '@/i18n/routing';
 import { ChevronDown } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 
 export default function Hero() {
+  const t = useTranslations('hero');
+  const tCommon = useTranslations('common');
+
   return (
     <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
       <div
@@ -14,17 +20,15 @@ export default function Hero() {
 
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <p className="font-body text-gold-light text-sm tracking-[0.4em] mb-4 animate-fade-in-up opacity-0 animate-delay-100">
-          3RD FLOOR • PHUKET
+          {t('subtitle')}
         </p>
 
         <h1 className="font-display text-white text-5xl md:text-7xl lg:text-8xl leading-tight mb-6 animate-fade-in-up opacity-0 animate-delay-200">
-          Royal Wellness
-          <span className="block text-gold">Spa</span>
+          {t('title')}
         </h1>
 
         <p className="font-body text-white/80 text-lg md:text-xl font-light max-w-2xl mx-auto mb-4 animate-fade-in-up opacity-0 animate-delay-300">
-          Indulge in a tranquil spa experience designed to restore balance to
-          both body and mind
+          {t('description')}
         </p>
 
         <p className="font-body text-gold-light text-sm tracking-wider mb-10 animate-fade-in-up opacity-0 animate-delay-300">
@@ -36,13 +40,13 @@ export default function Hero() {
             href="/book"
             className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-10 py-4 tracking-widest"
           >
-            BOOK YOUR ESCAPE
+            {tCommon('bookYourEscape').toUpperCase()}
           </Link>
           <Link
             href="/treatments"
             className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-body text-sm px-10 py-4 tracking-widest transition-all"
           >
-            VIEW TREATMENTS
+            {tCommon('viewTreatments').toUpperCase()}
           </Link>
         </div>
       </div>

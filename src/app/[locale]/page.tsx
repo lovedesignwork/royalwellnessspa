@@ -1,11 +1,22 @@
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import { categories, getTreatmentsByCategory } from '@/lib/spa-data';
 import { Clock, Award, Heart, Leaf, Star, Quote, Hotel, Sparkles, Shield, Users, Gem, CheckCircle } from 'lucide-react';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 
-export default function Home() {
+export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('welcome');
+  const tUsp = await getTranslations('usp');
+  const tHotel = await getTranslations('hotelDiscount');
+  const tCategories = await getTranslations('categories');
+  const tTestimonials = await getTranslations('testimonials');
+  const tCta = await getTranslations('cta');
+  const tCommon = await getTranslations('common');
+  const tTravel = await getTranslations('travelRecovery');
   const travelRecovery = getTreatmentsByCategory('Travel Recovery').slice(0, 3);
 
   const testimonials = [
@@ -42,23 +53,23 @@ export default function Home() {
   const uspFeatures = [
     {
       icon: Gem,
-      title: "Premium Organic Products",
-      description: "We exclusively use certified organic oils and botanical ingredients sourced from Thailand's finest suppliers."
+      title: tUsp('premiumProducts'),
+      description: tUsp('premiumProductsDesc')
     },
     {
       icon: Users,
-      title: "Master-Level Therapists",
-      description: "Our therapists undergo 500+ hours of specialized training, combining ancient Thai techniques with modern wellness science."
+      title: tUsp('masterTherapists'),
+      description: tUsp('masterTherapistsDesc')
     },
     {
       icon: Shield,
-      title: "Personalized Treatments",
-      description: "Every session begins with a consultation to customize pressure, focus areas, and aromatherapy to your specific needs."
+      title: tUsp('personalizedTreatments'),
+      description: tUsp('personalizedTreatmentsDesc')
     },
     {
       icon: Sparkles,
-      title: "Traveler-Focused Recovery",
-      description: "Unique treatments designed specifically for jet lag, screen fatigue, and the physical demands of travel."
+      title: tUsp('travelerFocused'),
+      description: tUsp('travelerFocusedDesc')
     }
   ];
 
@@ -97,29 +108,27 @@ export default function Home() {
                 </div>
                 <div className="absolute -bottom-6 -right-6 bg-gold p-6 rounded-sm shadow-xl hidden lg:block">
                   <p className="font-display text-white text-4xl font-semibold">13+</p>
-                  <p className="font-body text-white/80 text-sm">Years of Excellence</p>
+                  <p className="font-body text-white/80 text-sm">{t('yearsExcellence')}</p>
                 </div>
               </div>
 
               <div>
                 <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                  WELCOME TO ROYAL WELLNESS SPA
+                  {t('subtitle')}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6 leading-tight">
-                  A Sanctuary of <span className="text-gold">Serenity</span> in the Heart of Phuket
+                  {t('title')} <span className="text-gold">{t('titleHighlight')}</span> {t('titleEnd')}
                 </h2>
                 <p className="font-body text-charcoal/70 leading-relaxed mb-8">
-                  Nestled on the 3rd floor with panoramic views, Royal Wellness Spa offers an escape from the ordinary. 
-                  With expert massage techniques passed down through generations and premium aromatic oils sourced from 
-                  Thailand's finest botanical gardens, every treatment is a journey to complete renewal.
+                  {t('description')}
                 </p>
 
                 <div className="grid grid-cols-2 gap-6 mb-8">
                   {[
-                    { icon: Clock, title: 'Open Daily', desc: '10:00 AM – 10:00 PM' },
-                    { icon: Award, title: 'Certified Experts', desc: '500+ hours training' },
-                    { icon: Heart, title: 'Organic Oils', desc: 'Premium aromatics' },
-                    { icon: Leaf, title: 'Eco-Conscious', desc: 'Sustainable practices' },
+                    { icon: Clock, title: t('openDaily'), desc: t('hours') },
+                    { icon: Award, title: t('certifiedExperts'), desc: t('training') },
+                    { icon: Heart, title: t('organicOils'), desc: t('premiumAromatics') },
+                    { icon: Leaf, title: t('ecoConscious'), desc: t('sustainable') },
                   ].map((item, idx) => (
                     <div key={idx} className="flex items-start gap-4">
                       <div className="w-12 h-12 bg-gold/10 rounded-full flex items-center justify-center flex-shrink-0">
@@ -141,7 +150,7 @@ export default function Home() {
                   href="/about"
                   className="inline-flex items-center gap-2 font-body text-sm text-gold hover:text-gold-dark transition-colors"
                 >
-                  Discover Our Story
+                  {t('discoverStory')}
                   <span className="text-lg">→</span>
                 </Link>
               </div>
@@ -163,19 +172,17 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div>
                 <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                  PERFECT FOR TRAVELERS
+                  {tTravel('subtitle')}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl mb-6">
-                  Travel Recovery <span className="text-gold">Collection</span>
+                  {tTravel('title')} <span className="text-gold">{tTravel('titleHighlight')}</span>
                 </h2>
                 <p className="font-body text-white/70 mb-8 leading-relaxed">
-                  Designed specifically for weary travelers, our recovery treatments restore your body 
-                  and mind after long journeys. From jet lag to digital fatigue, we have the perfect 
-                  remedy for modern travel stress.
+                  {tTravel('description')}
                 </p>
 
                 <div className="space-y-4 mb-8">
-                  {['Jet Lag & Flight Recovery', 'Digital Detox & Screen Fatigue', 'Walking & Sightseeing Recovery', 'Active Sports Recovery'].map((item, idx) => (
+                  {[tTravel('jetLag'), tTravel('digitalDetox'), tTravel('walking'), tTravel('sports')].map((item, idx) => (
                     <div key={idx} className="flex items-center gap-3">
                       <CheckCircle className="w-5 h-5 text-gold" />
                       <span className="font-body text-sm text-white/80">{item}</span>
@@ -187,7 +194,7 @@ export default function Home() {
                   href="/treatments?category=Travel%20Recovery"
                   className="btn-luxury border border-gold bg-transparent hover:bg-gold text-white font-body text-sm px-8 py-3 inline-block"
                 >
-                  View All Recovery Treatments
+                  {tTravel('viewAll')}
                 </Link>
               </div>
 
@@ -215,7 +222,7 @@ export default function Home() {
                           href={`/book?treatment=${treatment.id}`}
                           className="font-body text-xs text-gold hover:text-gold-light transition-colors"
                         >
-                          Book →
+                          {tTravel('book')} →
                         </Link>
                       </div>
                     </div>
@@ -231,14 +238,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center max-w-3xl mx-auto mb-16">
               <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                WHY CHOOSE US
+                {tUsp('subtitle')}
               </p>
               <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
-                What Makes Us <span className="text-gold">Different</span>
+                {tUsp('title')} <span className="text-gold">{tUsp('titleHighlight')}</span>
               </h2>
               <p className="font-body text-charcoal/70">
-                At Royal Wellness Spa, we don't just offer massages – we craft transformative experiences 
-                that address the unique challenges of modern travelers and city dwellers.
+                {tUsp('description')}
               </p>
             </div>
 
@@ -281,21 +287,20 @@ export default function Home() {
               <div className="text-center lg:text-left">
                 <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full mb-4">
                   <span className="font-body text-white text-sm font-medium">
-                    EXCLUSIVE OFFER
+                    {tHotel('exclusive')}
                   </span>
                 </div>
                 <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
-                  Royal Phuket City Hotel Guests Get <span className="font-semibold">10% OFF</span>
+                  {tHotel('title')} <span className="font-semibold">{tHotel('discount')}</span>
                 </h2>
                 <p className="font-body text-white/90 mb-6 max-w-xl">
-                  Staying at Royal Phuket City Hotel? Enjoy an exclusive 10% discount on all spa treatments. 
-                  Simply present your room key or booking confirmation at reception.
+                  {tHotel('description')}
                 </p>
                 <Link
                   href="/book"
                   className="inline-block bg-white text-gold hover:bg-cream font-body text-sm px-8 py-3 transition-colors shadow-lg"
                 >
-                  Book With Hotel Discount
+                  {tHotel('cta')}
                 </Link>
               </div>
             </div>
@@ -307,10 +312,10 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6">
             <div className="text-center mb-16">
               <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                EXPLORE
+                {tCategories('subtitle')}
               </p>
               <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
-                Treatment Categories
+                {tCategories('title')}
               </h2>
             </div>
 
@@ -324,6 +329,13 @@ export default function Home() {
                   '/images/Royal Spa 9.jpg',
                 ];
                 const treatmentCount = getTreatmentsByCategory(category as typeof categories[number]).length;
+                const categoryNames: Record<string, string> = {
+                  'Travel Recovery': tCategories('travelRecovery'),
+                  'Skin & Radiance': tCategories('skinRadiance'),
+                  'Couple & Special': tCategories('coupleSpecial'),
+                  'Facial Treatments': tCategories('facialTreatments'),
+                  'Classic Thai Heritage': tCategories('classicThaiHeritage'),
+                };
                 
                 return (
                   <Link
@@ -340,10 +352,10 @@ export default function Home() {
                     <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/20 transition-colors duration-300" />
                     <div className="relative h-full flex flex-col justify-end p-6">
                       <span className="font-body text-gold text-xs tracking-wider mb-2">
-                        {treatmentCount} TREATMENTS
+                        {treatmentCount} {tCommon('treatments').toUpperCase()}
                       </span>
                       <h3 className="font-display text-xl md:text-2xl text-white">
-                        {category}
+                        {categoryNames[category] || category}
                       </h3>
                     </div>
                   </Link>
@@ -359,16 +371,16 @@ export default function Home() {
             <div className="flex flex-col lg:flex-row gap-16">
               <div className="lg:w-1/3">
                 <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                  TESTIMONIALS
+                  {tTestimonials('subtitle')}
                 </p>
                 <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
-                  What Our Guests Say
+                  {tTestimonials('title')}
                 </h2>
                 
                 <div className="bg-cream p-8 rounded-sm mb-6">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="font-body text-sm font-medium text-charcoal">Google</span>
-                    <span className="font-body text-xs text-charcoal/60">Reviews</span>
+                    <span className="font-body text-xs text-charcoal/60">{tTestimonials('googleReviews').replace('Google ', '')}</span>
                   </div>
                   <div className="flex items-center gap-2 mb-2">
                     <span className="font-display text-4xl text-charcoal">4.9</span>
@@ -379,18 +391,19 @@ export default function Home() {
                     </div>
                   </div>
                   <p className="font-body text-sm text-charcoal/60">
-                    Based on 200+ reviews
+                    {tTestimonials('basedOn')}
                   </p>
                 </div>
 
-                <Link
+                <a
                   href="https://google.com/maps"
                   target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 font-body text-sm text-gold hover:text-gold-dark transition-colors"
                 >
-                  See All Reviews on Google
+                  {tTestimonials('seeAll')}
                   <span className="text-lg">→</span>
-                </Link>
+                </a>
               </div>
 
               <div className="lg:w-2/3">
@@ -442,27 +455,26 @@ export default function Home() {
 
           <div className="relative z-10 max-w-3xl mx-auto text-center px-6">
             <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-              BEGIN YOUR JOURNEY
+              {tCta('subtitle')}
             </p>
             <h2 className="font-display text-4xl md:text-5xl text-white mb-6">
-              Ready to Experience True Relaxation?
+              {tCta('title')}
             </h2>
             <p className="font-body text-white/80 mb-10">
-              Book your appointment today and discover the art of wellness at Royal Wellness Spa. 
-              Your sanctuary of serenity awaits.
+              {tCta('description')}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/book"
                 className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-12 py-4 tracking-widest inline-block"
               >
-                BOOK YOUR ESCAPE
+                {tCommon('bookYourEscape').toUpperCase()}
               </Link>
               <Link
                 href="/treatments"
                 className="border border-white/30 hover:border-gold hover:bg-gold/10 text-white font-body text-sm px-12 py-4 tracking-widest inline-block transition-all"
               >
-                VIEW TREATMENTS
+                {tCommon('viewTreatments').toUpperCase()}
               </Link>
             </div>
           </div>

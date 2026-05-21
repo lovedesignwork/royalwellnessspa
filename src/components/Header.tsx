@@ -1,13 +1,17 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
+import { useTranslations } from 'next-intl';
+import LanguageSwitcher from './LanguageSwitcher';
 
 export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const t = useTranslations('nav');
+  const tCommon = useTranslations('common');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,10 +22,10 @@ export default function Header() {
   }, []);
 
   const navLinks = [
-    { href: '/', label: 'Home' },
-    { href: '/treatments', label: 'Treatments' },
-    { href: '/about', label: 'About' },
-    { href: '/contact', label: 'Contact' },
+    { href: '/', label: t('home') },
+    { href: '/treatments', label: t('treatments') },
+    { href: '/about', label: t('about') },
+    { href: '/contact', label: t('contact') },
   ];
 
   return (
@@ -71,8 +75,9 @@ export default function Header() {
               </div>
             </div>
 
-            {/* CTA Button */}
+            {/* Language Switcher & CTA Button */}
             <div className="hidden lg:flex items-center gap-4">
+              <LanguageSwitcher isScrolled={isScrolled} />
               <Link
                 href="/book"
                 className={`group relative overflow-hidden font-body text-sm px-6 py-3 rounded-full transition-all duration-300 flex items-center gap-2 ${
@@ -81,7 +86,7 @@ export default function Header() {
                     : 'bg-white text-charcoal hover:bg-gold hover:text-white'
                 }`}
               >
-                <span className="relative z-10">Book Now</span>
+                <span className="relative z-10">{tCommon('bookNow')}</span>
                 <ChevronRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
@@ -157,21 +162,24 @@ export default function Header() {
 
             {/* Mobile Menu Footer */}
             <div className="p-6 border-t border-cream bg-cream/30">
+              <div className="flex justify-center mb-4">
+                <LanguageSwitcher isScrolled={true} />
+              </div>
               <Link
                 href="/book"
                 className="block w-full bg-gold hover:bg-gold-dark text-white font-body text-center py-4 rounded-full transition-colors mb-4"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Book Your Escape
+                {tCommon('bookYourEscape')}
               </Link>
               
               <div className="flex items-center justify-center gap-4 text-sm">
                 <a 
-                  href="tel:+66XXXXXXXX" 
+                  href="tel:090-596-9666" 
                   className="flex items-center gap-2 text-charcoal/60 hover:text-gold transition-colors font-body"
                 >
                   <Phone className="w-4 h-4" />
-                  <span>Call Us</span>
+                  <span>{tCommon('callUs')}</span>
                 </a>
                 <span className="text-charcoal/30">|</span>
                 <span className="flex items-center gap-2 text-charcoal/60 font-body">
@@ -179,7 +187,7 @@ export default function Header() {
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                     <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                   </span>
-                  <span>Open Now</span>
+                  <span>{tCommon('openNow')}</span>
                 </span>
               </div>
             </div>

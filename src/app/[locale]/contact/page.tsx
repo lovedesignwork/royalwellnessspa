@@ -153,7 +153,7 @@ export default function ContactPage() {
                         Opening Hours
                       </h3>
                       <p className="font-body text-sm text-charcoal/70">
-                        Open Daily: 10:00 AM – 10:00 PM
+                        Open Daily: 10:00 AM – 11:00 PM
                       </p>
                     </div>
                   </div>
