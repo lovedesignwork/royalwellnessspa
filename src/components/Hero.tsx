@@ -9,7 +9,7 @@ export default function Hero() {
   const tCommon = useTranslations('common');
 
   return (
-    <section className="relative h-screen min-h-[700px] flex items-center justify-center overflow-hidden">
+    <section className="relative h-screen min-h-[600px] max-h-[800px] md:max-h-[1000px] flex items-center justify-center overflow-hidden">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat"
         style={{

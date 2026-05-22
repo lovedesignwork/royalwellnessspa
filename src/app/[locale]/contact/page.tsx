@@ -1,21 +1,45 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
+import CountryPhoneSelector from '@/components/CountryPhoneSelector';
+import { MapPin, Phone, Mail, Clock, Send, MessageCircle, CheckCircle } from 'lucide-react';
+import { Link } from '@/i18n/routing';
+
+const INQUIRY_TYPES = [
+  "General Inquiry",
+  "Spa Treatment Question",
+  "Group Booking",
+  "Wedding & Special Occasions",
+  "Corporate Wellness",
+  "Partnership",
+  "Feedback & Suggestions",
+  "Other",
+] as const;
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
+    country: '',
+    inquiryType: INQUIRY_TYPES[0],
     subject: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [referenceNumber, setReferenceNumber] = useState('');
   const [error, setError] = useState('');
+  const [formLoadedAt] = useState(() => Date.now());
+  const successRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (submitted && successRef.current) {
+      successRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [submitted]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,13 +50,17 @@ export default function ContactPage() {
       const response = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          _ts: formLoadedAt,
+        }),
       });
 
       const data = await response.json();
 
       if (data.success) {
         setSubmitted(true);
+        setReferenceNumber(data.referenceNumber || '');
       } else {
         setError(data.error || 'Failed to send message. Please try again.');
       }
@@ -46,261 +74,312 @@ export default function ContactPage() {
   return (
     <>
       <Header />
-      <main>
-        <section className="pt-32 pb-16 bg-charcoal">
-          <div className="max-w-7xl mx-auto px-6 text-center">
-            <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-              GET IN TOUCH
-            </p>
-            <h1 className="font-display text-4xl md:text-6xl text-white mb-6">
-              Contact Us
+      <main className="min-h-screen bg-background">
+        {/* Hero Section */}
+        <section className="pt-32 pb-16 bg-charcoal relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div 
+              className="absolute inset-0 bg-cover bg-center"
+              style={{ backgroundImage: "url('/images/Royal Spa 1.jpg')" }}
+            />
+          </div>
+          <div className="relative max-w-4xl mx-auto px-6 text-center">
+            <div className="inline-flex items-center gap-3 mb-6">
+              <span className="w-12 h-px bg-gold" />
+              <span className="font-body text-gold text-xs tracking-[0.4em]">GET IN TOUCH</span>
+              <span className="w-12 h-px bg-gold" />
+            </div>
+            <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
+              Stay in <em className="italic text-gold">touch</em>
+              <br />
+              with <span className="text-gold">Royal Wellness.</span>
             </h1>
-            <p className="font-body text-white/70 max-w-2xl mx-auto">
-              We would love to hear from you. Reach out with any questions or to book your spa experience.
+            <p className="font-body text-xs text-white/50 tracking-[0.3em] uppercase mb-6">
+              — Spa Bookings · Group Events · General Inquiries —
+            </p>
+            <p className="font-display italic text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
+              Whether you would like to plan a wellness retreat, enquire about treatments, 
+              or simply share your experience — we would love to hear from you.
             </p>
           </div>
         </section>
 
-        <section className="py-24 bg-background">
+        {/* Form Section */}
+        <section className="py-20 bg-cream/30">
           <div className="max-w-7xl mx-auto px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              <div>
-                <h2 className="font-display text-3xl text-charcoal mb-8">
-                  Visit Us
-                </h2>
-
-                <div className="space-y-6 mb-12">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <MapPin className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        Location
-                      </h3>
-                      <p className="font-body text-sm text-charcoal/70">
-                        Royal Wellness Spa<br />
-                        3rd Floor, Royal Phuket City Hotel<br />
-                        Phuket, Thailand
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <Phone className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        Phone
-                      </h3>
-                      <a href="tel:+66905969666" className="font-body text-sm text-charcoal/70 hover:text-gold transition-colors">
-                        090-596-9666
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-gold" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                      </svg>
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        WhatsApp
-                      </h3>
-                      <a href="https://wa.me/66905969666" target="_blank" rel="noopener noreferrer" className="font-body text-sm text-charcoal/70 hover:text-gold transition-colors">
-                        090-596-9666
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <MessageCircle className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        LINE
-                      </h3>
-                      <a href="https://lin.ee/En1ToHH" target="_blank" rel="noopener noreferrer" className="font-body text-sm text-charcoal/70 hover:text-gold transition-colors">
-                        @royalwellnessspa
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <Mail className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        Email
-                      </h3>
-                      <a href="mailto:wallop.c@royalwellnessspaphuket.com" className="font-body text-sm text-charcoal/70 hover:text-gold transition-colors">
-                        wallop.c@royalwellnessspaphuket.com
-                      </a>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 bg-gold/10 flex items-center justify-center flex-shrink-0">
-                      <Clock className="w-5 h-5 text-gold" />
-                    </div>
-                    <div>
-                      <h3 className="font-body text-sm font-medium text-charcoal mb-1">
-                        Opening Hours
-                      </h3>
-                      <p className="font-body text-sm text-charcoal/70">
-                        Open Daily: 10:00 AM – 11:00 PM
-                      </p>
-                    </div>
-                  </div>
+            <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-16 items-start">
+              {/* Sidebar */}
+              <aside className="lg:sticky lg:top-32 lg:pr-8 lg:border-r lg:border-cream">
+                <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
+                  DIRECT LINES
+                </p>
+                <h3 className="font-display italic text-3xl text-charcoal mb-8">
+                  Reach us directly.
+                </h3>
+                
+                <div className="space-y-6 mb-8">
+                  <ContactDetail 
+                    label="Email" 
+                    value="wallop.c@royalwellnessspaphuket.com" 
+                    href="mailto:wallop.c@royalwellnessspaphuket.com"
+                  />
+                  <ContactDetail 
+                    label="Phone" 
+                    value="090-596-9666" 
+                    href="tel:+66905969666"
+                  />
+                  <ContactDetail 
+                    label="WhatsApp" 
+                    value="090-596-9666" 
+                    href="https://wa.me/66905969666"
+                  />
+                  <ContactDetail 
+                    label="LINE" 
+                    value="@royalwellnessspa" 
+                    href="https://lin.ee/En1ToHH"
+                  />
+                  <ContactDetail 
+                    label="Hours" 
+                    value="Open Daily: 10:00 AM – 11:00 PM"
+                  />
+                  <ContactDetail 
+                    label="Address" 
+                    value={`3rd Floor\nRoyal Phuket City Hotel\nPhuket, Thailand`}
+                  />
                 </div>
 
-                <div className="bg-cream p-8">
-                  <h3 className="font-display text-xl text-charcoal mb-4">
-                    Quick Booking
-                  </h3>
-                  <p className="font-body text-sm text-charcoal/70 mb-4">
-                    Ready to book your spa experience? Use our online booking system for instant confirmation.
-                  </p>
-                  <a
-                    href="/book"
-                    className="btn-luxury bg-gold hover:bg-gold-dark text-white font-body text-sm px-8 py-3 inline-block"
-                  >
-                    Book Online
-                  </a>
-                </div>
-              </div>
+                <p className="font-body text-sm text-charcoal/60 leading-relaxed">
+                  For spa bookings, please use our{' '}
+                  <Link href="/book" className="text-gold underline underline-offset-2 hover:text-gold-dark">
+                    online booking system
+                  </Link>
+                  . For all other inquiries, write to us here.
+                </p>
+              </aside>
 
-              <div className="bg-white p-8 border border-cream">
+              {/* Form */}
+              <div className="bg-white p-8 md:p-12 border border-cream">
                 {submitted ? (
-                  <div className="text-center py-12">
-                    <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Send className="w-8 h-8 text-green-600" />
+                  <div ref={successRef} className="text-center py-16">
+                    <div className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                      <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
-                    <h3 className="font-display text-2xl text-charcoal mb-4">
-                      Message Sent!
-                    </h3>
-                    <p className="font-body text-sm text-charcoal/70">
-                      Thank you for reaching out. We will get back to you shortly.
+                    <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
+                      MESSAGE SENT
                     </p>
+                    <h3 className="font-display text-3xl md:text-4xl text-charcoal mb-4">
+                      Thank you. Your <em className="italic text-gold">message</em> is on its way.
+                    </h3>
+                    <p className="font-body text-charcoal/70 max-w-md mx-auto mb-6">
+                      We have received your inquiry and will respond within one business day.
+                    </p>
+                    {referenceNumber && (
+                      <div className="inline-block bg-cream px-6 py-4 mb-8">
+                        <p className="font-body text-xs text-charcoal/60 mb-1">Reference Number</p>
+                        <p className="font-display text-xl text-gold">{referenceNumber}</p>
+                      </div>
+                    )}
+                    <div className="flex gap-4 justify-center flex-wrap">
+                      <Link 
+                        href="/treatments" 
+                        className="font-body text-sm px-6 py-3 border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors"
+                      >
+                        View Treatments
+                      </Link>
+                      <Link 
+                        href="/book" 
+                        className="font-body text-sm px-6 py-3 bg-gold text-white hover:bg-gold-dark transition-colors"
+                      >
+                        Book a Treatment
+                      </Link>
+                    </div>
                   </div>
                 ) : (
-                  <>
-                    <h2 className="font-display text-3xl text-charcoal mb-8">
-                      Send a Message
-                    </h2>
+                  <form onSubmit={handleSubmit}>
+                    {/* Honeypot */}
+                    <input
+                      type="text"
+                      name="website"
+                      tabIndex={-1}
+                      autoComplete="off"
+                      className="absolute left-[-10000px] w-px h-px opacity-0"
+                    />
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Section 01 - Inquiry */}
+                    <FormSection number="01" title="Inquiry" subtitle="What can we help you with?">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block font-body text-sm text-charcoal/70 mb-2">
-                            Name
-                          </label>
+                        <FormField label="Inquiry Type">
+                          <select
+                            value={formData.inquiryType}
+                            onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value }))}
+                            className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold appearance-none cursor-pointer"
+                          >
+                            {INQUIRY_TYPES.map((t) => (
+                              <option key={t} value={t}>{t}</option>
+                            ))}
+                          </select>
+                        </FormField>
+                        <FormField label="Subject" hint="Optional">
+                          <input
+                            type="text"
+                            value={formData.subject}
+                            onChange={(e) => setFormData(prev => ({ ...prev, subject: e.target.value }))}
+                            placeholder="e.g. Group booking for 6 guests"
+                            className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
+                          />
+                        </FormField>
+                      </div>
+                    </FormSection>
+
+                    {/* Section 02 - Contact Info */}
+                    <FormSection number="02" title="You" subtitle="How shall we reach you?">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <FormField label="Full Name" required>
                           <input
                             type="text"
                             required
                             value={formData.name}
-                            onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, name: e.target.value }))
-                            }
-                            className="w-full p-3 border border-cream font-body text-sm"
-                            placeholder="Your name"
+                            onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                            placeholder="Mr. or Ms. ___"
+                            autoComplete="name"
+                            className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
                           />
-                        </div>
-                        <div>
-                          <label className="block font-body text-sm text-charcoal/70 mb-2">
-                            Email
-                          </label>
+                        </FormField>
+                        <FormField label="Email" required>
                           <input
                             type="email"
                             required
                             value={formData.email}
-                            onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, email: e.target.value }))
-                            }
-                            className="w-full p-3 border border-cream font-body text-sm"
-                            placeholder="your@email.com"
+                            onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
+                            placeholder="you@example.com"
+                            autoComplete="email"
+                            className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
                           />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                          <label className="block font-body text-sm text-charcoal/70 mb-2">
-                            Phone
-                          </label>
-                          <input
-                            type="tel"
-                            value={formData.phone}
-                            onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, phone: e.target.value }))
-                            }
-                            className="w-full p-3 border border-cream font-body text-sm"
-                            placeholder="+66 XX XXX XXXX"
+                        </FormField>
+                        <FormField label="Phone">
+                          <CountryPhoneSelector
+                            name="phone"
+                            defaultCountry="TH"
+                            onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
                           />
-                        </div>
-                        <div>
-                          <label className="block font-body text-sm text-charcoal/70 mb-2">
-                            Subject
-                          </label>
+                        </FormField>
+                        <FormField label="Country" hint="Optional">
                           <input
                             type="text"
-                            required
-                            value={formData.subject}
-                            onChange={(e) =>
-                              setFormData((prev) => ({ ...prev, subject: e.target.value }))
-                            }
-                            className="w-full p-3 border border-cream font-body text-sm"
-                            placeholder="How can we help?"
+                            value={formData.country}
+                            onChange={(e) => setFormData(prev => ({ ...prev, country: e.target.value }))}
+                            placeholder="Thailand, Australia, Japan..."
+                            autoComplete="country-name"
+                            className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
                           />
-                        </div>
+                        </FormField>
                       </div>
+                    </FormSection>
 
-                      <div>
-                        <label className="block font-body text-sm text-charcoal/70 mb-2">
-                          Message
-                        </label>
+                    {/* Section 03 - Message */}
+                    <FormSection number="03" title="Message" subtitle="Tell us more.">
+                      <FormField 
+                        label="Your Message" 
+                        required
+                        hint="Please provide as much detail as possible so we can assist you better."
+                      >
                         <textarea
                           required
+                          rows={6}
                           value={formData.message}
-                          onChange={(e) =>
-                            setFormData((prev) => ({ ...prev, message: e.target.value }))
-                          }
-                          className="w-full p-3 border border-cream font-body text-sm h-32 resize-none"
-                          placeholder="Your message..."
+                          onChange={(e) => setFormData(prev => ({ ...prev, message: e.target.value }))}
+                          placeholder="Hello Royal Wellness team,&#10;&#10;I am writing to enquire about..."
+                          className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold resize-y min-h-[150px]"
                         />
-                      </div>
+                      </FormField>
+                    </FormSection>
 
+                    {/* Submit */}
+                    <div className="mt-12 pt-8 border-t border-cream">
                       {error && (
-                        <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded text-sm font-body">
-                          {error}
+                        <div className="bg-red-50 border-l-2 border-red-400 px-4 py-3 mb-6">
+                          <p className="font-body text-sm text-red-600">{error}</p>
                         </div>
                       )}
-
-                      <button
-                        type="submit"
-                        disabled={isSubmitting}
-                        className="btn-luxury bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 text-white font-body text-sm px-8 py-3 w-full flex items-center justify-center gap-2"
-                      >
-                        {isSubmitting ? (
-                          <>
-                            <span className="animate-spin">⟳</span>
-                            Sending...
-                          </>
-                        ) : (
-                          <>
-                            <Send className="w-4 h-4" />
-                            Send Message
-                          </>
-                        )}
-                      </button>
-                    </form>
-                  </>
+                      
+                      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                        <p className="font-body text-xs text-charcoal/50 max-w-sm leading-relaxed">
+                          By submitting, you agree to be contacted by Royal Wellness Spa. 
+                          We do not share your details and will reply within one business day.
+                        </p>
+                        <button
+                          type="submit"
+                          disabled={isSubmitting}
+                          className="flex items-center justify-center gap-2 bg-gold hover:bg-gold-dark disabled:bg-charcoal/30 text-white font-body text-sm px-10 py-4 transition-colors min-w-[200px]"
+                        >
+                          {isSubmitting ? (
+                            <>
+                              <span className="animate-spin">⟳</span>
+                              Sending...
+                            </>
+                          ) : (
+                            <>
+                              Send Message
+                              <Send className="w-4 h-4" />
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </div>
+                  </form>
                 )}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Map Section */}
+        <section className="py-16 bg-white">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+              <div>
+                <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
+                  FIND US
+                </p>
+                <h2 className="font-display text-3xl md:text-4xl text-charcoal mb-6">
+                  Visit Our <span className="text-gold">Sanctuary</span>
+                </h2>
+                <p className="font-body text-charcoal/70 mb-8 leading-relaxed">
+                  Located on the 3rd floor of Royal Phuket City Hotel in the heart of Phuket Old Town, 
+                  our spa offers a tranquil escape from the bustling streets below.
+                </p>
+                
+                <div className="flex flex-wrap gap-4">
+                  <a
+                    href="https://maps.google.com/?q=Royal+Phuket+City+Hotel"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 font-body text-sm px-6 py-3 bg-charcoal text-white hover:bg-charcoal/80 transition-colors"
+                  >
+                    <MapPin className="w-4 h-4" />
+                    Get Directions
+                  </a>
+                  <a
+                    href="tel:+66905969666"
+                    className="flex items-center gap-2 font-body text-sm px-6 py-3 border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors"
+                  >
+                    <Phone className="w-4 h-4" />
+                    Call Us
+                  </a>
+                </div>
+              </div>
+              
+              <div className="aspect-video bg-cream overflow-hidden">
+                <iframe
+                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3952.0123456789!2d98.3866!3d7.8845!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2sRoyal%20Phuket%20City%20Hotel!5e0!3m2!1sen!2sth!4v1234567890"
+                  width="100%"
+                  height="100%"
+                  style={{ border: 0 }}
+                  allowFullScreen
+                  loading="lazy"
+                  referrerPolicy="no-referrer-when-downgrade"
+                  title="Royal Wellness Spa Location"
+                />
               </div>
             </div>
           </div>
@@ -308,5 +387,89 @@ export default function ContactPage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+function ContactDetail({ 
+  label, 
+  value, 
+  href 
+}: { 
+  label: string; 
+  value: string; 
+  href?: string;
+}) {
+  const valueElement = (
+    <span className="font-body text-sm text-charcoal whitespace-pre-line leading-relaxed">
+      {value}
+    </span>
+  );
+
+  return (
+    <div>
+      <div className="font-body text-xs tracking-[0.2em] text-gold uppercase mb-1.5">
+        {label}
+      </div>
+      {href ? (
+        <a href={href} target={href.startsWith('http') ? '_blank' : undefined} rel="noopener noreferrer" className="hover:text-gold transition-colors">
+          {valueElement}
+        </a>
+      ) : (
+        valueElement
+      )}
+    </div>
+  );
+}
+
+function FormSection({ 
+  number, 
+  title, 
+  subtitle, 
+  children 
+}: { 
+  number: string; 
+  title: string; 
+  subtitle: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="pb-10 mb-10 border-b border-cream">
+      <div className="mb-8">
+        <p className="font-body text-gold text-xs tracking-[0.3em] mb-3">
+          {number} — {title.toUpperCase()}
+        </p>
+        <h3 className="font-display italic text-2xl md:text-3xl text-charcoal">
+          {subtitle}
+        </h3>
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function FormField({ 
+  label, 
+  hint, 
+  required, 
+  children 
+}: { 
+  label: string; 
+  hint?: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between mb-2">
+        <label className="font-body text-xs tracking-[0.2em] text-charcoal/70 uppercase">
+          {label}
+          {required && <span className="text-gold ml-1">*</span>}
+        </label>
+      </div>
+      {children}
+      {hint && (
+        <p className="mt-2 font-body text-xs text-charcoal/50">{hint}</p>
+      )}
+    </div>
   );
 }

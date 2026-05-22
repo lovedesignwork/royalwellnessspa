@@ -87,10 +87,10 @@ export type SpaContactInsert = {
 
 export async function insertSpaContact(
   row: SpaContactInsert
-): Promise<{ ok: boolean; error?: string }> {
+): Promise<{ ok: boolean; id?: string; error?: string }> {
   const sb = getRPCHSupabaseClient();
 
-  const { error } = await sb.from("spa_contact_submissions").insert({
+  const { data, error } = await sb.from("spa_contact_submissions").insert({
     name: row.name,
     email: row.email,
     phone: row.phone ?? null,
@@ -100,11 +100,11 @@ export async function insertSpaContact(
     inquiry_type_label: row.inquiry_type_label ?? null,
     country: row.country ?? null,
     status: "new",
-  });
+  }).select("id").single();
 
   if (error) {
     console.error("[spa] Contact insert failed:", error.message);
     return { ok: false, error: error.message };
   }
-  return { ok: true };
+  return { ok: true, id: data?.id };
 }
