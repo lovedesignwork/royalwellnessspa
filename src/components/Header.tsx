@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import Image from 'next/image';
 import { Menu, X, ChevronRight, Phone } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -12,6 +12,7 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const t = useTranslations('nav');
   const tCommon = useTranslations('common');
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -59,19 +60,22 @@ export default function Header() {
               <div className={`flex items-center rounded-full px-2 py-1 transition-all duration-300 ${
                 isScrolled ? 'bg-cream/50' : 'bg-white/10 backdrop-blur-sm'
               }`}>
-                {navLinks.map((link, idx) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className={`relative font-body text-sm px-5 py-2 rounded-full transition-all duration-300 ${
-                      isScrolled
-                        ? 'text-charcoal hover:text-gold hover:bg-gold/10'
-                        : 'text-white/90 hover:text-white hover:bg-white/10'
-                    } ${idx === 0 && !isScrolled ? 'bg-white/10' : ''}`}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
+                {navLinks.map((link) => {
+                  const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`relative font-body text-sm px-5 py-2 rounded-full transition-all duration-300 ${
+                        isScrolled
+                          ? `text-charcoal hover:text-gold hover:bg-gold/10 ${isActive ? 'bg-gold/10 text-gold' : ''}`
+                          : `text-white/90 hover:text-white hover:bg-white/10 ${isActive ? 'bg-white/10' : ''}`
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  );
+                })}
               </div>
             </div>
 
@@ -146,18 +150,27 @@ export default function Header() {
 
             {/* Navigation Links */}
             <nav className="flex-1 overflow-y-auto py-6">
-              {navLinks.map((link, idx) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center justify-between px-6 py-4 font-body text-charcoal hover:bg-cream hover:text-gold transition-colors group"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ animationDelay: `${idx * 50}ms` }}
-                >
-                  <span className="text-lg">{link.label}</span>
-                  <ChevronRight className="w-5 h-5 text-charcoal/30 group-hover:text-gold group-hover:translate-x-1 transition-all" />
-                </Link>
-              ))}
+              {navLinks.map((link, idx) => {
+                const isActive = pathname === link.href || (link.href !== '/' && pathname.startsWith(link.href));
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`flex items-center justify-between px-6 py-4 font-body transition-colors group ${
+                      isActive 
+                        ? 'bg-gold/10 text-gold border-l-4 border-gold' 
+                        : 'text-charcoal hover:bg-cream hover:text-gold'
+                    }`}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    style={{ animationDelay: `${idx * 50}ms` }}
+                  >
+                    <span className="text-lg">{link.label}</span>
+                    <ChevronRight className={`w-5 h-5 transition-all ${
+                      isActive ? 'text-gold' : 'text-charcoal/30 group-hover:text-gold group-hover:translate-x-1'
+                    }`} />
+                  </Link>
+                );
+              })}
             </nav>
 
             {/* Mobile Menu Footer */}

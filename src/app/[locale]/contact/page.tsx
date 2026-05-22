@@ -4,10 +4,22 @@ import { useState, useRef, useEffect } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CountryPhoneSelector from '@/components/CountryPhoneSelector';
-import { MapPin, Phone, Mail, Clock, Send, MessageCircle, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, Send, CheckCircle } from 'lucide-react';
 import { Link } from '@/i18n/routing';
+import { useTranslations } from 'next-intl';
 
-const INQUIRY_TYPES = [
+const INQUIRY_TYPES_KEYS = [
+  "inquiryGeneral",
+  "inquirySpa",
+  "inquiryGroup",
+  "inquiryWedding",
+  "inquiryCorporate",
+  "inquiryPartnership",
+  "inquiryFeedback",
+  "inquiryOther",
+] as const;
+
+const INQUIRY_TYPES_EN = [
   "General Inquiry",
   "Spa Treatment Question",
   "Group Booking",
@@ -18,7 +30,7 @@ const INQUIRY_TYPES = [
   "Other",
 ] as const;
 
-type InquiryType = typeof INQUIRY_TYPES[number];
+type InquiryType = typeof INQUIRY_TYPES_EN[number];
 
 interface FormData {
   name: string;
@@ -31,6 +43,10 @@ interface FormData {
 }
 
 export default function ContactPage() {
+  const t = useTranslations('contact');
+  const tCommon = useTranslations('common');
+  const tNav = useTranslations('nav');
+  
   const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
@@ -98,20 +114,19 @@ export default function ContactPage() {
           <div className="relative max-w-4xl mx-auto px-6 text-center">
             <div className="inline-flex items-center gap-3 mb-6">
               <span className="w-12 h-px bg-gold" />
-              <span className="font-body text-gold text-xs tracking-[0.4em]">GET IN TOUCH</span>
+              <span className="font-body text-gold text-xs tracking-[0.4em]">{t('subtitle')}</span>
               <span className="w-12 h-px bg-gold" />
             </div>
             <h1 className="font-display text-4xl md:text-6xl lg:text-7xl text-white mb-6 leading-tight">
-              Stay in <em className="italic text-gold">touch</em>
+              {t('title')} <em className="italic text-gold">{t('titleHighlight')}</em>
               <br />
-              with <span className="text-gold">Royal Wellness.</span>
+              <span className="text-gold">{t('titleEnd')}</span>
             </h1>
             <p className="font-body text-xs text-white/50 tracking-[0.3em] uppercase mb-6">
-              — Spa Bookings · Group Events · General Inquiries —
+              {t('tagline')}
             </p>
             <p className="font-display italic text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
-              Whether you would like to plan a wellness retreat, enquire about treatments, 
-              or simply share your experience — we would love to hear from you.
+              {t('heroDesc')}
             </p>
           </div>
         </section>
@@ -123,49 +138,49 @@ export default function ContactPage() {
               {/* Sidebar */}
               <aside className="lg:sticky lg:top-32 lg:pr-8 lg:border-r lg:border-cream">
                 <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
-                  DIRECT LINES
+                  {t('directLines')}
                 </p>
                 <h3 className="font-display italic text-3xl text-charcoal mb-8">
-                  Reach us directly.
+                  {t('reachUs')}
                 </h3>
                 
                 <div className="space-y-6 mb-8">
                   <ContactDetail 
-                    label="Email" 
+                    label={t('emailLabel')} 
                     value="wallop.c@royalwellnessspaphuket.com" 
                     href="mailto:wallop.c@royalwellnessspaphuket.com"
                   />
                   <ContactDetail 
-                    label="Phone" 
+                    label={t('phoneLabel')} 
                     value="090-596-9666" 
                     href="tel:+66905969666"
                   />
                   <ContactDetail 
-                    label="WhatsApp" 
+                    label={t('whatsappLabel')} 
                     value="090-596-9666" 
                     href="https://wa.me/66905969666"
                   />
                   <ContactDetail 
-                    label="LINE" 
+                    label={t('lineLabel')} 
                     value="@royalwellnessspa" 
                     href="https://lin.ee/En1ToHH"
                   />
                   <ContactDetail 
-                    label="Hours" 
-                    value="Open Daily: 10:00 AM – 11:00 PM"
+                    label={t('hoursLabel')} 
+                    value={t('hoursValue')}
                   />
                   <ContactDetail 
-                    label="Address" 
-                    value={`3rd Floor\nRoyal Phuket City Hotel\nPhuket, Thailand`}
+                    label={t('addressLabel')} 
+                    value={t('addressValue')}
                   />
                 </div>
 
                 <p className="font-body text-sm text-charcoal/60 leading-relaxed">
-                  For spa bookings, please use our{' '}
+                  {t('bookingNote').split('online booking system')[0]}
                   <Link href="/book" className="text-gold underline underline-offset-2 hover:text-gold-dark">
-                    online booking system
+                    {tCommon('bookNow').toLowerCase()}
                   </Link>
-                  . For all other inquiries, write to us here.
+                  {t('bookingNote').split('online booking system')[1]}
                 </p>
               </aside>
 
@@ -177,33 +192,44 @@ export default function ContactPage() {
                       <CheckCircle className="w-10 h-10 text-green-600" />
                     </div>
                     <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
-                      MESSAGE SENT
+                      {t('successTitle').toUpperCase()}
                     </p>
                     <h3 className="font-display text-3xl md:text-4xl text-charcoal mb-4">
-                      Thank you. Your <em className="italic text-gold">message</em> is on its way.
+                      {t('successTitle')}
                     </h3>
                     <p className="font-body text-charcoal/70 max-w-md mx-auto mb-6">
-                      We have received your inquiry and will respond within one business day.
+                      {t('successDesc')}
                     </p>
                     {referenceNumber && (
                       <div className="inline-block bg-cream px-6 py-4 mb-8">
-                        <p className="font-body text-xs text-charcoal/60 mb-1">Reference Number</p>
+                        <p className="font-body text-xs text-charcoal/60 mb-1">{t('referenceNumber')}</p>
                         <p className="font-display text-xl text-gold">{referenceNumber}</p>
                       </div>
                     )}
                     <div className="flex gap-4 justify-center flex-wrap">
                       <Link 
-                        href="/treatments" 
+                        href="/" 
                         className="font-body text-sm px-6 py-3 border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors"
                       >
-                        View Treatments
+                        {t('backToHome')}
                       </Link>
-                      <Link 
-                        href="/book" 
+                      <button 
+                        onClick={() => {
+                          setSubmitted(false);
+                          setFormData({
+                            name: '',
+                            email: '',
+                            phone: '',
+                            country: '',
+                            inquiryType: 'General Inquiry',
+                            subject: '',
+                            message: '',
+                          });
+                        }}
                         className="font-body text-sm px-6 py-3 bg-gold text-white hover:bg-gold-dark transition-colors"
                       >
-                        Book a Treatment
-                      </Link>
+                        {t('sendAnother')}
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -218,20 +244,20 @@ export default function ContactPage() {
                     />
 
                     {/* Section 01 - Inquiry */}
-                    <FormSection number="01" title="Inquiry" subtitle="What can we help you with?">
+                    <FormSection number="01" title={t('step1Label').split(' — ')[1] || 'INQUIRY'} subtitle={t('step1Title')}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField label="Inquiry Type">
+                        <FormField label={t('inquiryType')}>
                           <select
                             value={formData.inquiryType}
-                            onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value as typeof INQUIRY_TYPES[number] }))}
+                            onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value as typeof INQUIRY_TYPES_EN[number] }))}
                             className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold appearance-none cursor-pointer"
                           >
-                            {INQUIRY_TYPES.map((t) => (
-                              <option key={t} value={t}>{t}</option>
+                            {INQUIRY_TYPES_KEYS.map((key, idx) => (
+                              <option key={key} value={INQUIRY_TYPES_EN[idx]}>{t(key)}</option>
                             ))}
                           </select>
                         </FormField>
-                        <FormField label="Subject" hint="Optional">
+                        <FormField label={t('subjectLabel')} hint={t('subjectOptional')}>
                           <input
                             type="text"
                             value={formData.subject}
@@ -244,9 +270,9 @@ export default function ContactPage() {
                     </FormSection>
 
                     {/* Section 02 - Contact Info */}
-                    <FormSection number="02" title="You" subtitle="How shall we reach you?">
+                    <FormSection number="02" title={t('step2Label').split(' — ')[1] || 'YOU'} subtitle={t('step2Title')}>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <FormField label="Full Name" required>
+                        <FormField label={t('fullName')} required>
                           <input
                             type="text"
                             required
@@ -257,7 +283,7 @@ export default function ContactPage() {
                             className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
                           />
                         </FormField>
-                        <FormField label="Email" required>
+                        <FormField label={t('email')} required>
                           <input
                             type="email"
                             required
@@ -268,14 +294,14 @@ export default function ContactPage() {
                             className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold"
                           />
                         </FormField>
-                        <FormField label="Phone">
+                        <FormField label={t('phone')}>
                           <CountryPhoneSelector
                             name="phone"
                             defaultCountry="TH"
                             onChange={(value) => setFormData(prev => ({ ...prev, phone: value }))}
                           />
                         </FormField>
-                        <FormField label="Country" hint="Optional">
+                        <FormField label={t('country')} hint={t('countryOptional')}>
                           <input
                             type="text"
                             value={formData.country}
@@ -289,11 +315,11 @@ export default function ContactPage() {
                     </FormSection>
 
                     {/* Section 03 - Message */}
-                    <FormSection number="03" title="Message" subtitle="Tell us more.">
+                    <FormSection number="03" title={t('step3Label').split(' — ')[1] || 'MESSAGE'} subtitle={t('step3Title')}>
                       <FormField 
-                        label="Your Message" 
+                        label={t('message')} 
                         required
-                        hint="Please provide as much detail as possible so we can assist you better."
+                        hint={t('messagePlaceholder')}
                       >
                         <textarea
                           required
@@ -316,8 +342,7 @@ export default function ContactPage() {
                       
                       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <p className="font-body text-xs text-charcoal/50 max-w-sm leading-relaxed">
-                          By submitting, you agree to be contacted by Royal Wellness Spa. 
-                          We do not share your details and will reply within one business day.
+                          {t('submitConsent')}
                         </p>
                         <button
                           type="submit"
@@ -327,11 +352,11 @@ export default function ContactPage() {
                           {isSubmitting ? (
                             <>
                               <span className="animate-spin">⟳</span>
-                              Sending...
+                              {t('sending')}
                             </>
                           ) : (
                             <>
-                              Send Message
+                              {t('sendMessage')}
                               <Send className="w-4 h-4" />
                             </>
                           )}
@@ -351,14 +376,13 @@ export default function ContactPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <p className="font-body text-gold text-xs tracking-[0.3em] mb-4">
-                  FIND US
+                  {t('findUs')}
                 </p>
                 <h2 className="font-display text-3xl md:text-4xl text-charcoal mb-6">
-                  Visit Our <span className="text-gold">Sanctuary</span>
+                  {t('visitSanctuary')}
                 </h2>
                 <p className="font-body text-charcoal/70 mb-8 leading-relaxed">
-                  Located on the 3rd floor of Royal Phuket City Hotel in the heart of Phuket Old Town, 
-                  our spa offers a tranquil escape from the bustling streets below.
+                  {t('visitDesc')}
                 </p>
                 
                 <div className="flex flex-wrap gap-4">
@@ -369,14 +393,14 @@ export default function ContactPage() {
                     className="flex items-center gap-2 font-body text-sm px-6 py-3 bg-charcoal text-white hover:bg-charcoal/80 transition-colors"
                   >
                     <MapPin className="w-4 h-4" />
-                    Get Directions
+                    {t('getDirections')}
                   </a>
                   <a
                     href="tel:+66905969666"
                     className="flex items-center gap-2 font-body text-sm px-6 py-3 border border-charcoal text-charcoal hover:bg-charcoal hover:text-white transition-colors"
                   >
                     <Phone className="w-4 h-4" />
-                    Call Us
+                    {tCommon('callUs')}
                   </a>
                 </div>
               </div>
