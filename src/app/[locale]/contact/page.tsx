@@ -18,13 +18,25 @@ const INQUIRY_TYPES = [
   "Other",
 ] as const;
 
+type InquiryType = typeof INQUIRY_TYPES[number];
+
+interface FormData {
+  name: string;
+  email: string;
+  phone: string;
+  country: string;
+  inquiryType: InquiryType;
+  subject: string;
+  message: string;
+}
+
 export default function ContactPage() {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
     country: '',
-    inquiryType: INQUIRY_TYPES[0],
+    inquiryType: 'General Inquiry',
     subject: '',
     message: '',
   });
@@ -211,7 +223,7 @@ export default function ContactPage() {
                         <FormField label="Inquiry Type">
                           <select
                             value={formData.inquiryType}
-                            onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value }))}
+                            onChange={(e) => setFormData(prev => ({ ...prev, inquiryType: e.target.value as typeof INQUIRY_TYPES[number] }))}
                             className="w-full p-3 bg-white border border-cream font-body text-sm text-charcoal outline-none focus:border-gold appearance-none cursor-pointer"
                           >
                             {INQUIRY_TYPES.map((t) => (

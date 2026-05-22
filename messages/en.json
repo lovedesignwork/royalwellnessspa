@@ -11,7 +11,15 @@
     "treatments": "treatments",
     "minutes": "min",
     "perCouple": "per couple",
-    "perPerson": "per person"
+    "perPerson": "per person",
+    "multipleOptions": "Multiple options",
+    "signature": "Signature",
+    "couple": "Couple",
+    "specialOffer": "Special Offer",
+    "browseByCategory": "Browse by Category",
+    "findPerfectTreatment": "Find the perfect treatment for your needs",
+    "premiumTreatments": "Premium Treatments",
+    "all": "All"
   },
   "nav": {
     "home": "Home",
@@ -73,7 +81,9 @@
     "title": "Royal Phuket City Hotel Guests Get",
     "discount": "10% OFF",
     "description": "Staying at Royal Phuket City Hotel? Enjoy an exclusive 10% discount on all spa treatments. Simply present your room key or booking confirmation at reception.",
-    "cta": "Book With Hotel Discount"
+    "cta": "Book With Hotel Discount",
+    "hotelGuestDiscount": "Hotel Guest Discount",
+    "exclusiveDiscount": "Exclusive 10% discount"
   },
   "categories": {
     "subtitle": "EXPLORE",
@@ -83,6 +93,13 @@
     "coupleSpecial": "Couple & Special",
     "facialTreatments": "Facial Treatments",
     "classicThaiHeritage": "Classic Thai Heritage"
+  },
+  "categoryDescriptions": {
+    "travelRecovery": "Restore your body after long journeys",
+    "skinRadiance": "Reveal your natural glow",
+    "coupleSpecial": "Share wellness moments together",
+    "facialTreatments": "Rejuvenate and refresh your face",
+    "classicThaiHeritage": "Ancient techniques, timeless results"
   },
   "testimonials": {
     "subtitle": "TESTIMONIALS",
@@ -108,13 +125,27 @@
   },
   "treatmentsPage": {
     "subtitle": "OUR TREATMENTS",
-    "title": "Discover Your Perfect Treatment",
-    "description": "Experience the art of wellness with our carefully curated treatments",
+    "title": "Our",
+    "titleHighlight": "Spa Menu",
+    "description": "Discover our curated collection of treatments, each designed to restore balance and bring harmony to your body and mind.",
     "allTreatments": "All Treatments",
     "duration": "Duration",
     "price": "Price",
     "bookThis": "Book This Treatment",
-    "viewDetails": "View Details"
+    "viewDetails": "View Details",
+    "bookYourTreatment": "Book Your Treatment",
+    "loading": "Loading treatments..."
+  },
+  "treatmentDetail": {
+    "duration": "Duration",
+    "price": "Price",
+    "highlights": "Key Techniques Included",
+    "targetGuest": "Target Guest",
+    "bestTime": "Best Booking Time",
+    "bookNow": "Book This Treatment",
+    "backToTreatments": "All Treatments",
+    "selectDuration": "Select Duration",
+    "min": "min"
   },
   "booking": {
     "title": "Book Your Treatment",
@@ -162,25 +193,67 @@
     "title": "About Royal Wellness Spa",
     "description": "Discover the journey of Royal Wellness Spa and our commitment to exceptional wellness experiences."
   },
-  "treatments": {
-    "officeSyndromeRelief": "Office Syndrome Relief",
-    "postureRevival": "Posture Revival",
-    "voyageReset": "Voyage Reset",
-    "wanderTherapy": "Wander Therapy",
-    "activeBodyRepair": "Active Body Repair",
-    "sunkissRecovery": "Sunkiss Recovery",
-    "royalGlowRitual": "Royal Glow Ritual",
-    "silkRadianceRitual": "Silk Radiance Ritual",
-    "harmonyRetreat": "Harmony Retreat",
-    "blossomBridal": "Blossom Bridal",
-    "sunkissFacial": "Sunkiss Facial",
-    "royalSignatureFacial": "Royal Signature Facial",
-    "royalThaiBalance": "Royal Thai Balance",
-    "aromaRelaxationMassage": "Aroma Relaxation Massage",
-    "thaiHerbalCompressTherapy": "Thai Herbal Compress Therapy",
-    "footBoost": "Foot Boost",
-    "headReset": "Head Reset",
-    "thaiHerbalCompress": "Thai Herbal Compress",
-    "screenReliefTreatment": "Screen Relief Treatment"
+  "treatmentNames": {
+    "1": "Office Syndrome Relief",
+    "2": "Posture Revival",
+    "3": "Voyage Reset",
+    "4": "Wander Therapy",
+    "5": "Active Body Repair",
+    "6": "Sunkiss Recovery",
+    "7": "Royal Glow Ritual",
+    "8": "Silk Radiance Ritual",
+    "9": "Harmony Retreat",
+    "10": "Blossom Bridal",
+    "11": "Sunkiss Facial",
+    "12": "Royal Signature Facial",
+    "13": "Royal Thai Balance",
+    "14": "Aroma Relaxation Massage",
+    "15": "Thai Herbal Compress Therapy",
+    "16": "Foot Boost",
+    "17": "Head Reset",
+    "18": "Thai Herbal Compress",
+    "19": "Screen Relief Treatment"
+  },
+  "treatmentDescriptions": {
+    "1": "Deep release of neck, shoulder and back muscles, combined with scalp massage and warm eye compress to relieve work fatigue and restore lightness to body and mind.",
+    "2": "Full-body posture revival treatment designed for modern workers. Deep release of back and shoulder muscles, hip and lower back rebalancing, and stretching techniques to restore elegant posture.",
+    "3": "Restores the body after long travel using lymphatic drainage to reduce swelling and fatigue, combined with warm eye compress to reset freshness and energy.",
+    "4": "Intensive foot and leg therapy for tired travelers after sightseeing. Includes herbal foot soak, foot and calf massage, and gentle stretching to restore mobility.",
+    "5": "Intensive muscle repair for athletes and fitness enthusiasts. Includes deep tissue massage targeting trigger points, combined with stretching and hot herbal compress to accelerate recovery.",
+    "6": "Full-body treatment to restore skin after sun exposure. Cool aloe vera gel and nourishing oils reduce redness and moisturize sun-kissed skin with gentle massage to promote skin healing.",
+    "7": "Signature full-body and facial ritual — body scrub, aroma massage, and a complete Sculpting Lift Facial in one session. Luxury experience for truly glowing skin.",
+    "8": "Luxurious skin journey including body scrub, nourishing massage, and a special wrap. Reveals silky smooth, radiant skin.",
+    "9": "Romantic couple spa experience including flower bath, aroma massage for two, and light facial treatments. Creates precious moments of connection and relaxation together.",
+    "10": "Luxury bridal spa package including body scrub, full-body massage, and glowing facial treatment. Prepares skin perfectly for the special day.",
+    "11": "Gentle facial treatment for sun-exposed skin with cooling and nourishing ingredients. Reduces redness, restores hydration, and calms the skin. Perfect after outdoor activities.",
+    "12": "Our signature facial treatment including deep cleansing, lifting massage, and special mask. Reveals youthful, radiant, and firmer skin.",
+    "13": "Authentic Thai massage experience including pressure point techniques and stretching. Balances body energy and promotes overall wellness.",
+    "14": "Relaxing essential oil massage combining gentle rhythms with calming aromatherapy. Reduces stress, promotes better sleep, and restores calm.",
+    "15": "Traditional Thai herbal therapy using hot herbal compress balls to relax muscles, reduce pain, and promote circulation. Combined with Thai massage for maximum benefit.",
+    "16": "Intensive foot treatment to energize tired legs. Includes herbal foot soak, pressure point massage, and moisturizing. Perfect as an add-on to any treatment.",
+    "17": "Intensive head, neck and shoulder massage combining pressure points and scalp massage. Relieves tension, headaches, and mental fatigue.",
+    "18": "Add-on herbal compress treatment using hot Thai herbal balls to relax muscles and promote relaxation. Pairs well with any massage treatment.",
+    "19": "Specialized treatment for screen fatigue relief focusing on eyes, neck and shoulders. Includes warm eye compress, head massage, and neck relaxation techniques."
+  },
+  "treatmentHighlights": {
+    "1": ["Neck & Shoulder Release", "Scalp Circulation", "Warm Eye Compress", "Relaxing Aromatherapy", "Mind Rebalancing", "Deep Back Release (120 min)"],
+    "2": ["Deep Back & Shoulder Release", "Hip & Lower Back Relaxation", "Posture-Correcting Stretches", "Pain Relief", "Mobility Restoration"],
+    "3": ["Foot Awakening Ritual", "Leg Circulation and Nourishment", "Lymphatic Drainage"],
+    "4": ["Herbal Foot Soak", "Foot & Calf Massage", "Gentle Stretching", "Mobility Restoration"],
+    "5": ["Deep Tissue Massage", "Trigger Point Focus", "Hot Herbal Compress", "Muscle Stretching", "Recovery Acceleration"],
+    "6": ["Cool Aloe Vera Gel", "Nourishing Oils", "Redness Reduction", "Moisturizing", "Gentle Massage"],
+    "7": ["Body Scrub", "Aroma Massage", "Sculpting Lift Facial", "Glowing Skin"],
+    "8": ["Body Scrub", "Nourishing Massage", "Special Wrap", "Silky Smooth Skin"],
+    "9": ["Flower Bath for Two", "Couple Aroma Massage", "Facial Treatment", "Romantic Moments"],
+    "10": ["Body Scrub", "Full-Body Massage", "Glowing Facial", "Pre-Wedding Skin Prep"],
+    "11": ["Cooling Ingredients", "Redness Reduction", "Hydration Restoration", "Skin Calming"],
+    "12": ["Deep Cleansing", "Lifting Massage", "Special Mask", "Youthful Skin"],
+    "13": ["Thai Pressure Points", "Stretching Techniques", "Energy Balancing", "Wellness Promotion"],
+    "14": ["Essential Oils", "Gentle Rhythms", "Stress Reduction", "Sleep Promotion"],
+    "15": ["Herbal Compress Balls", "Muscle Relaxation", "Pain Reduction", "Circulation Promotion"],
+    "16": ["Herbal Foot Soak", "Foot Pressure Points", "Moisturizing"],
+    "17": ["Head Massage", "Neck & Shoulder Release", "Headache Relief"],
+    "18": ["Hot Herbal Compress", "Muscle Relaxation", "Relaxation"],
+    "19": ["Warm Eye Compress", "Head Massage", "Neck Relaxation"]
   }
 }
