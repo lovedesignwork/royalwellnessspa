@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { generatePaymentFormData } from '@/lib/paysolutions';
+import { requestPaymentToken } from '@/lib/2c2p';
 import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
-
-const MAX_REF_LENGTH = 12;
 
 interface TreatmentItem {
   guestName: string;
@@ -28,17 +26,6 @@ interface PaymentRequest {
   discount?: number;
 }
 
-function buildNumericRef(source: string): string {
-  const digits = (source || '').replace(/\D/g, '');
-  const timestamp = Date.now().toString();
-  const random = Math.floor(Math.random() * 1_000_000)
-    .toString()
-    .padStart(6, '0');
-
-  const combined = `${digits}${timestamp}${random}`;
-  return combined.slice(-MAX_REF_LENGTH);
-}
-
 export async function POST(request: NextRequest) {
   try {
     const body: PaymentRequest = await request.json();
@@ -46,25 +33,19 @@ export async function POST(request: NextRequest) {
 
     const supabase = getRPCHSupabaseClient();
 
-    // Generate booking reference
     const bookingRef = `RWS${Date.now()}${Math.floor(Math.random() * 10000)}`.slice(0, 20);
 
-    // Format treatment names for storage
     const treatmentNames = treatments && treatments.length > 0
       ? treatments
           .map((t) => `${t.guestName}: ${t.treatmentName}${t.duration ? ` (${t.duration})` : ''}`)
           .join(' | ')
       : treatment || '';
 
-    // Generate the numeric Pay Solutions ref
-    const paySolutionsRef = buildNumericRef(bookingRef);
-
-    // Insert into spa_reservations (RPCH admin picks it up)
     const { data: booking, error: bookingError } = await supabase
       .from('spa_reservations')
       .insert({
         reference: bookingRef,
-        payment_ref: paySolutionsRef,
+        payment_ref: bookingRef,
         guest_name: `${customer.firstName} ${customer.lastName}`.trim(),
         email: customer.email,
         phone: customer.phone,
@@ -89,10 +70,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const merchantId = process.env.PAYSOLUTIONS_MERCHANT_ID;
+    const merchantId = process.env.TWOC2P_MERCHANT_ID;
 
     if (!merchantId) {
-      // Fallback: confirm booking without payment (for testing)
       return NextResponse.json({
         success: true,
         bookingRef,
@@ -106,10 +86,8 @@ export async function POST(request: NextRequest) {
       : `Royal Wellness Spa - ${treatment || 'Booking'}`;
     const customerName = `${customer.firstName} ${customer.lastName}`.trim();
 
-    // Generate Pay Solutions form data
-    const result = generatePaymentFormData({
-      refNo: paySolutionsRef,
-      originalRef: bookingRef,
+    const result = await requestPaymentToken({
+      invoiceNo: bookingRef,
       amount: Number(amount),
       description: productDetail,
       customerEmail: customer.email,
@@ -118,7 +96,7 @@ export async function POST(request: NextRequest) {
     });
 
     if (!result.success) {
-      console.error('Pay Solutions form data generation failure:', result.error);
+      console.error('2C2P payment token request failed:', result.error);
       return NextResponse.json(
         { success: false, error: `Payment initialization failed: ${result.error}` },
         { status: 500 }
@@ -127,11 +105,12 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      paymentUrl: result.paymentUrl,
-      formData: result.formData,
-      refNo: result.refNo,
+      paymentUrl: result.webPaymentUrl,
+      paymentToken: result.paymentToken,
+      invoiceNo: result.invoiceNo,
       bookingRef,
       bookingId: booking.id,
+      gateway: '2c2p',
     });
   } catch (error) {
     console.error('Payment creation error:', error);

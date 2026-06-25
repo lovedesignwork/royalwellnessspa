@@ -264,12 +264,18 @@ function BookingContent() {
 
       const data = await response.json();
 
-      if (data.success && data.paymentUrl && data.formData) {
-        // Pay Solutions requires a POST form submission. Set the form data and submit it.
-        setPaymentForm({ url: data.paymentUrl, data: data.formData });
-        setTimeout(() => {
-          paymentFormRef.current?.submit();
-        }, 100);
+      if (data.success && data.paymentUrl) {
+        if (data.formData) {
+          // Legacy: PaySolutions requires a POST form submission
+          setPaymentForm({ url: data.paymentUrl, data: data.formData });
+          setTimeout(() => {
+            paymentFormRef.current?.submit();
+          }, 100);
+        } else {
+          // 2C2P: Direct redirect to payment page
+          setPaymentForm({ url: data.paymentUrl, data: {} });
+          window.location.href = data.paymentUrl;
+        }
       } else if (data.success) {
         // No payment gateway configured — fall back to confirmation
         setCurrentStep('confirmation');

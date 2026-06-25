@@ -1,23 +1,25 @@
 # Royal Wellness Spa
 
-A luxury massage and spa booking website for Royal Wellness Spa in Phuket, Thailand. Built with Next.js, Supabase, and PaySolution payment gateway.
+A luxury massage and spa booking website for Royal Wellness Spa in Phuket, Thailand. Built with Next.js, Supabase, and 2C2P payment gateway.
 
 ## Features
 
 - **Luxury Design**: Modern, elegant UI with premium fonts and gold accents
 - **Online Booking**: Complete booking flow with treatment selection, date/time picker
-- **Payment Integration**: PaySolution payment gateway for Thai payment methods
+- **Payment Integration**: 2C2P payment gateway for Thai and international payment methods
 - **Admin Dashboard**: Secure admin panel at `/xadmin` for managing bookings
 - **Responsive**: Mobile-first design that works on all devices
+- **Bilingual**: English and Thai language support
 
 ## Tech Stack
 
-- **Framework**: Next.js 15 with App Router
+- **Framework**: Next.js 16 with App Router
 - **Styling**: Tailwind CSS
 - **Database**: Supabase (PostgreSQL)
 - **Authentication**: Supabase Auth
-- **Payments**: PaySolution Gateway
+- **Payments**: 2C2P Payment Gateway
 - **Hosting**: Vercel
+- **i18n**: next-intl
 
 ## Getting Started
 
@@ -26,7 +28,7 @@ A luxury massage and spa booking website for Royal Wellness Spa in Phuket, Thail
 - Node.js 18+
 - npm or yarn
 - Supabase account
-- PaySolution merchant account
+- 2C2P merchant account
 
 ### Installation
 
@@ -50,8 +52,9 @@ cp .env.example .env.local
 ```
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-PAYSOLUTION_MERCHANT_ID=your_merchant_id
-PAYSOLUTION_SECRET_KEY=your_secret_key
+TWOC2P_MERCHANT_ID=your_2c2p_merchant_id
+TWOC2P_SECRET_KEY=your_2c2p_secret_key
+TWOC2P_SANDBOX=true
 ```
 
 5. Set up the database:
@@ -75,16 +78,18 @@ npm run dev
 ```
 src/
 ├── app/
-│   ├── (pages)/          # Public pages
+│   ├── [locale]/         # Localized pages (en, th)
 │   ├── api/              # API routes
 │   ├── xadmin/           # Admin dashboard
 │   └── layout.tsx        # Root layout
 ├── components/           # React components
 │   ├── admin/            # Admin-specific components
 │   └── ...               # Shared components
-└── lib/
-    ├── spa-data.ts       # Treatment data
-    └── supabase/         # Supabase clients
+├── lib/
+│   ├── spa-data.ts       # Treatment data
+│   ├── 2c2p.ts           # 2C2P payment gateway
+│   └── supabase/         # Supabase clients
+└── messages/             # i18n translations (en.json, th.json)
 ```
 
 ## Deployment to Vercel
@@ -94,10 +99,11 @@ src/
 3. Add environment variables in Vercel dashboard:
    - `NEXT_PUBLIC_SUPABASE_URL`
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-   - `PAYSOLUTION_MERCHANT_ID`
-   - `PAYSOLUTION_SECRET_KEY`
-   - `PAYSOLUTION_API_URL`
+   - `TWOC2P_MERCHANT_ID`
+   - `TWOC2P_SECRET_KEY`
+   - `TWOC2P_SANDBOX` (set to `false` for production)
    - `NEXT_PUBLIC_BASE_URL` (your Vercel domain)
+   - `RESEND_API_KEY` (for contact form emails)
 4. Deploy!
 
 ## Admin Access
@@ -106,14 +112,25 @@ src/
 - Login with your Supabase admin credentials
 - Manage bookings, view stats, and more
 
-## PaySolution Integration
+## 2C2P Payment Integration
 
 The payment flow:
 1. Customer selects treatment and fills booking details
 2. System creates a pending booking in database
-3. Customer is redirected to PaySolution payment page
-4. After payment, webhook updates booking status
-5. Customer sees confirmation
+3. System requests a payment token from 2C2P
+4. Customer is redirected to 2C2P hosted payment page
+5. Customer completes payment (card, QR, bank transfer, etc.)
+6. 2C2P sends backend notification to update booking status
+7. Customer is redirected back and sees confirmation
+
+### Supported Payment Methods
+
+2C2P supports various payment methods including:
+- Credit/Debit Cards (Visa, Mastercard, JCB, AMEX)
+- QR Code Payments (PromptPay)
+- Bank Transfers
+- Digital Wallets
+- And more...
 
 ## Spa Menu
 
@@ -123,7 +140,6 @@ The spa offers treatments in these categories:
 - **Couple & Special**: Romantic packages, bridal prep
 - **Facial Treatments**: Various facial therapies
 - **Classic Thai Heritage**: Traditional Thai massage
-- **Top-Up / Add-On**: Enhancement treatments
 
 ## License
 
@@ -132,5 +148,6 @@ Private - All rights reserved.
 ## Contact
 
 Royal Wellness Spa
-3rd Floor, Phuket, Thailand
+3rd Floor, Royal Phuket City Hotel, Phuket, Thailand
 Open: 10AM - 11PM Daily
+Phone: 090-596-9666

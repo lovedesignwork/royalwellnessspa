@@ -1,6 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
-import { isPaymentSuccessful } from '@/lib/paysolutions';
+import { isPaymentSuccessful as is2C2PSuccess, inquirePayment } from '@/lib/2c2p';
+
+function isPaymentSuccessful(status: string, gateway?: string): boolean {
+  if (gateway === '2c2p') {
+    return is2C2PSuccess(status);
+  }
+  const normalized = String(status).trim().toLowerCase();
+  if (/^0+$/.test(normalized) || normalized === '1') {
+    return true;
+  }
+  const successStatuses = new Set([
+    'success', 'successful', 'completed', 'approved', 'paid', 'settled', 'captured', '0000',
+  ]);
+  return successStatuses.has(normalized);
+}
 
 type BookingRecord = {
   id: string;

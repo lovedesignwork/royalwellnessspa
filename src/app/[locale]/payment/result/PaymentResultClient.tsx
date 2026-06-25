@@ -22,8 +22,8 @@ interface BookingInfo {
   transaction_id: string | null;
 }
 
-const PAY_SOLUTIONS_POLL_INTERVAL = 1500;
-const PAY_SOLUTIONS_MAX_ATTEMPTS = 12;
+const PAYMENT_POLL_INTERVAL = 1500;
+const PAYMENT_MAX_ATTEMPTS = 12;
 
 export default function PaymentResultClient() {
   const searchParams = useSearchParams();
@@ -39,10 +39,10 @@ export default function PaymentResultClient() {
     setGateway(gatewayParam);
 
     const refNo =
+      searchParams.get('invoiceNo') ||
       searchParams.get('refNo') ||
       searchParams.get('ref_no') ||
       searchParams.get('referenceNo') ||
-      searchParams.get('invoiceNo') ||
       searchParams.get('refno') ||
       '';
 
@@ -127,8 +127,8 @@ export default function PaymentResultClient() {
         console.error('Failed to verify payment status:', error);
       }
 
-      if (attempts < PAY_SOLUTIONS_MAX_ATTEMPTS) {
-        pollTimeout.current = setTimeout(checkStatus, PAY_SOLUTIONS_POLL_INTERVAL);
+      if (attempts < PAYMENT_MAX_ATTEMPTS) {
+        pollTimeout.current = setTimeout(checkStatus, PAYMENT_POLL_INTERVAL);
       } else if (!cancelled && !resolved) {
         setStatus(callbackDetectedRef.current ? 'failed' : 'pending');
       }
@@ -244,7 +244,7 @@ export default function PaymentResultClient() {
                 Payment Failed
               </h1>
               <p className="font-body text-charcoal/70 mb-6">
-                We were unable to process your payment. If you received a Pay Solutions receipt,
+                We were unable to process your payment. If you received a payment receipt,
                 please contact our team using the reference below and we will finish your booking
                 manually.
               </p>
@@ -261,14 +261,14 @@ export default function PaymentResultClient() {
                 Thank You for Your Booking
               </h1>
               <p className="font-body text-charcoal/70 mb-6">
-                {gateway === 'paysolutions'
+                {gateway === '2c2p' || gateway === 'paysolutions'
                   ? 'If your payment was successful, you will receive a confirmation email shortly. Our team will verify your payment and finalize the booking.'
                   : 'We will get back to you with confirmation of your booking soon.'}
               </p>
               {renderBookingDetails()}
-              {gateway === 'paysolutions' && (
+              {(gateway === '2c2p' || gateway === 'paysolutions') && (
                 <p className="font-body text-sm text-charcoal/60 mb-6">
-                  Please keep your Pay Solutions receipt for reference.
+                  Please keep your payment receipt for reference.
                 </p>
               )}
             </>
