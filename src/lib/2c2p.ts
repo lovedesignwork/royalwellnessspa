@@ -141,13 +141,14 @@ export async function requestPaymentToken(
     const frontendReturnUrl = `${BASE_URL}/payment/result?gateway=2c2p&invoiceNo=${request.invoiceNo}`;
     const backendReturnUrl = `${BASE_URL}/api/payment/2c2p/callback`;
 
-    const amountStr = (request.amount * 100).toFixed(0).padStart(12, '0');
+    // 2C2P expects amount as a decimal number (e.g., 1000.00)
+    const amount = Number(request.amount.toFixed(2));
 
     const payload: Record<string, unknown> = {
       merchantID: MERCHANT_ID,
       invoiceNo: request.invoiceNo,
       description: request.description.substring(0, 255),
-      amount: amountStr,
+      amount: amount,
       currencyCode: request.currencyCode || 'THB',
       frontendReturnUrl,
       backendReturnUrl,
@@ -169,7 +170,8 @@ export async function requestPaymentToken(
     console.log('2C2P Payment Token Request:', {
       merchantID: MERCHANT_ID,
       invoiceNo: request.invoiceNo,
-      amount: request.amount,
+      amount: amount,
+      currencyCode: 'THB',
       apiUrl: `${API_URL}/paymentToken`,
     });
 
@@ -187,7 +189,7 @@ export async function requestPaymentToken(
       console.error('2C2P response missing payload:', responseData);
       return {
         success: false,
-        error: 'Invalid response from 2C2P',
+        error: `Invalid response from 2C2P: ${JSON.stringify(responseData)}`,
       };
     }
 
