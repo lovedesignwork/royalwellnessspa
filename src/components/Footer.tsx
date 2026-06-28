@@ -2,7 +2,7 @@
 
 import { Link } from '@/i18n/routing';
 import Image from 'next/image';
-import { MapPin, Phone, Clock, Instagram, Facebook, MessageCircle, Mail } from 'lucide-react';
+import { MapPin, Phone, Clock, Instagram, Facebook, MessageCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 
 export default function Footer() {
@@ -97,12 +97,6 @@ export default function Footer() {
                   className="hover:text-gold transition-colors"
                 >
                   LINE: @royalwellnessspa
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 text-gold flex-shrink-0" />
-                <a href="mailto:wallop.c@royalwellnessspaphuket.com" className="hover:text-gold transition-colors">
-                  wallop.c@royalwellnessspaphuket.com
                 </a>
               </li>
               <li className="flex items-center gap-3">

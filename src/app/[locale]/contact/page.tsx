@@ -145,14 +145,9 @@ export default function ContactPage() {
                 </h3>
                 
                 <div className="space-y-6 mb-8">
-                  <ContactDetail 
-                    label={t('emailLabel')} 
-                    value="wallop.c@royalwellnessspaphuket.com" 
-                    href="mailto:wallop.c@royalwellnessspaphuket.com"
-                  />
-                  <ContactDetail 
-                    label={t('phoneLabel')} 
-                    value="090-596-9666" 
+                  <ContactDetail
+                    label={t('phoneLabel')}
+                    value="090-596-9666"
                     href="tel:+66905969666"
                   />
                   <ContactDetail 
