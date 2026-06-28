@@ -1033,7 +1033,7 @@ function BookingContent() {
                           </span>
                         </div>
                         <p className="font-body text-xs text-charcoal/60">
-                          Credit cards, debit cards, and QR payment accepted via PaySolution.
+                          Credit cards, debit cards, and QR payment accepted via 2C2P.
                         </p>
                       </div>
 
