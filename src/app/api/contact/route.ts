@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { insertSpaContact } from '@/lib/supabase-rpch';
+import { ADMIN_RECIPIENTS, SENDER_EMAIL, REPLY_TO_EMAIL } from '@/lib/email';
 
 interface ContactRequest {
   name: string;
@@ -11,14 +12,6 @@ interface ContactRequest {
   message: string;
   _ts?: number;
 }
-
-const ADMIN_RECIPIENTS = [
-  "marketing@royalphuketcity.com",
-  "wallop.c@royalwellnessspaphuket.com",
-] as const;
-
-const SENDER_EMAIL = "Royal Wellness Spa <marketing@royalphuketcity.com>";
-const REPLY_TO_EMAIL = "marketing@royalphuketcity.com";
 
 export async function POST(request: NextRequest) {
   try {
@@ -255,7 +248,7 @@ function generateCustomerEmailHtml(data: {
           <strong>Phone:</strong> 090-596-9666<br />
           <strong>WhatsApp:</strong> 090-596-9666<br />
           <strong>LINE:</strong> @royalwellnessspa<br />
-          <strong>Email:</strong> wallop.c@royalwellnessspaphuket.com
+          <strong>Email:</strong> marketing@royalphuketcity.com
         </p>
       </div>
       <div style="background-color: #1a1a1a; padding: 20px; text-align: center;">
@@ -263,7 +256,7 @@ function generateCustomerEmailHtml(data: {
           Royal Wellness Spa | 3rd Floor, Royal Phuket City Hotel, Phuket, Thailand
         </p>
         <p style="color: rgba(255,255,255,0.4); margin: 10px 0 0 0; font-size: 11px;">
-          This is an automated confirmation. If you need to reply, please email wallop.c@royalwellnessspaphuket.com
+          This is an automated confirmation. If you need to reply, please email marketing@royalphuketcity.com
         </p>
       </div>
     </div>

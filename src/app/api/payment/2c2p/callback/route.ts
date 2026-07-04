@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
 import { parseCallbackPayload, isPaymentSuccessful } from '@/lib/2c2p';
+import { sendBookingConfirmationEmails } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   try {
@@ -67,6 +68,25 @@ export async function POST(request: NextRequest) {
 
     if (updateError) {
       console.error('Failed to update booking:', updateError);
+    }
+
+    // Send confirmation emails on first successful payment only (2C2P may retry
+    // the callback, and booking.payment_status reflects the value before update).
+    if (isSuccess && booking.payment_status !== 'paid') {
+      await sendBookingConfirmationEmails({
+        reference: booking.reference,
+        guestName: booking.guest_name,
+        email: booking.email,
+        phone: booking.phone,
+        date: booking.date,
+        time: booking.time,
+        guests: booking.guests,
+        service: booking.service,
+        amount: Number(booking.amount),
+        occasion: booking.occasion,
+        specialRequests: booking.special_requests,
+        transactionId: tranRef || approvalCode || invoiceNo,
+      });
     }
 
     return NextResponse.json({ status: 'ok' });
