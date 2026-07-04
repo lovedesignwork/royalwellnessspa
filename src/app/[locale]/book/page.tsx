@@ -355,7 +355,7 @@ function BookingContent() {
             {currentStep === 'treatment' && (
               <div className="flex flex-col lg:flex-row gap-8">
                 {/* Main Content */}
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="text-center mb-8">
                     <h2 className="font-display text-3xl text-charcoal mb-2">
                       Select Treatments
@@ -634,7 +634,7 @@ function BookingContent() {
                 </div>
 
                 {/* Cart Sidebar with Date/Time */}
-                <div className={`lg:w-96 ${showCart || guestsWithTreatments.length > 0 ? 'block' : 'hidden lg:block'}`}>
+                <div className={`lg:w-96 lg:flex-shrink-0 ${showCart || guestsWithTreatments.length > 0 ? 'block' : 'hidden lg:block'}`}>
                   <div className="bg-white rounded-lg shadow-lg p-6 sticky top-32">
                     <div className="flex items-center gap-2 mb-6">
                       <ShoppingBag className="w-5 h-5 text-gold" />
