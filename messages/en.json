@@ -12,6 +12,7 @@
     "minutes": "min",
     "perCouple": "per couple",
     "perPerson": "per person",
+    "forTwoPeople": "for 2 people",
     "multipleOptions": "Multiple options",
     "signature": "Signature",
     "couple": "Couple",
@@ -88,6 +89,7 @@
   "categories": {
     "subtitle": "EXPLORE",
     "title": "Treatment Categories",
+    "promotion": "Promotion",
     "travelRecovery": "Travel Recovery",
     "skinRadiance": "Skin & Radiance",
     "coupleSpecial": "Couple & Special",
@@ -95,6 +97,7 @@
     "classicThaiHeritage": "Classic Thai Heritage"
   },
   "categoryDescriptions": {
+    "promotion": "Limited-time recovery packages at special prices",
     "travelRecovery": "Restore your body after long journeys",
     "skinRadiance": "Reveal your natural glow",
     "coupleSpecial": "Share wellness moments together",

@@ -11,6 +11,7 @@ import { Clock, Sparkles, Star, ArrowRight } from 'lucide-react';
 import { useTranslations, useLocale } from 'next-intl';
 
 const categoryKeys: Record<string, string> = {
+  "Promotion": "promotion",
   "Travel Recovery": "travelRecovery",
   "Skin & Radiance": "skinRadiance",
   "Couple & Special": "coupleSpecial",
@@ -51,19 +52,21 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
           
-          {treatment.isSignature && (
+          {treatment.badge ? (
+            <div className="absolute top-4 right-4 bg-red-500 text-white text-xs font-body font-medium px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
+              {treatment.badge}
+            </div>
+          ) : treatment.isSignature ? (
             <div className="absolute top-4 right-4 bg-gold text-white text-xs font-body px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Sparkles className="w-3 h-3" />
               {t('common.signature').toUpperCase()}
             </div>
-          )}
-
-          {treatment.isCouple && (
+          ) : treatment.isCouple ? (
             <div className="absolute top-4 right-4 bg-rose-500 text-white text-xs font-body px-3 py-1.5 rounded-full flex items-center gap-1.5 shadow-lg">
               <Star className="w-3 h-3" />
               {t('common.couple').toUpperCase()}
             </div>
-          )}
+          ) : null}
 
           <div className="absolute top-4 left-4">
             <span className="bg-white/90 backdrop-blur-sm text-charcoal text-xs font-body px-3 py-1 rounded-full">
@@ -97,7 +100,13 @@ function TreatmentCard({ treatment }: { treatment: Treatment }) {
           )}
           {treatment.priceNote && (
             <span className="bg-rose-500/10 text-rose-500 text-[10px] font-body px-2 py-0.5 rounded-full">
-              {locale === 'th' ? (treatment.priceNote === 'per couple' ? t('common.perCouple') : t('common.perPerson')) : treatment.priceNote}
+              {locale === 'th'
+                ? treatment.priceNote === 'per couple'
+                  ? t('common.perCouple')
+                  : treatment.priceNote === 'for 2 people'
+                  ? t('common.forTwoPeople')
+                  : t('common.perPerson')
+                : treatment.priceNote}
             </span>
           )}
         </div>
@@ -174,6 +183,7 @@ function TreatmentsContent() {
       return t(`categoryDescriptions.${categoryKeys[category]}`);
     }
     const descriptions: Record<string, string> = {
+      "Promotion": "Limited-time recovery packages at special prices",
       "Travel Recovery": "Restore your body after long journeys",
       "Skin & Radiance": "Reveal your natural glow",
       "Couple & Special": "Share wellness moments together",

@@ -586,6 +586,14 @@ function BookingContent() {
                                 </div>
                               )}
 
+                              {treatment.badge && (
+                                <div className="absolute top-3 right-3">
+                                  <span className="bg-red-500 text-white font-body text-[10px] font-medium px-2 py-1 rounded-full shadow-md">
+                                    {treatment.badge}
+                                  </span>
+                                </div>
+                              )}
+
                               <div className="absolute bottom-3 right-3">
                                 <span className="bg-gold text-white font-display text-lg px-3 py-1 rounded-sm">
                                   {treatment.price.split(' /')[0]}
@@ -606,6 +614,11 @@ function BookingContent() {
                                 {hasDurationOptions(treatment) && (
                                   <span className="ml-auto bg-gold/10 text-gold text-[10px] font-body px-2 py-0.5 rounded-full">
                                     Multiple options
+                                  </span>
+                                )}
+                                {treatment.priceNote && (
+                                  <span className="ml-auto bg-charcoal/5 text-charcoal/60 text-[10px] font-body px-2 py-0.5 rounded-full">
+                                    {treatment.priceNote}
                                   </span>
                                 )}
                               </div>

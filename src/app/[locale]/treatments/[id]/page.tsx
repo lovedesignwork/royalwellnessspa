@@ -8,6 +8,7 @@ import { Clock, Sparkles, ArrowRight, Check, Users, Star, ArrowLeft, Calendar, H
 import { getTranslations } from 'next-intl/server';
 
 const categoryKeys: Record<string, string> = {
+  "Promotion": "promotion",
   "Travel Recovery": "travelRecovery",
   "Skin & Radiance": "skinRadiance",
   "Couple & Special": "coupleSpecial",
@@ -121,6 +122,11 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
 
           {/* Badges */}
           <div className="absolute top-28 right-6 z-10 flex items-center gap-2">
+            {treatment.badge && (
+              <div className="bg-red-500 text-white text-sm font-body font-medium px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
+                {treatment.badge}
+              </div>
+            )}
             {treatment.isSignature && (
               <div className="bg-gold text-white text-sm font-body px-4 py-2 rounded-full flex items-center gap-2 shadow-lg">
                 <Sparkles className="w-4 h-4" />
@@ -183,7 +189,7 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
                   {treatment.priceNote && (
                     <p className="mt-4 font-body text-sm text-charcoal/60 italic">
                       {locale === 'th' 
-                        ? `ราคา${treatment.priceNote === 'per couple' ? t('common.perCouple') : t('common.perPerson')}`
+                        ? `ราคา${treatment.priceNote === 'per couple' ? t('common.perCouple') : treatment.priceNote === 'for 2 people' ? t('common.forTwoPeople') : t('common.perPerson')}`
                         : `Price is ${treatment.priceNote}`
                       }
                     </p>
@@ -420,6 +426,10 @@ export default async function TreatmentDetailPage({ params }: { params: Promise<
 
 function getTargetGuestThai(targetGuest: string): string {
   const translations: Record<string, string> = {
+    "Everyone / quick relief / neck & shoulder tension": "ทุกคน / บรรเทาด่วน / อาการตึงคอและไหล่",
+    "Couples & friends / quick relief together": "คู่รักและเพื่อน / บรรเทาด่วนไปด้วยกัน",
+    "Everyone / deep relaxation / full upper-body relief": "ทุกคน / ผ่อนคลายลึก / บรรเทาช่วงบนทั้งหมด",
+    "Couples & friends / deep relaxation together": "คู่รักและเพื่อน / ผ่อนคลายลึกไปด้วยกัน",
     "Office workers, remote workers, frequent computer users": "พนักงานออฟฟิศ ทำงานทางไกล ผู้ใช้คอมพิวเตอร์บ่อย",
     "Modern professionals, urban workers, sedentary lifestyle": "มืออาชีพยุคใหม่ คนทำงานในเมือง ผู้มีวิถีชีวิตนั่งทำงาน",
     "Long-haul travelers, post-flight recovery, jet lag sufferers": "นักเดินทางระยะไกล ฟื้นตัวหลังเที่ยวบิน ผู้มีอาการเจ็ตแล็ก",
@@ -445,6 +455,7 @@ function getTargetGuestThai(targetGuest: string): string {
 
 function getBestBookingTimeThai(bestBookingTime: string): string {
   const translations: Record<string, string> = {
+    "Anytime": "ตลอดเวลา",
     "After long work day, midweek refresh": "หลังวันทำงานหนัก รีเฟรชกลางสัปดาห์",
     "Morning or after work hours": "ช่วงเช้าหรือหลังเลิกงาน",
     "Day of arrival or next morning": "วันที่เดินทางมาถึงหรือเช้าวันรุ่งขึ้น",

@@ -13,6 +13,8 @@ export interface Treatment {
   image: string;
   isSignature?: boolean;
   isCouple?: boolean;
+  isPromotion?: boolean;
+  badge?: string;
   priceNote?: string;
 }
 
@@ -28,6 +30,7 @@ export interface AddOn {
 }
 
 export const categories = [
+  "Promotion",
   "Travel Recovery",
   "Skin & Radiance",
   "Couple & Special",
@@ -44,7 +47,7 @@ export const spaInfo = {
   phone: "090-596-9666",
   whatsapp: "090-596-9666",
   lineUrl: "https://lin.ee/En1ToHH",
-  email: "wallop.c@royalwellnessspaphuket.com",
+  email: "marketing@royalphuketcity.com",
   hours: "Open Daily: 10:00 AM – 11:00 PM",
   brandColors: {
     gold: "#D4B371",
@@ -54,6 +57,7 @@ export const spaInfo = {
 };
 
 const treatmentImages: Record<string, string> = {
+  "Promotion": "/images/Treatment/Thai Herbal Compress Therapy.jpg",
   "Travel Recovery": "/images/Royal Spa 1.jpg",
   "Skin & Radiance": "/images/Royal Spa 2.jpg",
   "Couple & Special": "/images/Royal Spa 3.jpg",
@@ -82,9 +86,102 @@ const specificImages: Record<number, string> = {
   17: "/images/Royal Spa 8.jpg",
   18: "/images/Treatment/Thai Herbal Compress Therapy.jpg",
   19: "/images/Royal Spa 10.jpg",
+  20: "/images/Treatment/Thai Herbal Compress Therapy.jpg",
+  21: "/images/Royal Spa 3.jpg",
+  22: "/images/Treatment/Aroma Relaxation Massage.jpg",
+  23: "/images/Royal Spa 3.jpg",
 };
 
 export const treatments: Treatment[] = [
+  // ===== Promotion — Recovery Packages (4 packages) =====
+  {
+    id: 20,
+    name: "Recovery Starter",
+    category: "Promotion",
+    duration: "60 min",
+    price: "฿1,200",
+    priceValue: 1200,
+    description: "Warm herbal compress massage for the neck and shoulders, finished for instant relief and relaxation.",
+    highlights: [
+      "Warm Herbal Compress",
+      "Neck & Shoulder Relief",
+      "Instant Relaxation",
+    ],
+    targetGuest: "Everyone / quick relief / neck & shoulder tension",
+    bestBookingTime: "Anytime",
+    notes: "Promotion",
+    isPromotion: true,
+    priceNote: "per person",
+    image: specificImages[20] || treatmentImages["Promotion"],
+  },
+  {
+    id: 21,
+    name: "Double Recovery (Starter)",
+    category: "Promotion",
+    duration: "60 min",
+    price: "฿2,100",
+    priceValue: 2100,
+    description: "Warm herbal compress massage for the neck and shoulders, finished for instant relief and relaxation — shared by two guests side by side.",
+    highlights: [
+      "Warm Herbal Compress",
+      "Neck & Shoulder Relief",
+      "For 2 People",
+      "Instant Relaxation",
+    ],
+    targetGuest: "Couples & friends / quick relief together",
+    bestBookingTime: "Anytime",
+    notes: "Promotion",
+    isPromotion: true,
+    isCouple: true,
+    badge: "SAVE ฿300",
+    priceNote: "for 2 people",
+    image: specificImages[21] || treatmentImages["Promotion"],
+  },
+  {
+    id: 22,
+    name: "Recovery Classic",
+    category: "Promotion",
+    duration: "90 min",
+    price: "฿1,700",
+    priceValue: 1700,
+    description: "Warm herbal compress massage for the neck, shoulders, and back, finished with organic oil for deep relaxation.",
+    highlights: [
+      "Warm Herbal Compress",
+      "Neck, Shoulders & Back",
+      "Organic Oil Finish",
+      "Deep Relaxation",
+    ],
+    targetGuest: "Everyone / deep relaxation / full upper-body relief",
+    bestBookingTime: "Anytime",
+    notes: "Promotion",
+    isPromotion: true,
+    priceNote: "per person",
+    image: specificImages[22] || treatmentImages["Promotion"],
+  },
+  {
+    id: 23,
+    name: "Double Recovery (Classic)",
+    category: "Promotion",
+    duration: "90 min",
+    price: "฿3,000",
+    priceValue: 3000,
+    description: "Warm herbal compress massage for the neck, shoulders, and back, finished with organic oil for deep relaxation — shared by two guests side by side.",
+    highlights: [
+      "Warm Herbal Compress",
+      "Neck, Shoulders & Back",
+      "For 2 People",
+      "Organic Oil Finish",
+    ],
+    targetGuest: "Couples & friends / deep relaxation together",
+    bestBookingTime: "Anytime",
+    notes: "Promotion",
+    isPromotion: true,
+    isCouple: true,
+    badge: "SAVE ฿400",
+    priceNote: "for 2 people",
+    image: specificImages[23] || treatmentImages["Promotion"],
+  },
+
   // ===== Travel Recovery (5 treatments) =====
   {
     id: 1,
