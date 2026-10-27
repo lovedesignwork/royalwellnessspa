@@ -11,8 +11,8 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
  * reads via the service role client.
  */
 
-const RPCH_SUPABASE_URL = "https://crhzxvbubvyachauomlx.supabase.co";
-const RPCH_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyaHp4dmJ1YnZ5YWNoYXVvbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk0MjQsImV4cCI6MjA4OTQyNTQyNH0.k8jEtxz3ixWbMvG3507ImJZ5PRizktOO0wossbPZSQk";
+export const RPCH_SUPABASE_URL = "https://crhzxvbubvyachauomlx.supabase.co";
+export const RPCH_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNyaHp4dmJ1YnZ5YWNoYXVvbWx4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4NDk0MjQsImV4cCI6MjA4OTQyNTQyNH0.k8jEtxz3ixWbMvG3507ImJZ5PRizktOO0wossbPZSQk";
 
 let client: SupabaseClient | null = null;
 

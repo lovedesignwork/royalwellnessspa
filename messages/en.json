@@ -23,6 +23,7 @@
     "all": "All"
   },
   "nav": {
+    "blog": "Blog",
     "home": "Home",
     "treatments": "Treatments",
     "about": "About",

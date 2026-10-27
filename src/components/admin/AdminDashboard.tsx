@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
@@ -114,7 +115,8 @@ export default function AdminDashboard({ user, bookings, stats }: AdminDashboard
           <p className="text-gold text-xs tracking-[0.2em]">ADMIN</p>
         </div>
 
-        <nav className="p-4">
+        <div className="px-6 py-3"><Link href="/xadmin/blog" className="text-gold underline">Manage blog articles →</Link></div>
+          <nav className="p-4">
           <button
             onClick={() => setActiveTab('overview')}
             className={`w-full flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-body transition-colors ${

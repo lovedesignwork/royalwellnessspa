@@ -1,3 +1,5 @@
+import LatestArticles from '@/components/blog/LatestArticles';
+export const dynamic = 'force-dynamic';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
 import Footer from '@/components/Footer';
@@ -443,6 +445,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
         </section>
 
+        <LatestArticles />
         {/* CTA Section */}
         <section className="relative py-32 overflow-hidden">
           <div

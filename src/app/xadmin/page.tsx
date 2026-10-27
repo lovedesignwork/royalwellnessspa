@@ -29,6 +29,9 @@ export default async function AdminPage() {
     redirect('/xadmin/login');
   }
 
+  const { data: admin } = await supabase.from('admin_users').select('role').eq('id', user.id).single();
+  if (!admin || !['admin', 'superadmin', 'editor'].includes(admin.role)) redirect('/xadmin/login');
+
   const { data: rawBookings } = await supabase
     .from('spa_reservations')
     .select('*')

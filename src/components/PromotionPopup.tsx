@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { Link } from '@/i18n/routing';
+import { Link, usePathname } from '@/i18n/routing';
 import { useTranslations } from 'next-intl';
 import { X } from 'lucide-react';
 
@@ -11,6 +11,7 @@ const STORAGE_KEY = 'rws_promo_seen';
 export default function PromotionPopup() {
   const [isOpen, setIsOpen] = useState(false);
   const t = useTranslations('common');
+  const pathname = usePathname();
 
   useEffect(() => {
     let alreadySeen = false;
@@ -20,11 +21,11 @@ export default function PromotionPopup() {
       alreadySeen = false;
     }
 
-    if (alreadySeen) return;
+    if (alreadySeen || pathname.startsWith('/blog')) return;
 
     const timer = setTimeout(() => setIsOpen(true), 900);
     return () => clearTimeout(timer);
-  }, []);
+  }, [pathname]);
 
   const close = () => {
     setIsOpen(false);

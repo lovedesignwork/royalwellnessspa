@@ -30,6 +30,7 @@ export default function Footer() {
               {t('quickLinks')}
             </h4>
             <ul className="space-y-3 font-body text-sm">
+              <li><Link href="/blog" className="text-white/70 hover:text-gold transition-colors">{tNav('blog')}</Link></li>
               <li>
                 <Link
                   href="/treatments"
