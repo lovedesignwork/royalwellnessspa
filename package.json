@@ -14,7 +14,7 @@
     "@supabase/supabase-js": "^2.99.2",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.577.0",
-    "next": "16.1.7",
+    "next": "16.4.3",
     "next-intl": "^4.12.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
@@ -22,7 +22,7 @@
     "react-phone-number-input": "^3.4.16",
     "remark-gfm": "4.0.1",
     "resend": "^6.12.3",
-    "sharp": "0.34.5",
+    "sharp": "0.35.5",
     "zustand": "^5.0.12"
   },
   "devDependencies": {
@@ -31,7 +31,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
-    "eslint-config-next": "16.1.7",
+    "eslint-config-next": "16.4.3",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

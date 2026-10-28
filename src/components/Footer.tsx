@@ -4,6 +4,7 @@ import { Link } from '@/i18n/routing';
 import Image from 'next/image';
 import { MapPin, Phone, Clock, Instagram, Facebook, MessageCircle } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import { AnalyticsSettingsButton } from './GoogleAnalytics';
 
 export default function Footer() {
   const t = useTranslations('footer');
@@ -147,7 +148,8 @@ export default function Footer() {
           <p className="font-body text-xs text-white/50">
             © 2026 Royal Wellness Spa. {t('copyright')}
           </p>
-          <div className="flex gap-6 font-body text-xs text-white/50">
+          <div className="flex flex-wrap justify-center gap-6 font-body text-xs text-white/70">
+            <AnalyticsSettingsButton />
             <Link href="/privacy" className="hover:text-gold transition-colors">
               {tNav('home') === 'Home' ? 'Privacy Policy' : 'นโยบายความเป็นส่วนตัว'}
             </Link>
