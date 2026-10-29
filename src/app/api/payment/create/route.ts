@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requestPaymentToken } from '@/lib/2c2p';
 import { getRPCHSupabaseClient } from '@/lib/supabase-rpch';
+import { bookingAttemptId, validBookingAttempt } from '@/lib/booking-attempt';
 
 interface TreatmentItem {
   guestName: string;
@@ -28,12 +29,16 @@ interface PaymentRequest {
 
 export async function POST(request: NextRequest) {
   try {
+    const attemptKey = request.headers.get('Idempotency-Key');
+    if (!validBookingAttempt(attemptKey)) {
+      return NextResponse.json({ success: false, error: 'Please refresh the booking page before submitting.' }, { status: 400 });
+    }
     const body: PaymentRequest = await request.json();
     const { amount, treatments, treatment, date, time, customer, notes, isHotelGuest } = body;
 
     const supabase = getRPCHSupabaseClient();
 
-    const bookingRef = `RWS${Date.now()}${Math.floor(Math.random() * 10000)}`.slice(0, 20);
+    let bookingRef = `RWS${Date.now()}${Math.floor(Math.random() * 10000)}`.slice(0, 20);
 
     const treatmentNames = treatments && treatments.length > 0
       ? treatments
@@ -41,11 +46,7 @@ export async function POST(request: NextRequest) {
           .join(' | ')
       : treatment || '';
 
-    const { data: booking, error: bookingError } = await supabase
-      .from('spa_reservations')
-      .insert({
-        reference: bookingRef,
-        payment_ref: bookingRef,
+    const bookingDetails = {
         guest_name: `${customer.firstName} ${customer.lastName}`.trim(),
         email: customer.email,
         phone: customer.phone,
@@ -58,9 +59,20 @@ export async function POST(request: NextRequest) {
         amount: amount,
         status: 'pending',
         payment_status: 'pending',
-      })
+      };
+    const bookingId = bookingAttemptId(attemptKey, bookingDetails);
+    let { data: booking, error: bookingError } = await supabase
+      .from('spa_reservations')
+      .insert({ ...bookingDetails, id: bookingId, reference: bookingRef, payment_ref: bookingRef })
       .select()
       .single();
+
+    if (bookingError?.code === '23505') {
+      // A retry must reuse the original row and invoice; never enqueue a second inquiry.
+      const existing = await supabase.from('spa_reservations').select('*').eq('id', bookingId).single();
+      booking = existing.data;
+      bookingError = existing.error;
+    }
 
     if (bookingError || !booking) {
       console.error('Booking error:', bookingError);
@@ -68,6 +80,11 @@ export async function POST(request: NextRequest) {
         { success: false, error: `Failed to create booking: ${bookingError?.message || 'unknown error'}` },
         { status: 500 }
       );
+    }
+
+    bookingRef = booking.reference;
+    if (booking.payment_status === 'paid' || booking.status === 'confirmed') {
+      return NextResponse.json({ success: false, bookingRef, error: 'This booking is already confirmed. Please check your confirmation email.' }, { status: 409 });
     }
 
     const merchantId = process.env.TWOC2P_MERCHANT_ID;
@@ -98,7 +115,7 @@ export async function POST(request: NextRequest) {
     if (!result.success) {
       console.error('2C2P payment token request failed:', result.error);
       return NextResponse.json(
-        { success: false, error: `Payment initialization failed: ${result.error}` },
+        { success: false, bookingRef, error: `Your request ${bookingRef} has been received, but online payment could not start. Retrying the same details will reuse this request.` },
         { status: 500 }
       );
     }

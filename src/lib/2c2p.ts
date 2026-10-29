@@ -3,9 +3,9 @@ import * as crypto from 'crypto';
 const SANDBOX_API_URL = 'https://sandbox-pgw.2c2p.com/payment/4.3';
 const PRODUCTION_API_URL = 'https://pgw.2c2p.com/payment/4.3';
 
-const MERCHANT_ID = process.env.TWOC2P_MERCHANT_ID || '';
-const SECRET_KEY = process.env.TWOC2P_SECRET_KEY || '';
-const IS_SANDBOX = process.env.TWOC2P_SANDBOX === 'true';
+const MERCHANT_ID = (process.env.TWOC2P_MERCHANT_ID || '').trim();
+const SECRET_KEY = (process.env.TWOC2P_SECRET_KEY || '').trim();
+const IS_SANDBOX = process.env.TWOC2P_SANDBOX?.trim() === 'true';
 
 const API_URL = IS_SANDBOX ? SANDBOX_API_URL : PRODUCTION_API_URL;
 
@@ -107,24 +107,39 @@ function decodeJWT(token: string): Record<string, unknown> | null {
 
 function verifyJWT(token: string): boolean {
   try {
+    if (!SECRET_KEY || typeof token !== 'string') return false;
     const parts = token.split('.');
     if (parts.length !== 3) {
       return false;
     }
 
     const [encodedHeader, encodedPayload, signature] = parts;
+    const header = JSON.parse(Buffer.from(encodedHeader, 'base64url').toString('utf8'));
+    if (header.alg !== 'HS256' || !/^[A-Za-z0-9_-]+$/.test(signature)) return false;
     const expectedSignature = crypto
       .createHmac('sha256', SECRET_KEY)
       .update(`${encodedHeader}.${encodedPayload}`)
-      .digest('base64')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=+$/, '');
+      .digest();
 
-    return signature === expectedSignature;
+    const actualSignature = Buffer.from(signature, 'base64url');
+    return actualSignature.length === expectedSignature.length &&
+      crypto.timingSafeEqual(actualSignature, expectedSignature);
   } catch {
     return false;
   }
+}
+
+function gatewayError(response: Record<string, unknown>): TwoC2PPaymentTokenResponse {
+  const respCode = typeof response.respCode === 'string' ? response.respCode : undefined;
+  const respDesc = typeof response.respDesc === 'string' ? response.respDesc : undefined;
+  return {
+    success: false,
+    respCode,
+    respDesc,
+    error: respCode === '9042'
+      ? '2C2P authentication failed (9042): check the merchant SHA secret and sandbox/production pairing.'
+      : `2C2P rejected the request (${respCode || 'unknown response'}).`,
+  };
 }
 
 export async function requestPaymentToken(
@@ -147,7 +162,7 @@ export async function requestPaymentToken(
     const payload: Record<string, unknown> = {
       merchantID: MERCHANT_ID,
       invoiceNo: request.invoiceNo,
-      description: request.description.substring(0, 255),
+      description: request.description.substring(0, 250),
       amount: amount,
       currencyCode: request.currencyCode || 'THB',
       frontendReturnUrl,
@@ -181,18 +196,18 @@ export async function requestPaymentToken(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ payload: jwtToken }),
+      signal: AbortSignal.timeout(20000),
     });
 
     const responseData = await response.json();
     
     if (!responseData.payload) {
-      console.error('2C2P response missing payload:', responseData);
-      return {
-        success: false,
-        error: `Invalid response from 2C2P: ${JSON.stringify(responseData)}`,
-      };
+      return gatewayError(responseData);
     }
 
+    if (!verifyJWT(responseData.payload)) {
+      return { success: false, error: 'Invalid 2C2P response signature' };
+    }
     const decodedResponse = decodeJWT(responseData.payload);
     
     if (!decodedResponse) {
@@ -209,6 +224,11 @@ export async function requestPaymentToken(
     });
 
     if (decodedResponse.respCode === '0000') {
+      if (typeof decodedResponse.webPaymentUrl !== 'string' ||
+          !decodedResponse.webPaymentUrl.startsWith('https://') ||
+          typeof decodedResponse.paymentToken !== 'string' || !decodedResponse.paymentToken) {
+        return { success: false, error: '2C2P did not return a complete payment session' };
+      }
       return {
         success: true,
         webPaymentUrl: decodedResponse.webPaymentUrl as string,
@@ -289,17 +309,18 @@ export async function inquirePayment(invoiceNo: string): Promise<TwoC2PInquiryRe
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ payload: jwtToken }),
+      signal: AbortSignal.timeout(20000),
     });
 
     const responseData = await response.json();
 
     if (!responseData.payload) {
-      return {
-        success: false,
-        error: 'Invalid response from 2C2P',
-      };
+      return gatewayError(responseData);
     }
 
+    if (!verifyJWT(responseData.payload)) {
+      return { success: false, error: 'Invalid 2C2P response signature' };
+    }
     const decodedResponse = decodeJWT(responseData.payload);
 
     if (!decodedResponse) {
