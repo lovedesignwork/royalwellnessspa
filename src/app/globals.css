@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+.spa-cookie-banner { position: fixed; z-index: 130; bottom: 16px; left: 16px; right: 16px; max-width: 760px; margin: auto; padding: 24px; background: #fdfbf7; color: #26231d; border: 1px solid #b8974f; border-radius: 12px; }
+.spa-cookie-banner h2 { font-size: 24px; line-height: 1.2; margin: 0 0 8px; }
+.spa-cookie-banner p { font-size: 14px; line-height: 1.6; margin: 0; max-width: 70ch; }
+.spa-cookie-actions { display: flex; gap: 12px; margin-top: 18px; flex-wrap: wrap; }
+.spa-cookie-actions button { min-height: 44px; padding: 10px 16px; border: 1px solid #88703d; border-radius: 6px; background: transparent; color: #26231d; font-size: 14px; cursor: pointer; }
+.spa-cookie-actions button:hover { background: #f5f0e6; }
+.spa-cookie-actions button:focus-visible { outline: 2px solid #6f5625; outline-offset: 3px; }
+@media (max-width: 480px) { .spa-cookie-banner { padding: 18px; bottom: 12px; left: 12px; right: 12px; } .spa-cookie-actions { gap: 8px; } .spa-cookie-actions button { flex: 1; } }
+
 :root {
   --background: #fdfbf7;
   --foreground: #000000;

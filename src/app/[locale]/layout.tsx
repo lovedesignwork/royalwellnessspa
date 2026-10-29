@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import PromotionPopup from "@/components/PromotionPopup";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 import "../globals.css";
 
 const crimsonText = Crimson_Text({
@@ -74,6 +75,7 @@ export default async function LocaleLayout({
         <NextIntlClientProvider messages={messages}>
           {children}
           <PromotionPopup />
+          <GoogleAnalytics />
         </NextIntlClientProvider>
       </body>
     </html>

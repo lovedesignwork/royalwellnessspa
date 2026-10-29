@@ -67,6 +67,8 @@ function BookingContent() {
   const [paymentError, setPaymentError] = useState<string>('');
   const [paymentForm, setPaymentForm] = useState<{ url: string; data: Record<string, string> } | null>(null);
   const paymentFormRef = useRef<HTMLFormElement>(null);
+  const paymentInFlight = useRef(false);
+  const bookingAttempt = useRef<{ fingerprint: string; key: string } | null>(null);
   
   const [bookingData, setBookingData] = useState<BookingData>({
     guests: [{ id: 'guest-1', guestName: 'Guest 1', treatment: null, selectedDuration: '', selectedPrice: 0 }],
@@ -224,21 +226,18 @@ function BookingContent() {
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (paymentInFlight.current) return;
 
     if (!bookingData.date || !bookingData.time || !bookingData.firstName || !bookingData.email || !bookingData.phone) {
       return;
     }
 
+    paymentInFlight.current = true;
     setIsProcessing(true);
     setPaymentError('');
 
     try {
-      const response = await fetch('/api/payment/create', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      const requestBody = JSON.stringify({
           amount: calculateTotal(),
           treatments: bookingData.guests
             .filter((g) => g.treatment)
@@ -259,7 +258,22 @@ function BookingContent() {
           notes: bookingData.notes,
           isHotelGuest: bookingData.isHotelGuest,
           discount: calculateDiscount(),
-        }),
+        });
+      const fingerprint = Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(requestBody))), byte => byte.toString(16).padStart(2, '0')).join('');
+      if (bookingAttempt.current?.fingerprint !== fingerprint) {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem('spa-booking-attempt') || 'null');
+          bookingAttempt.current = saved?.fingerprint === fingerprint && typeof saved.key === 'string' ? saved : null;
+        } catch { /* Storage may be disabled; the in-memory key still protects retries. */ }
+        if (bookingAttempt.current?.fingerprint !== fingerprint) {
+          bookingAttempt.current = { fingerprint, key: crypto.randomUUID() };
+        }
+        try { sessionStorage.setItem('spa-booking-attempt', JSON.stringify(bookingAttempt.current)); } catch { /* Keep the in-memory key. */ }
+      }
+      const response = await fetch('/api/payment/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Idempotency-Key': bookingAttempt.current.key },
+        body: requestBody,
       });
 
       const data = await response.json();
@@ -280,14 +294,17 @@ function BookingContent() {
         // No payment gateway configured — fall back to confirmation
         setCurrentStep('confirmation');
         setIsProcessing(false);
+        paymentInFlight.current = false;
       } else {
         setPaymentError(data.error || 'Failed to initiate payment. Please try again.');
         setIsProcessing(false);
+        paymentInFlight.current = false;
       }
     } catch (error) {
       console.error('Payment error:', error);
       setPaymentError('Failed to initiate payment. Please try again.');
       setIsProcessing(false);
+      paymentInFlight.current = false;
     }
   };
 

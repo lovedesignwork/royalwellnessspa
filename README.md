@@ -106,6 +106,27 @@ src/
    - `RESEND_API_KEY` (for contact form emails)
 4. Deploy!
 
+## Google Analytics
+
+Set `NEXT_PUBLIC_GA_MEASUREMENT_ID` to this site's GA4 web-stream measurement ID
+and rebuild the deployment. This is a public tracking ID, never a private key.
+Tracking loads only on the production spa domains, after a visitor chooses
+**Allow analytics**. The bilingual notice and footer **Cookie settings** let
+visitors decline or withdraw consent. Admin and payment routes are excluded.
+Only public page views are sent; query strings, fragments, guest form data and
+booking/payment identifiers are not sent. Advertising consent stays denied.
+
+Keep **Enhanced measurement off** for this web stream: the client records one
+page view per public route change, including Next.js navigation. Enabling
+automatic history page views would double-count them. Basic session and user
+metrics are provided by GA4. This change does not report successful payments,
+confirmed bookings or inquiry conversions.
+
+The hotel admin dashboard reads this property's reports with its separate
+server-only Viewer service account. No reporting private key belongs in this
+website. New properties have no historical data; standard reports need Google
+processing time. Realtime can verify the first consented page views.
+
 ## Admin Access
 
 - Navigate to `yourdomain.com/xadmin`
