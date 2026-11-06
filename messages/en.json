@@ -320,5 +320,24 @@
     "17": ["Head Massage", "Neck & Shoulder Release", "Headache Relief"],
     "18": ["Hot Herbal Compress", "Muscle Relaxation", "Relaxation"],
     "19": ["Warm Eye Compress", "Head Massage", "Neck Relaxation"]
+  },
+  "homepageDesign": {
+    "heroEyebrow": "Royal Wellness Spa · Phuket",
+    "heroTitle": "A moment of calm.",
+    "heroAccent": "Just for you.",
+    "heroDescription": "Let the journey pause. Unwind with soothing massage, warm aromatic oils, and thoughtful care in the heart of Phuket.",
+    "massageAlt": "A relaxing shoulder and back massage in a softly lit spa",
+    "location": "3rd Floor, Royal Phuket City Hotel",
+    "slowDown": "Take a moment to explore",
+    "roomAlt": "A warmly lit treatment room at Royal Wellness Spa",
+    "hotelPhotoCaption": "Your sanctuary, just an elevator ride away",
+    "hotelTitle": "A little more relaxation.",
+    "hotelAccent": "A privilege of your stay.",
+    "discountLabel": "off spa treatments",
+    "collectionsEyebrow": "The art of feeling well",
+    "collectionsTitle": "Find your",
+    "collectionsAccent": "kind of calm.",
+    "collectionsDescription": "From tired shoulders to time for two, discover a treatment that meets you where you are.",
+    "collectionNote": "Expert hands. Thoughtful rituals. Time that belongs to you."
   }
 }

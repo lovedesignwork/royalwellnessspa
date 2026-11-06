@@ -2,10 +2,11 @@ import LatestArticles from '@/components/blog/LatestArticles';
 export const dynamic = 'force-dynamic';
 import Header from '@/components/Header';
 import Hero from '@/components/Hero';
+import HomeWellnessSections from '@/components/HomeWellnessSections';
 import Footer from '@/components/Footer';
 import { Link } from '@/i18n/routing';
-import { categories, getTreatmentsByCategory } from '@/lib/spa-data';
-import { Clock, Award, Heart, Leaf, Star, Quote, Hotel, Sparkles, Shield, Users, Gem, CheckCircle } from 'lucide-react';
+import { getTreatmentsByCategory } from '@/lib/spa-data';
+import { Clock, Award, Heart, Leaf, Star, Quote, Sparkles, Shield, Users, Gem, CheckCircle } from 'lucide-react';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 
 export default async function Home({ params }: { params: Promise<{ locale: string }> }) {
@@ -13,8 +14,6 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
   setRequestLocale(locale);
   const t = await getTranslations('welcome');
   const tUsp = await getTranslations('usp');
-  const tHotel = await getTranslations('hotelDiscount');
-  const tCategories = await getTranslations('categories');
   const tTestimonials = await getTranslations('testimonials');
   const tCta = await getTranslations('cta');
   const tCommon = await getTranslations('common');
@@ -82,7 +81,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
         <Hero />
 
         {/* Welcome Section - Redesigned */}
-        <section className="py-24 bg-white overflow-hidden">
+        <section id="welcome" className="py-24 bg-white overflow-hidden scroll-mt-20">
           <div className="max-w-7xl mx-auto px-6">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
               <div className="relative">
@@ -273,99 +272,7 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
           </div>
         </section>
 
-        {/* Hotel Guest Discount */}
-        <section className="py-20 bg-gradient-to-r from-gold-dark via-gold to-gold-light relative overflow-hidden">
-          <div className="absolute inset-0 opacity-20">
-            <div className="absolute top-0 left-0 w-64 h-64 bg-white rounded-full -translate-x-1/2 -translate-y-1/2" />
-            <div className="absolute bottom-0 right-0 w-96 h-96 bg-white rounded-full translate-x-1/3 translate-y-1/3" />
-          </div>
-          <div className="relative z-10 max-w-5xl mx-auto px-6">
-            <div className="flex flex-col lg:flex-row items-center gap-12">
-              <div className="flex-shrink-0">
-                <div className="w-32 h-32 bg-white rounded-full flex items-center justify-center shadow-2xl">
-                  <Hotel className="w-16 h-16 text-gold" />
-                </div>
-              </div>
-              <div className="text-center lg:text-left">
-                <div className="inline-block bg-white/20 backdrop-blur-sm px-4 py-1 rounded-full mb-4">
-                  <span className="font-body text-white text-sm font-medium">
-                    {tHotel('exclusive')}
-                  </span>
-                </div>
-                <h2 className="font-display text-3xl md:text-4xl text-white mb-4">
-                  {tHotel('title')} <span className="font-semibold">{tHotel('discount')}</span>
-                </h2>
-                <p className="font-body text-white/90 mb-6 max-w-xl">
-                  {tHotel('description')}
-                </p>
-                <Link
-                  href="/book"
-                  className="inline-block bg-white text-gold hover:bg-cream font-body text-sm px-8 py-3 transition-colors shadow-lg"
-                >
-                  {tHotel('cta')}
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Treatment Categories - Redesigned */}
-        <section className="py-24 bg-cream">
-          <div className="max-w-7xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <p className="font-body text-gold text-sm tracking-[0.3em] mb-4">
-                {tCategories('subtitle')}
-              </p>
-              <h2 className="font-display text-4xl md:text-5xl text-charcoal mb-6">
-                {tCategories('title')}
-              </h2>
-            </div>
-
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-              {categories.filter(c => c !== "Top-Up / Add-On").map((category, idx) => {
-                const images = [
-                  '/images/Royal Spa 5.jpg',
-                  '/images/Royal Spa 6.jpg',
-                  '/images/Royal Spa 7.jpg',
-                  '/images/Royal Spa 8.jpg',
-                  '/images/Royal Spa 9.jpg',
-                ];
-                const treatmentCount = getTreatmentsByCategory(category as typeof categories[number]).length;
-                const categoryNames: Record<string, string> = {
-                  'Travel Recovery': tCategories('travelRecovery'),
-                  'Skin & Radiance': tCategories('skinRadiance'),
-                  'Couple & Special': tCategories('coupleSpecial'),
-                  'Facial Treatments': tCategories('facialTreatments'),
-                  'Classic Thai Heritage': tCategories('classicThaiHeritage'),
-                };
-                
-                return (
-                  <Link
-                    key={category}
-                    href={`/treatments?category=${encodeURIComponent(category)}`}
-                    className={`group relative overflow-hidden card-hover ${idx === 0 ? 'col-span-2 lg:col-span-1 row-span-2' : ''}`}
-                    style={{ minHeight: idx === 0 ? '400px' : '200px' }}
-                  >
-                    <div 
-                      className="absolute inset-0 bg-cover bg-center transition-transform duration-700 group-hover:scale-110"
-                      style={{ backgroundImage: `url('${images[idx]}')` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/50 to-transparent" />
-                    <div className="absolute inset-0 bg-gold/0 group-hover:bg-gold/20 transition-colors duration-300" />
-                    <div className="relative h-full flex flex-col justify-end p-6">
-                      <span className="font-body text-gold text-xs tracking-wider mb-2">
-                        {treatmentCount} {tCommon('treatments').toUpperCase()}
-                      </span>
-                      <h3 className="font-display text-xl md:text-2xl text-white">
-                        {categoryNames[category] || category}
-                      </h3>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <HomeWellnessSections />
 
         {/* Testimonials & Reviews */}
         <section className="py-24 bg-white">
