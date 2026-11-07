@@ -10,7 +10,6 @@ export const ADMIN_RECIPIENTS = [
   'marketing@royalphuketcity.com',
   'puttipop.l@royalphuketcity.com',
   'gm@royalphuketcity.com',
-  'wallop.c@royalphuketcity.com',
 ] as const;
 
 export const SENDER_EMAIL = 'Royal Wellness Spa <marketing@royalphuketcity.com>';

@@ -57,49 +57,74 @@ export async function POST(request: NextRequest) {
       ? `RWS-${submissionId.slice(0, 8).toUpperCase()}` 
       : `RWS-${Date.now()}`;
 
-    // Send emails via Resend if API key is available
+    let staffEmailAccepted = false;
+    // A saved enquiry remains available to staff if the email provider fails.
     if (process.env.RESEND_API_KEY) {
       const { Resend } = await import('resend');
       const resend = new Resend(process.env.RESEND_API_KEY);
 
-      // Send notification to admin
-      await resend.emails.send({
-        from: SENDER_EMAIL,
-        to: [...ADMIN_RECIPIENTS],
-        replyTo: email,
-        subject: `🧘 New Spa Inquiry: ${subject || inquiryType || 'General'} - Ref: ${referenceNumber}`,
-        html: generateAdminEmailHtml({
-          name,
-          email,
-          phone,
-          country,
-          inquiryType,
-          subject,
-          message,
-          referenceNumber,
-        }),
-      });
+      // Send notification to admin and inspect SDK errors (they do not throw).
+      try {
+        const notification = await resend.emails.send({
+          from: SENDER_EMAIL,
+          to: [...ADMIN_RECIPIENTS],
+          replyTo: email,
+          subject: `🧘 New Spa Inquiry: ${subject || inquiryType || 'General'} - Ref: ${referenceNumber}`,
+          html: generateAdminEmailHtml({
+            name,
+            email,
+            phone,
+            country,
+            inquiryType,
+            subject,
+            message,
+            referenceNumber,
+          }),
+        });
+        staffEmailAccepted = !notification.error && !!notification.data?.id;
+        if (!staffEmailAccepted) {
+          console.error('Staff contact notification was not accepted:', notification.error?.message);
+        }
+      } catch (error) {
+        console.error('Staff contact notification failed:', error);
+      }
 
-      // Send confirmation to customer
-      await resend.emails.send({
-        from: SENDER_EMAIL,
-        to: [email],
-        replyTo: REPLY_TO_EMAIL,
-        subject: `Thank You for Contacting Royal Wellness Spa (Ref: ${referenceNumber})`,
-        html: generateCustomerEmailHtml({
-          name,
-          email,
-          phone,
-          subject,
-          message,
-          referenceNumber,
-        }),
-      });
+      // Confirm receipt only when at least one staff channel accepted it.
+      if (submissionId || staffEmailAccepted) {
+        try {
+          const confirmation = await resend.emails.send({
+            from: SENDER_EMAIL,
+            to: [email],
+            replyTo: REPLY_TO_EMAIL,
+            subject: `Thank You for Contacting Royal Wellness Spa (Ref: ${referenceNumber})`,
+            html: generateCustomerEmailHtml({
+              name,
+              email,
+              phone,
+              subject,
+              message,
+              referenceNumber,
+            }),
+          });
+          if (confirmation.error) {
+            console.error('Contact confirmation was not accepted:', confirmation.error.message);
+          }
+        } catch (error) {
+          console.error('Contact confirmation failed:', error);
+        }
+      }
+    }
+
+    if (!submissionId && !staffEmailAccepted) {
+      return NextResponse.json(
+        { success: false, error: 'We could not receive your message. Please try again or contact us by phone.' },
+        { status: 503 },
+      );
     }
 
     return NextResponse.json({
       success: true,
-      message: 'Your message has been sent successfully.',
+      message: 'Your enquiry has been received by our team.',
       referenceNumber,
     });
   } catch (error) {
