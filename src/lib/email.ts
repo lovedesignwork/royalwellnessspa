@@ -13,6 +13,11 @@ export const ADMIN_RECIPIENTS = [
   'wallop.c@royalphuketcity.com',
 ] as const;
 
+// Booking notifications exclude the Wallop mailbox at the owner’s request.
+export const BOOKING_ADMIN_RECIPIENTS = ADMIN_RECIPIENTS.filter(
+  (email) => email !== 'wallop.c@royalphuketcity.com'
+);
+
 export const SENDER_EMAIL = 'Royal Wellness Spa <marketing@royalphuketcity.com>';
 export const REPLY_TO_EMAIL = 'marketing@royalphuketcity.com';
 
@@ -187,27 +192,32 @@ function generateAdminBookingHtml(data: BookingEmailData): string {
   `;
 }
 
-/**
- * Sends a booking confirmation to the customer and a notification to all admin
- * recipients. Safe to call without a configured Resend key (it no-ops).
- */
+/** Sends the team notification independently, so a controlled retry does not email the guest again. */
+export async function sendBookingTeamNotification(data: BookingEmailData): Promise<string> {
+  const resend = getResend();
+  if (!resend) throw new Error('Booking email service is not configured.');
+  const result = await resend.emails.send({
+    from: SENDER_EMAIL,
+    to: [...BOOKING_ADMIN_RECIPIENTS],
+    replyTo: data.email,
+    subject: `✅ New Spa Booking (Paid): ${data.guestName} — Ref: ${data.reference}`,
+    html: generateAdminBookingHtml(data),
+  }, { idempotencyKey: `spa-paid-admin-v2/${data.reference}` });
+  if (result.error) throw new Error(result.error.message);
+  if (!result.data?.id) throw new Error('Booking email service did not return a message ID.');
+  console.info("spa-booking-email", { reference: data.reference, audience: "team", emailId: result.data.id });
+  return result.data.id;
+}
+
+/** Sends the paid booking's team notification and guest confirmation. */
 export async function sendBookingConfirmationEmails(data: BookingEmailData): Promise<void> {
   const resend = getResend();
   if (!resend) {
     console.warn('RESEND_API_KEY not configured — skipping booking emails');
     return;
   }
-
   try {
-    const result = await resend.emails.send({
-      from: SENDER_EMAIL,
-      to: [...ADMIN_RECIPIENTS],
-      replyTo: data.email,
-      subject: `✅ New Spa Booking (Paid): ${data.guestName} — Ref: ${data.reference}`,
-      html: generateAdminBookingHtml(data),
-    }, { idempotencyKey: `spa-paid-admin/${data.reference}` });
-    if (result.error) throw new Error(result.error.message);
-    console.info("spa-booking-email", { reference: data.reference, audience: "team", emailId: result.data?.id });
+    await sendBookingTeamNotification(data);
   } catch (error) {
     console.error('Failed to send admin booking notification:', error);
   }

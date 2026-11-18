@@ -1,5 +1,5 @@
 import {NextRequest,NextResponse} from 'next/server';
-import {getResend,ADMIN_RECIPIENTS} from '@/lib/email';
+import {getResend,ADMIN_RECIPIENTS,BOOKING_ADMIN_RECIPIENTS,sendBookingTeamNotification} from '@/lib/email';
 import {paymentDatabase} from '@/lib/payment-booking';
 import {generatePaymentFormData,paymentCookieName,paymentCookieValue} from '@/lib/paysolutions';
 import {isTestBooking,validTestLink} from '@/lib/payment-test';
@@ -37,4 +37,16 @@ export async function GET(request:NextRequest) {
  response.cookies.set(paymentCookieName(ref),paymentCookieValue(ref),{httpOnly:true,secure:true,sameSite:'lax',path:'/',maxAge:86400});
  response.headers.set('Cache-Control','no-store');response.headers.set('X-Robots-Tag','noindex, nofollow');response.headers.set('Referrer-Policy','no-referrer');return response;
  }catch{return new NextResponse('Unable to open test checkout. Please try again.',{status:503});}
+}
+
+// Private, explicit retry of the existing paid test's team message only.
+export async function POST(request:NextRequest) {
+ try {
+  const {ref,expires,token,action}=await request.json();
+  if(process.env.PAYSOLUTIONS_ENABLED!=='true'||action!=='retry-team-email'||typeof ref!=='string'||typeof expires!=='string'||typeof token!=='string'||!validTestLink(ref,expires,token))return NextResponse.json({error:'Invalid test authorization.'},{status:404});
+  const {data:booking,error}=await paymentDatabase().from('spa_reservations').select('*').eq('payment_ref',ref).single();
+  if(error||!booking||!isTestBooking(booking)||booking.payment_status!=='paid')return NextResponse.json({error:'A confirmed paid test booking is required.'},{status:400});
+  const id=await sendBookingTeamNotification({reference:booking.reference,guestName:booking.guest_name,email:booking.email,phone:booking.phone,date:booking.date,time:booking.time,guests:booking.guests,service:booking.service,amount:Number(booking.amount),occasion:booking.occasion,specialRequests:booking.special_requests,transactionId:booking.transaction_id});
+  return NextResponse.json({id,to:BOOKING_ADMIN_RECIPIENTS},{headers:{'Cache-Control':'no-store','X-Robots-Tag':'noindex, nofollow'}});
+ } catch {return NextResponse.json({error:'Unable to retry the staff notification.'},{status:503});}
 }
