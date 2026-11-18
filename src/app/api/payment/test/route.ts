@@ -1,4 +1,5 @@
 import {NextRequest,NextResponse} from 'next/server';
+import {getResend} from '@/lib/email';
 import {paymentDatabase} from '@/lib/payment-booking';
 import {generatePaymentFormData,paymentCookieName,paymentCookieValue} from '@/lib/paysolutions';
 import {isTestBooking,validTestLink} from '@/lib/payment-test';
@@ -7,10 +8,19 @@ export async function GET(request:NextRequest) {
  const ref=request.nextUrl.searchParams.get('ref')||'';const expires=request.nextUrl.searchParams.get('expires')||'';const token=request.nextUrl.searchParams.get('token')||'';
  try{
  if(process.env.PAYSOLUTIONS_ENABLED!=='true'||!validTestLink(ref,expires,token))return new NextResponse('This private test link is invalid or expired.',{status:404});
- const {data:booking,error}=await paymentDatabase().from('spa_reservations').select('service,amount,payment_status,email').eq('payment_ref',ref).single();
+ const {data:booking,error}=await paymentDatabase().from('spa_reservations').select('reference,service,amount,payment_status,email').eq('payment_ref',ref).single();
  if(error||!booking||!isTestBooking(booking))return new NextResponse('Test payment not found.',{status:404});
  let response:NextResponse;
- if(booking.payment_status==='paid')response=NextResponse.redirect(new URL(`/payment/result?gateway=paysolutions&refno=${ref}`,request.url),303);
+ const emailId=request.nextUrl.searchParams.get('emailId');
+ if(emailId){
+  if(!/^[a-f0-9-]{36}$/i.test(emailId))return NextResponse.json({error:'Email not found.'},{status:404});
+  const resend=getResend();if(!resend)return NextResponse.json({error:'Email delivery lookup is not configured.'},{status:503});
+  const result=await resend.emails.get(emailId);
+  if(result.error){console.warn('spa-test-email-inspection-unavailable',{code:result.error.name});return NextResponse.json({error:'Email delivery lookup unavailable.',code:result.error.name},{status:503});}
+  if(!result.data?.subject.includes(booking.reference))return NextResponse.json({error:'Email not found.'},{status:404});
+  response=NextResponse.json({id:result.data.id,to:result.data.to,subject:result.data.subject,status:result.data.last_event,created_at:result.data.created_at});
+ }
+ else if(booking.payment_status==='paid')response=NextResponse.redirect(new URL(`/payment/result?gateway=paysolutions&refno=${ref}`,request.url),303);
  else{
  const checkout=generatePaymentFormData({refNo:ref,amount:10,description:booking.service,customerEmail:booking.email});
  const fields=Object.entries(checkout.formData).map(([key,value])=>`<input type="hidden" name="${escapeHtml(key)}" value="${escapeHtml(value)}">`).join('');

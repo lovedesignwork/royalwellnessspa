@@ -57,3 +57,5 @@ The owner authorized one THB 10 PromptPay test, including normal guest and team 
 Callbacks log their arrival and verified result using only the payment reference. Booking sends log Resend message IDs and report provider errors. Separate deterministic idempotency keys protect the team and guest messages against accidental duplicate requests within Resend's retention window. Resend delivery status verifies acceptance by recipient mail servers, not inbox placement or that a person read the message.
 
 The first real PromptPay test returned `MerchantID: 36906`, `Status: Y`, `StatusName: Paid`. The verifier matches this authenticated response against the configured merchant suffix while retaining exact reference, amount and currency checks. Browser and callback status values remain untrusted.
+
+Signed test links can inspect Resend delivery metadata using an email ID. The server uses the site account, validates that the message subject belongs to this test reference, and returns status only; message bodies and credentials are never returned. This supports checking the correct sending account when a connected Resend account differs.
