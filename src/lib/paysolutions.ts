@@ -107,8 +107,9 @@ export function verifiedOrder(
   return orders.find(
     (o) =>
       String(o.ReferenceNo) === ref &&
-      String(o.MerchantID) === merchantId &&
-      o.Status === "CP" &&
+      (String(o.MerchantID) === merchantId ||
+        String(o.MerchantID).padStart(5, "0") === merchantId.slice(-5)) &&
+      ["CP", "Y"].includes(o.Status) &&
       ["00", "OO"].includes(String(o.CurrencyCode)) &&
       Number.isFinite(Number(o.Total)) &&
       Math.round(Number(o.Total) * 100) === Math.round(amount * 100) &&

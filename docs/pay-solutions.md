@@ -26,7 +26,7 @@ The hosted Simple Payment documentation does not specify per-order callback URL 
 
 Prices and durations are checked against the server's treatment catalogue, including the existing 10% hotel-guest discount. Tampered totals are rejected. Each checkout receives a cryptographically random, unique 12-digit payment reference and a separate booking reference.
 
-Callbacks and the return page trigger an authenticated request to the official Inquiry API. Payment is confirmed only when reference, merchant, THB currency, exact amount and completed `CP` status all match. Browser `result`, `apcode` and callback status values never authorize a payment. An empty inquiry remains pending rather than being treated as failure or success.
+Callbacks and the return page trigger an authenticated request to the official Inquiry API. Payment is confirmed only when reference, merchant (full eight-digit ID or its authenticated inquiry five-digit representation), THB currency, exact amount and paid `Y` status from the live PromptPay inquiry (or completed `CP` from the documented legacy response) all match. Browser `result`, `apcode` and callback status values never authorize a payment. An empty inquiry remains pending rather than being treated as failure or success.
 
 The status page requires an HttpOnly signed cookie set by checkout. Guests must use the same browser and canonical domain. Without the cookie, they should contact the spa with their provider receipt. Result pages do not expose reservation details to other visitors.
 
@@ -55,3 +55,5 @@ The owner confirmed the dashboard settings on 18 November 2026 and supplied a sc
 The owner authorized one THB 10 PromptPay test, including normal guest and team notifications. Test records must clearly state that they reserve no appointment. Keep a completed real payment as an audit record; do not delete it as an unpaid browser fixture. An actual refund requires a separate instruction.
 
 Callbacks log their arrival and verified result using only the payment reference. Booking sends log Resend message IDs and report provider errors. Separate deterministic idempotency keys protect the team and guest messages against accidental duplicate requests within Resend's retention window. Resend delivery status verifies acceptance by recipient mail servers, not inbox placement or that a person read the message.
+
+The first real PromptPay test returned `MerchantID: 36906`, `Status: Y`, `StatusName: Paid`. The verifier matches this authenticated response against the configured merchant suffix while retaining exact reference, amount and currency checks. Browser and callback status values remain untrusted.
