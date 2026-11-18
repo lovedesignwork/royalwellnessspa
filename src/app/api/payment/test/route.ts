@@ -1,5 +1,5 @@
 import {NextRequest,NextResponse} from 'next/server';
-import {getResend} from '@/lib/email';
+import {getResend,ADMIN_RECIPIENTS} from '@/lib/email';
 import {paymentDatabase} from '@/lib/payment-booking';
 import {generatePaymentFormData,paymentCookieName,paymentCookieValue} from '@/lib/paysolutions';
 import {isTestBooking,validTestLink} from '@/lib/payment-test';
@@ -12,7 +12,15 @@ export async function GET(request:NextRequest) {
  if(error||!booking||!isTestBooking(booking))return new NextResponse('Test payment not found.',{status:404});
  let response:NextResponse;
  const emailId=request.nextUrl.searchParams.get('emailId');
- if(emailId){
+ const suppressionEmail=request.nextUrl.searchParams.get('suppression');
+ if(suppressionEmail){
+  if(!ADMIN_RECIPIENTS.some(email=>email===suppressionEmail))return NextResponse.json({error:'Recipient not found.'},{status:404});
+  const lookup=await fetch(`https://api.resend.com/suppressions/${encodeURIComponent(suppressionEmail)}`,{headers:{Authorization:`Bearer ${process.env.RESEND_API_KEY}`},cache:'no-store',signal:AbortSignal.timeout(10000)});
+  if(lookup.status===404)response=NextResponse.json({email:suppressionEmail,suppressed:false});
+  else if(lookup.ok){const entry=await lookup.json();response=NextResponse.json({email:suppressionEmail,suppressed:true,origin:entry.origin,source_id:entry.source_id,created_at:entry.created_at});}
+  else return NextResponse.json({error:'Suppression lookup unavailable.',status:lookup.status},{status:503});
+ }
+ else if(emailId){
   if(!/^[a-f0-9-]{36}$/i.test(emailId))return NextResponse.json({error:'Email not found.'},{status:404});
   const resend=getResend();if(!resend)return NextResponse.json({error:'Email delivery lookup is not configured.'},{status:503});
   const result=await resend.emails.get(emailId);

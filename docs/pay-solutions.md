@@ -59,3 +59,5 @@ Callbacks log their arrival and verified result using only the payment reference
 The first real PromptPay test returned `MerchantID: 36906`, `Status: Y`, `StatusName: Paid`. The verifier matches this authenticated response against the configured merchant suffix while retaining exact reference, amount and currency checks. Browser and callback status values remain untrusted.
 
 Signed test links can inspect Resend delivery metadata using an email ID. The server uses the site account, validates that the message subject belongs to this test reference, and returns status only; message bodies and credentials are never returned. This supports checking the correct sending account when a connected Resend account differs.
+
+The same signed test link supports read-only suppression diagnosis restricted to the configured team recipients. It cannot remove suppressions or send messages. Existing bounce, complaint or manual suppressions require investigation before any removal or resend.
