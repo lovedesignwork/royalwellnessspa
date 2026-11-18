@@ -10,6 +10,9 @@ import { paymentDatabase } from "@/lib/payment-booking";
 import { priceTreatments } from "@/lib/payment-pricing";
 export async function POST(request: NextRequest) {
   try {
+    if (process.env.PAYSOLUTIONS_ENABLED !== 'true') {
+      return NextResponse.json({ success: false, error: 'Online payment is being set up. Please contact Royal Wellness Spa on 090-596-9666 to arrange your booking.' }, { status: 503 });
+    }
     paymentConfig();
     const body = await request.json();
     const { customer, date, time } = body;

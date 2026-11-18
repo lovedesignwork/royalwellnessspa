@@ -6,6 +6,7 @@ New spa checkout uses Pay Solutions' hosted payment page at `https://payments.pa
 
 Production secrets are in the existing Vercel `royalwellnessspa` project:
 
+- `PAYSOLUTIONS_ENABLED`: keep `false` until dashboard URLs are configured and verified; set `true` and redeploy to open checkout
 - `PAYSOLUTIONS_MERCHANT_ID`: eight-digit merchant account
 - `PAYSOLUTIONS_API_KEY`: payment inquiry API key
 - `PAYSOLUTIONS_SECRET_KEY`: merchant secret for authenticated inquiry
@@ -44,3 +45,5 @@ Official references:
 - https://api-docs.payso.co/docs/api/redirect/simple-payment
 - https://api-docs.payso.co/docs/api/payment-features/inquiry-api/
 - https://api-docs.payso.co/docs/api/preparation/
+
+The owner will configure the dashboard URLs later. Production checkout is intentionally disabled until this is complete; customers receive the spa contact number instead of reaching an incomplete payment flow. The callback and verification endpoints remain available.
