@@ -23,6 +23,7 @@ async function callback(request: NextRequest) {
       );
     // Callback fields and browser query strings are hints only. Independently inquire
     // using server credentials, then match merchant, reference, THB amount and CP state.
+    console.info("spa-payment-callback", { ref, method: request.method });
     const booking = await reconcilePayment(ref);
     if (!booking)
       return NextResponse.json(
@@ -31,6 +32,7 @@ async function callback(request: NextRequest) {
       );
     if (booking.payment_status !== "paid")
       return NextResponse.json({ status: "pending" }, { status: 503 });
+    console.info("spa-payment-callback-verified", { ref });
     return NextResponse.json({ status: "ok" });
   } catch {
     return NextResponse.json(

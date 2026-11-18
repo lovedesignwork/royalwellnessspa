@@ -47,3 +47,11 @@ Official references:
 - https://api-docs.payso.co/docs/api/preparation/
 
 The owner confirmed the dashboard settings on 18 November 2026 and supplied a screenshot showing the canonical return and postback URLs, postbacks enabled, GET delivery and the required `refno` parameter. Both GET and POST callbacks are supported. Production `PAYSOLUTIONS_ENABLED` is enabled after this confirmation. A settled payment and actual provider-generated callback still require a real transaction; no charge is made during the activation checks.
+
+## Authorized small live tests
+
+`/api/payment/test` is a private checkout for a pre-created reservation whose service is exactly `SYSTEM PAYMENT TEST - NO SPA TREATMENT` and amount is exactly THB 10. It cannot create bookings or choose arbitrary amounts. A one-hour HMAC-signed link authorizes access, sets the normal result-page cookie, and posts to the same hosted payment flow. Invalid links and regular treatment bookings return 404. Paid links only reopen the result page. Do not publish these links or add them to navigation.
+
+The owner authorized one THB 10 PromptPay test, including normal guest and team notifications. Test records must clearly state that they reserve no appointment. Keep a completed real payment as an audit record; do not delete it as an unpaid browser fixture. An actual refund requires a separate instruction.
+
+Callbacks log their arrival and verified result using only the payment reference. Booking sends log Resend message IDs and report provider errors. Separate deterministic idempotency keys protect the team and guest messages against accidental duplicate requests within Resend's retention window. Resend delivery status verifies acceptance by recipient mail servers, not inbox placement or that a person read the message.

@@ -199,26 +199,30 @@ export async function sendBookingConfirmationEmails(data: BookingEmailData): Pro
   }
 
   try {
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: SENDER_EMAIL,
       to: [...ADMIN_RECIPIENTS],
       replyTo: data.email,
       subject: `✅ New Spa Booking (Paid): ${data.guestName} — Ref: ${data.reference}`,
       html: generateAdminBookingHtml(data),
-    });
+    }, { idempotencyKey: `spa-paid-admin/${data.reference}` });
+    if (result.error) throw new Error(result.error.message);
+    console.info("spa-booking-email", { reference: data.reference, audience: "team", emailId: result.data?.id });
   } catch (error) {
     console.error('Failed to send admin booking notification:', error);
   }
 
   if (data.email) {
     try {
-      await resend.emails.send({
+      const result = await resend.emails.send({
         from: SENDER_EMAIL,
         to: [data.email],
         replyTo: REPLY_TO_EMAIL,
         subject: `Your Royal Wellness Spa Booking is Confirmed (Ref: ${data.reference})`,
         html: generateCustomerBookingHtml(data),
-      });
+      }, { idempotencyKey: `spa-paid-guest/${data.reference}` });
+      if (result.error) throw new Error(result.error.message);
+      console.info("spa-booking-email", { reference: data.reference, audience: "guest", emailId: result.data?.id });
     } catch (error) {
       console.error('Failed to send customer booking confirmation:', error);
     }
