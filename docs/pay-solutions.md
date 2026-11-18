@@ -46,4 +46,4 @@ Official references:
 - https://api-docs.payso.co/docs/api/payment-features/inquiry-api/
 - https://api-docs.payso.co/docs/api/preparation/
 
-The owner will configure the dashboard URLs later. Production checkout is intentionally disabled until this is complete; customers receive the spa contact number instead of reaching an incomplete payment flow. The callback and verification endpoints remain available.
+The owner confirmed the dashboard settings on 18 November 2026 and supplied a screenshot showing the canonical return and postback URLs, postbacks enabled, GET delivery and the required `refno` parameter. Both GET and POST callbacks are supported. Production `PAYSOLUTIONS_ENABLED` is enabled after this confirmation. A settled payment and actual provider-generated callback still require a real transaction; no charge is made during the activation checks.
