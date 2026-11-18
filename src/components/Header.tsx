@@ -13,7 +13,7 @@ export default function Header() {
   const t = useTranslations('nav');
   const tCommon = useTranslations('common');
   const pathname = usePathname();
-  const solid = isScrolled || pathname.startsWith('/blog') || isMobileMenuOpen;
+  const solid = isScrolled || pathname.startsWith('/blog') || pathname.startsWith('/payment') || isMobileMenuOpen;
 
   useEffect(() => {
     const handleScroll = () => {

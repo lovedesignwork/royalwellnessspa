@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { CheckCircle2, XCircle, Clock, Loader2, ArrowRight } from 'lucide-react';
+import { CheckCircle2, XCircle, Clock, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -27,48 +27,18 @@ const PAYMENT_MAX_ATTEMPTS = 12;
 
 export default function PaymentResultClient() {
   const searchParams = useSearchParams();
-  const [status, setStatus] = useState<ResultStatus>('loading');
-  const [bookingRef, setBookingRef] = useState('');
+  const gateway = searchParams.get('gateway');
+  const bookingRef = searchParams.get('refno') || searchParams.get('refNo') || searchParams.get('RefNo') || searchParams.get('ReferenceNo') || searchParams.get('referenceNo') || searchParams.get('invoiceNo') || '';
+  const [status, setStatus] = useState<ResultStatus>(() => bookingRef ? 'loading' : 'pending');
   const [bookingInfo, setBookingInfo] = useState<BookingInfo | null>(null);
-  const [gateway, setGateway] = useState<string | null>(null);
   const pollTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const callbackDetectedRef = useRef(false);
 
   useEffect(() => {
-    const gatewayParam = searchParams.get('gateway');
-    setGateway(gatewayParam);
-
-    const refNo =
-      searchParams.get('invoiceNo') ||
-      searchParams.get('refNo') ||
-      searchParams.get('ref_no') ||
-      searchParams.get('referenceNo') ||
-      searchParams.get('refno') ||
-      '';
-
-    if (refNo) {
-      setBookingRef(refNo);
-    }
-
-    return () => {
-      if (pollTimeout.current) {
-        clearTimeout(pollTimeout.current);
-      }
-    };
-  }, [searchParams]);
-
-  useEffect(() => {
-    if (!bookingRef) {
-      return;
-    }
+    if (!bookingRef) return;
 
     let attempts = 0;
     let cancelled = false;
     let resolved = false;
-    callbackDetectedRef.current = false;
-
-    const result = searchParams.get('result') || searchParams.get('Result') || '';
-    const apCode = searchParams.get('apcode') || searchParams.get('Apcode') || '';
 
     const checkStatus = async () => {
       if (cancelled || resolved) {
@@ -81,14 +51,6 @@ export default function PaymentResultClient() {
         const statusUrl = new URL(`/api/payment/status`, window.location.origin);
         statusUrl.searchParams.set('bookingRef', bookingRef);
 
-        if (attempts === 1 && result) {
-          statusUrl.searchParams.set('verify', 'true');
-          statusUrl.searchParams.set('result', result);
-          if (apCode) {
-            statusUrl.searchParams.set('apcode', apCode);
-          }
-        }
-
         const response = await fetch(statusUrl.toString(), {
           cache: 'no-store',
         });
@@ -98,15 +60,8 @@ export default function PaymentResultClient() {
           if (data.booking) {
             setBookingInfo(data.booking);
 
-            if (data.booking.reference && data.booking.reference !== bookingRef) {
-              setBookingRef(data.booking.reference);
-            }
 
-            if (data.booking.payment_status) {
-              callbackDetectedRef.current = true;
-            }
-
-            if (data.booking.payment_status === 'paid' || data.booking.status === 'confirmed') {
+            if (data.booking.payment_status === 'paid') {
               resolved = true;
               setStatus('success');
               return;
@@ -130,12 +85,11 @@ export default function PaymentResultClient() {
       if (attempts < PAYMENT_MAX_ATTEMPTS) {
         pollTimeout.current = setTimeout(checkStatus, PAYMENT_POLL_INTERVAL);
       } else if (!cancelled && !resolved) {
-        setStatus(callbackDetectedRef.current ? 'failed' : 'pending');
+        setStatus('pending');
       }
     };
 
-    setStatus('loading');
-    checkStatus();
+    pollTimeout.current = setTimeout(() => { setStatus('loading'); void checkStatus(); }, 0);
 
     return () => {
       cancelled = true;
@@ -143,7 +97,6 @@ export default function PaymentResultClient() {
         clearTimeout(pollTimeout.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookingRef]);
 
   const renderBookingDetails = () => {
@@ -258,17 +211,17 @@ export default function PaymentResultClient() {
                 <Clock className="w-12 h-12 text-amber-600" />
               </div>
               <h1 className="font-display text-3xl md:text-4xl text-charcoal mb-3">
-                Thank You for Your Booking
+                Payment Awaiting Verification
               </h1>
               <p className="font-body text-charcoal/70 mb-6">
                 {gateway === '2c2p' || gateway === 'paysolutions'
-                  ? 'If your payment was successful, you will receive a confirmation email shortly. Our team will verify your payment and finalize the booking.'
+                  ? 'If your payment was successful, you will receive a confirmation email shortly. Please contact the spa if confirmation does not arrive.'
                   : 'We will get back to you with confirmation of your booking soon.'}
               </p>
               {renderBookingDetails()}
               {(gateway === '2c2p' || gateway === 'paysolutions') && (
                 <p className="font-body text-sm text-charcoal/60 mb-6">
-                  Please keep your payment receipt for reference.
+                  Please keep your payment receipt for reference. Contact the spa on 090-596-9666 if you need help.
                 </p>
               )}
             </>

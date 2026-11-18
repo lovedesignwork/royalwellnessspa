@@ -1,5 +1,6 @@
 'use client';
 
+import { useLocale } from 'next-intl';
 import { useState, useEffect, useRef, Suspense } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Header from '@/components/Header';
@@ -57,6 +58,7 @@ function BookingContent() {
   const router = useRouter();
   const treatmentId = searchParams.get('treatment');
 
+  const locale = useLocale();
   const [currentStep, setCurrentStep] = useState<BookingStep>('treatment');
   const [isProcessing, setIsProcessing] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -240,10 +242,12 @@ function BookingContent() {
         },
         body: JSON.stringify({
           amount: calculateTotal(),
+          locale,
           treatments: bookingData.guests
             .filter((g) => g.treatment)
             .map((g) => ({
               guestName: g.guestName,
+              treatmentId: g.treatment?.id,
               treatmentName: g.treatment?.name,
               duration: g.selectedDuration,
               price: g.selectedPrice,
@@ -266,20 +270,16 @@ function BookingContent() {
 
       if (data.success && data.paymentUrl) {
         if (data.formData) {
-          // Legacy: PaySolutions requires a POST form submission
+          // Pay Solutions uses its hosted checkout through a POST form.
           setPaymentForm({ url: data.paymentUrl, data: data.formData });
           setTimeout(() => {
             paymentFormRef.current?.submit();
           }, 100);
         } else {
-          // 2C2P: Direct redirect to payment page
+          // Hosted checkout redirect.
           setPaymentForm({ url: data.paymentUrl, data: {} });
           window.location.href = data.paymentUrl;
         }
-      } else if (data.success) {
-        // No payment gateway configured — fall back to confirmation
-        setCurrentStep('confirmation');
-        setIsProcessing(false);
       } else {
         setPaymentError(data.error || 'Failed to initiate payment. Please try again.');
         setIsProcessing(false);
