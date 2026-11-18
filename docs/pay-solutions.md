@@ -61,3 +61,11 @@ The first real PromptPay test returned `MerchantID: 36906`, `Status: Y`, `Status
 Signed test links can inspect Resend delivery metadata using an email ID. The server uses the site account, validates that the message subject belongs to this test reference, and returns status only; message bodies and credentials are never returned. This supports checking the correct sending account when a connected Resend account differs.
 
 The same signed test link supports read-only suppression diagnosis restricted to the configured team recipients. It cannot remove suppressions or send messages. Existing bounce, complaint or manual suppressions require investigation before any removal or resend.
+
+## LINE booking alerts
+
+Royal Wellness reservation alerts are queued only on a transition to `payment_status = 'paid'` (or an already-paid insert). Pending, failed, cancelled and pay-at-spa checkout attempts do not queue booking alerts. The successful-payment snapshot is captured after the update. Repeated callbacks or later edits do not duplicate the notification.
+
+The shared Supabase trigger retains other brands' and contact forms' existing behavior. Paid spa events use the request key `<reservation UUID>:paid`, giving them their own outbox record and LINE retry key while preserving any legacy sent creation alert. Old unsent unpaid spa creation alerts are moved to `needs_attention` with `ignored-unpaid-spa-reservation`; they must not be manually retried as payment confirmations. Existing alerts already sent to LINE cannot be recalled by this change. No historical paid events are backfilled automatically.
+
+Migration: `supabase/migrations/20261118111228_spa_line_paid_only.sql`. Run `supabase/tests/spa_line_paid_only.sql` with `supabase db query --file` to verify the trigger behavior; it rolls back all fixtures so no test notification can be picked up by the worker.
