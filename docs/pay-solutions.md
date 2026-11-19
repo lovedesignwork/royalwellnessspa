@@ -1,26 +1,43 @@
 # Pay Solutions checkout
 
-New spa checkout uses Pay Solutions' hosted payment page at `https://payments.paysolutions.asia/payment`. Card details stay on the provider page. The existing 2C2P signed callback is retained only for legacy bookings, with reference and amount checks; new bookings never request a 2C2P token.
+## Hosted API migration status
+
+The spa-specific URL migration is prepared locally. It must not replace the live checkout until the merchant's Terminal ID and key version are supplied, configured and tested. Production still uses the previously deployed legacy form flow until that release. The hotel defaults must be restored as a coordinated cutover after verification.
+
+The new checkout calls `POST https://apis.paysolutions.asia/payment/gateway/v2/ui-payments` from the server and redirects the customer to the returned official provider URL. It sends both spa URLs explicitly for every payment:
+
+- `returnUrl`: `https://www.royalwellnessspaphuket.com/payment/result?gateway=paysolutions&refno=<payment reference>`
+- `postbackUrl`: `https://www.royalwellnessspaphuket.com/api/payment/paysolutions/callback?refno=<payment reference>`
+
+Dynamic postbacks use GET with no body, so the reference is included in the URL. The existing callback already supports GET and independently verifies the payment through the Inquiry API. No hotel callback is forwarded or modified. Upstream failures never fall back to the merchant's default URLs.
 
 ## Configuration
 
-Production secrets are in the existing Vercel `royalwellnessspa` project:
+Configure the existing Vercel `royalwellnessspa` production project:
 
-- `PAYSOLUTIONS_ENABLED`: keep `false` until dashboard URLs are configured and verified; set `true` and redeploy to open checkout
-- `PAYSOLUTIONS_MERCHANT_ID`: eight-digit merchant account
-- `PAYSOLUTIONS_API_KEY`: payment inquiry API key
-- `PAYSOLUTIONS_SECRET_KEY`: merchant secret for authenticated inquiry
-- `RPCH_SUPABASE_SERVICE_ROLE_KEY`: server-only access to the existing RPCH project
+- `PAYSOLUTIONS_MERCHANT_ID`: existing eight-digit merchant account
+- `PAYSOLUTIONS_API_KEY` and `PAYSOLUTIONS_SECRET_KEY`: existing merchant credentials for inquiry and request-cookie signing; used for hosted API authentication unless the terminal has a separate credential pair
+- `PAYSOLUTIONS_TERMINAL_ID`: required eight-character Terminal ID from the merchant control panel; never guess this from the merchant ID
+- `PAYSOLUTIONS_KEY_VERSION`: required numeric key version associated with the configured terminal/API credentials
+- `PAYSOLUTIONS_V2_API_KEY` and `PAYSOLUTIONS_V2_SECRET_KEY`: optional separate terminal credentials, if provided by Pay Solutions; configure both together
+- `RPCH_SUPABASE_SERVICE_ROLE_KEY`: existing server-only booking database access
+- `PAYSOLUTIONS_ENABLED`: existing checkout availability switch
 
-Never put these values in source control or client-side environment variables.
+Secrets belong in Vercel and local ignored environment files, never in source control or browser code. The app fails closed if hosted configuration is missing or the provider rejects the request.
 
-In Pay Solutions controls → Merchant Settings → Return Parameter, configure:
+## Coordinated hotel/spa cutover
 
-- Return URL (GET): `https://www.royalwellnessspaphuket.com/payment/result?gateway=paysolutions`
-- Postback URL (POST): `https://www.royalwellnessspaphuket.com/api/payment/paysolutions/callback`
-- Include the payment reference as `refno` in both returns and postbacks. The handler also accepts `ReferenceNo`.
+1. Obtain the Terminal ID and key version and confirm the existing merchant credentials work for the hosted API. Do not rotate or regenerate the hotel's existing credentials.
+2. Verify that Pay Solutions accepts a no-charge checkout initialization with both explicit spa URLs and returns its hosted payment page. A test session is not proof that a settled payment/callback works.
+3. Deploy through GitHub `main` and verify the exact production commit and live flow.
+4. Only then restore the merchant Control Panel defaults to the original hotel settings supplied by the owner:
+   - Return URL: `https://www.royalphuketcity.com`
+   - Postback URL: `https://www.myxcaliber.com/frontend/payment/pay-solutions-feed.html`
+   - Keep the hotel's required parameter/delivery settings as confirmed by MyXcaliber.
+5. Review any still-open spa checkout links created by the old default-based flow. They do not automatically acquire the new explicit URLs. Coordinate their expiry/replacement before relying on the hotel defaults for all outstanding sessions.
+6. Reconcile hotel payments received while the shared defaults pointed at the spa with MyXcaliber. Restoring the URL alone does not prove earlier hotel bookings were confirmed.
 
-The hosted Simple Payment documentation does not specify per-order callback URL overrides. These settings must be verified in the merchant dashboard; the API key does not grant dashboard access.
+The supplied screenshot establishes that both businesses use the same merchant account. It does not establish that existing hotel payment confirmations were unaffected. The current merchant dashboard requires sign-in, so the Terminal ID was not retrievable through the available session.
 
 ## Verification behavior
 

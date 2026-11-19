@@ -1,11 +1,10 @@
 import { randomInt, randomUUID } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
 import {
-  generatePaymentFormData,
-  paymentConfig,
   paymentCookieName,
   paymentCookieValue,
 } from "@/lib/paysolutions";
+import { createHostedPayment, hostedPaymentConfig } from "@/lib/paysolutions-hosted";
 import { paymentDatabase } from "@/lib/payment-booking";
 import { priceTreatments } from "@/lib/payment-pricing";
 export async function POST(request: NextRequest) {
@@ -13,7 +12,7 @@ export async function POST(request: NextRequest) {
     if (process.env.PAYSOLUTIONS_ENABLED !== 'true') {
       return NextResponse.json({ success: false, error: 'Online payment is being set up. Please contact Royal Wellness Spa on 090-596-9666 to arrange your booking.' }, { status: 503 });
     }
-    paymentConfig();
+    hostedPaymentConfig();
     const body = await request.json();
     const { customer, date, time } = body;
     if (
@@ -23,7 +22,7 @@ export async function POST(request: NextRequest) {
       typeof customer.lastName !== "string" ||
       typeof customer.email !== "string" ||
       !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(customer.email) ||
-      customer.email.length > 100 ||
+      customer.email.length > 50 ||
       typeof customer.phone !== "string" ||
       !customer.phone.trim() ||
       customer.phone.length > 50 ||
@@ -109,7 +108,7 @@ export async function POST(request: NextRequest) {
       if (error.code !== "23505") throw new Error("Unable to create booking.");
     }
     if (!booking) throw new Error("Unable to allocate payment reference.");
-    const checkout = generatePaymentFormData({
+    const checkout = await createHostedPayment({
       refNo: ref,
       amount: priced.amount,
       description: `Royal Wellness Spa - ${body.treatments.length} treatment(s)`,

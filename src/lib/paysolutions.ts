@@ -1,7 +1,6 @@
 import 'server-only';
 import { createHmac, timingSafeEqual } from "node:crypto";
 
-export const PAYMENT_URL = "https://payments.paysolutions.asia/payment";
 export const INQUIRY_URL =
   "https://apis.paysolutions.asia/order/orderdetailpost";
 export function paymentConfig() {
@@ -11,34 +10,6 @@ export function paymentConfig() {
   if (!merchantId || !/^\d{8}$/.test(merchantId) || !secret || !apiKey)
     throw new Error("Payment service is not configured.");
   return { merchantId, secret, apiKey };
-}
-export function generatePaymentFormData(request: {
-  refNo: string;
-  amount: number;
-  description: string;
-  customerEmail: string;
-  locale?: string;
-}) {
-  const { merchantId } = paymentConfig();
-  if (
-    !/^\d{12}$/.test(request.refNo) ||
-    !Number.isFinite(request.amount) ||
-    request.amount <= 0 ||
-    request.amount > 9999999
-  )
-    throw new Error("Invalid payment request.");
-  return {
-    paymentUrl: PAYMENT_URL,
-    formData: {
-      merchantid: merchantId,
-      refno: request.refNo,
-      customeremail: request.customerEmail,
-      productdetail: request.description.replace(/[<>&"']/g, " ").slice(0, 255),
-      total: request.amount.toFixed(2),
-      lang: request.locale === "th" ? "TH" : "EN",
-      cc: "00",
-    },
-  };
 }
 export function paymentCookieName(ref: string) {
   return `rws_payment_${ref}`;
