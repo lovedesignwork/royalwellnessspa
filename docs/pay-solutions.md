@@ -2,7 +2,7 @@
 
 ## Hosted API migration status
 
-The spa-specific URL migration is prepared locally. It must not replace the live checkout until the merchant's Terminal ID and key version are supplied, configured and tested. Production still uses the previously deployed legacy form flow until that release. The hotel defaults must be restored as a coordinated cutover after verification.
+This release switches spa checkout to per-transaction return and postback URLs. The owner supplied active terminal `TID00001`, key version `1`; both are configured on the existing Vercel production project. The existing merchant credentials successfully initialized a hosted payment with both explicit spa URLs, and its payment page displayed the correct merchant, amount and PromptPay option. No additional payment was made during this migration. Verify this release's exact production deployment before restoring hotel defaults.
 
 The new checkout calls `POST https://apis.paysolutions.asia/payment/gateway/v2/ui-payments` from the server and redirects the customer to the returned official provider URL. It sends both spa URLs explicitly for every payment:
 
@@ -37,7 +37,7 @@ Secrets belong in Vercel and local ignored environment files, never in source co
 5. Review any still-open spa checkout links created by the old default-based flow. They do not automatically acquire the new explicit URLs. Coordinate their expiry/replacement before relying on the hotel defaults for all outstanding sessions.
 6. Reconcile hotel payments received while the shared defaults pointed at the spa with MyXcaliber. Restoring the URL alone does not prove earlier hotel bookings were confirmed.
 
-The supplied screenshot establishes that both businesses use the same merchant account. It does not establish that existing hotel payment confirmations were unaffected. The current merchant dashboard requires sign-in, so the Terminal ID was not retrievable through the available session.
+The supplied screenshots establish that both businesses use the same merchant account and identify the active terminal and key version. They do not establish that existing hotel payment confirmations were unaffected. The public key supplied by the owner is not required for this hosted API's documented merchant-key authentication.
 
 ## Verification behavior
 
@@ -53,21 +53,23 @@ The migration removes public reservation reads and updates, restricts direct pub
 
 ## Checks
 
-Run `node --test tests/payment.test.cjs` for form serialization, secret exclusion, server pricing, signed cookies, exact payment matching, authenticated inquiry and idempotent confirmation tests. Run `npm run build` before deployment.
+Run `node --test tests/payment.test.cjs` for explicit hosted URLs, secret exclusion, server pricing, signed cookies, exact payment matching, authenticated inquiry and idempotent confirmation tests. Run `npm run build` before deployment.
 
-Browser verification covers treatment/date/time selection, guest details, the Pay Solutions POST handoff, correct amount, pending status, rejection of forged success callbacks and private status access. Local and live test bookings must be deleted afterward using their exact reference and the `royal-payment-verification@example.com` fixture email, only while unpaid. Never submit a card payment without explicit authorization.
+Browser verification covers treatment/date/time selection, guest details, the Pay Solutions hosted redirect, correct amount, pending status, rejection of forged success callbacks and private status access. Local and live test bookings must be deleted afterward using their exact reference and the `royal-payment-verification@example.com` fixture email, only while unpaid. Never submit a payment without explicit authorization.
 
 Official references:
 
-- https://api-docs.payso.co/docs/api/redirect/simple-payment
+- https://api-docs.payso.co/docs/api/payment-gateway/create-payment
+- https://api-docs.payso.co/docs/api/webhook-postback
+- https://api-docs.payso.co/docs/api/authentication
 - https://api-docs.payso.co/docs/api/payment-features/inquiry-api/
 - https://api-docs.payso.co/docs/api/preparation/
 
-The owner confirmed the dashboard settings on 18 November 2026 and supplied a screenshot showing the canonical return and postback URLs, postbacks enabled, GET delivery and the required `refno` parameter. Both GET and POST callbacks are supported. Production `PAYSOLUTIONS_ENABLED` is enabled after this confirmation. A settled payment and actual provider-generated callback still require a real transaction; no charge is made during the activation checks.
+The owner confirmed the original spa dashboard settings on 18 November 2026. Those shared defaults can return to the hotel after this release is verified; new spa requests supply their own URLs. Both GET and POST callbacks are supported. Production `PAYSOLUTIONS_ENABLED` remains enabled. The earlier authorized THB 10 payment verified settled payment, inquiry reconciliation and email delivery under the legacy handoff. A newly settled transaction through the dynamic-URL flow has not yet been tested.
 
 ## Authorized small live tests
 
-`/api/payment/test` is a private checkout for a pre-created reservation whose service is exactly `SYSTEM PAYMENT TEST - NO SPA TREATMENT` and amount is exactly THB 10. It cannot create bookings or choose arbitrary amounts. A one-hour HMAC-signed link authorizes access, sets the normal result-page cookie, and posts to the same hosted payment flow. Invalid links and regular treatment bookings return 404. Paid links only reopen the result page. Do not publish these links or add them to navigation.
+`/api/payment/test` is a private checkout for a pre-created reservation whose service is exactly `SYSTEM PAYMENT TEST - NO SPA TREATMENT` and amount is exactly THB 10. It cannot create bookings or choose arbitrary amounts. A one-hour HMAC-signed link authorizes access, sets the normal result-page cookie, and links to the same hosted payment flow. Invalid links and regular treatment bookings return 404. Paid links only reopen the result page. Do not publish these links or add them to navigation.
 
 The owner authorized one THB 10 PromptPay test, including normal guest and team notifications. Test records must clearly state that they reserve no appointment. Keep a completed real payment as an audit record; do not delete it as an unpaid browser fixture. An actual refund requires a separate instruction.
 
